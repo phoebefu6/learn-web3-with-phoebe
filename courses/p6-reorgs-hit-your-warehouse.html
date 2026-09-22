@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 6 of 10. A plain append-only loader against a depth 3 replacement every 50 blocks ends with 511 rows, 5.75 percent of the warehouse, describing history the chain no longer has. Nothing errors, and the lag table has a parameter nobody wrote down.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Reorgs hit your warehouse - learn web3 with phoebe">
+<meta property="og:description" content="Practitioner session 6 of 10. The damage measured, the silence explained, and the input the whole defence rests on that is not in your data.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-web3-with-phoebe/courses/p6-reorgs-hit-your-warehouse.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Reorgs hit your warehouse - learn web3 with phoebe">
+<meta name="twitter:description" content="511 wrong rows and every check green. The loader is correct code doing exactly what append-only means.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 6 · Reorgs hit your warehouse - learn web3 with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-web3-with-phoebe</a> / Practitioner session 6 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Web3 with Phoebe · Practitioner session 6 of 10</div>
+    <h1>Reorgs hit your <span class="accent">warehouse</span></h1>
+    <p class="sub">Larkfield's loader appends every block as it arrives. Bench B runs 200 blocks with a 3 block replacement every 50, and the loader ends holding 511 rows, 5.75 percent of the warehouse, that describe history the chain no longer has. Nothing errored, nothing was flagged, and every check the team owns stayed green, because the loader is correct code doing exactly what append-only means. Tonight measures the damage and finds the one input the whole problem turns on, which is not in your data and is usually not written down anywhere.</p>
+    <div class="chip-row">
+      <span class="chip level">🔧 Practitioner track</span>
+      <span class="chip audience">Data engineers who own the loader</span>
+      <span class="chip audience">Anyone who has signed off a row count</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · Why nothing errored</span>
+      <span class="a3" style="flex:3">18-30 · The size, and the missing input</span>
+      <span class="a4" style="flex:3">30-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>A correct loader, a green dashboard, and 511 wrong rows</h2>
+    </div>
+    <p class="lede">The five sessions so far have been about a number being wrong for reasons you can see once somebody points at them. Tonight is different in kind: the rows are wrong and there is no observation available inside the warehouse that would tell you so. The loader did not fail, the pipeline did not degrade, and the failure is not in anybody's code. It is in the assumption that an upstream only ever adds.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The damage measured on Bench B: 511 orphaned rows at 5.75 percent of the warehouse, stable at 5.65 to 5.75 percent across four runs. A mechanical account of why four standard checks all stay green, including the one that moves in the reassuring direction. The full lag table, 0 through 12, with the dangerous middle named: a lag of 1 leaves 3.99 percent wrong and feels like a precaution. And the parameter the entire table is conditional on, which is not a column in your data and which most teams have never written down.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Withdrawn is not late, and your toolkit only knows late<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every warehouse has machinery for records that turn up after the period they belong to: idempotent loads, merge keys, restatement windows. That craft is general, it is well developed, and it belongs to <b>learn-data-engineering-with-phoebe</b> rather than here. What matters tonight is that it is machinery for a different event.</p>
+        <p>Those patterns handle data that arrives <strong>late</strong>. This is data that is <strong>withdrawn</strong>. A late row is additive: something that was missing appears, a total goes up, and nothing that was already correct stops being correct. A withdrawn row is subtractive: something that was counted is gone, a total goes down, and a figure that was right last week can no longer be reproduced. Reaching for a merge key here is not a partial fix, it is a fix for the other case.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Larkfield's engineer asked the reasonable question first: is this not just late-arriving data with extra steps? The team spent two days trying to express it as a restatement window before somebody noticed that every pattern they reached for produced a row, and the thing they needed was to remove one.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words used tonight<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Replacement.</strong> The upstream withdrawing a run of recent blocks and continuing from an earlier point. Why it happens belongs to <b>learn-blockchain-with-phoebe</b>; what it does to a table is tonight.</li>
+          <li><strong>Depth.</strong> How many blocks back a replacement reaches. Bench B fixes it at 3. It is the parameter the whole of tonight turns on.</li>
+          <li><strong>Orphaned row.</strong> A row already loaded whose block has since been replaced. Still in the table, still queried, wrong, and counted by nobody.</li>
+          <li><strong>Finality lag.</strong> How far behind the newest block a loader stays before writing a block's rows. Bench B sweeps it from 0 to 12.</li>
+          <li><strong>Held rows.</strong> Rows that exist and are correct but have not been written yet because the lag has not elapsed. The freshness side of the ledger.</li>
+          <li><strong>Append only.</strong> A loader that writes and never removes. Correct behaviour, and the thing that turns a replacement into a permanent error.</li>
+          <li><strong>Late arriving.</strong> A record for an earlier period turning up now. Additive, familiar, and handled by patterns that already exist.</li>
+          <li><strong>Withdrawn.</strong> A record that was loaded and is now gone from the source. Subtractive, and the case tonight is about.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the silence</span>
+      <h2>Four checks, all green, none of them wrong to be</h2>
+      <span class="tag concept">15 min live</span>
+    </div>
+    <p class="lede">Follow five blocks through a loader that appends and nothing else. Three of them are replaced, the replacements are appended too, and the warehouse now holds eight blocks of rows where the chain has five. Then walk the four places a normal pipeline would notice something and watch each of them be satisfied, correctly, by a table that is 3 blocks of rows wrong.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 496" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two panels showing what the loader did and what the chain did next. Left panel: five block chips numbered 46 to 50 arrive, an arrow leads down to a warehouse bar of five matching segments, and a note says five blocks in, five blocks of rows written, all correct. Right panel: the chain now shows 46 and 47 followed by three amber replacement blocks, the loader appends those three as well, and the warehouse bar now holds eight segments where segments three, four and five are drawn in amber under a bracket reading three blocks of rows describing history the chain no longer has. Below, four tiles list places a pipeline would normally notice. Row count: eight blocks of rows sit where five did, volume is up and alerts watch for drops. Schema: every new row is well formed with nothing null. Uniqueness: a replaced block writes new rows rather than duplicate keys, so no constraint trips. Freshness: the newest block is newer than before, so the service level is green and greener. A closing band says the loader is correct and did exactly what append only means, that every check above asks whether the rows that arrived are good, and that the question nobody asked is whether the rows already written are still true.">
+        <style>
+          .p6aH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .p6aL { font: 800 9px Inter, sans-serif; fill: #54655F; letter-spacing: .11em; }
+          .p6aT { font: 800 9.5px Inter, sans-serif; fill: #FFFFFF; letter-spacing: .05em; }
+          .p6aBk { font: 700 10px Inter, sans-serif; fill: #123D3A; }
+          .p6aBa { font: 700 10px Inter, sans-serif; fill: #9C3D18; }
+          .p6aM { font: 400 10px Inter, sans-serif; fill: #54655F; }
+          .p6aB { font: 400 9.5px Inter, sans-serif; fill: #13201E; }
+          .p6aCa { font: 800 10px Inter, sans-serif; fill: #9C3D18; }
+          .p6aK { font: 800 11.5px Inter, sans-serif; fill: #9C3D18; }
+        </style>
+        <defs>
+          <marker id="p6aArI" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1F5F5B"></path></marker>
+          <marker id="p6aArA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9C3D18"></path></marker>
+        </defs>
+
+        <text class="p6aH" x="14" y="20">Same loader, two moments. Between them the chain took three blocks back.</text>
+
+        <rect x="14" y="36" width="418" height="204" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="36" width="418" height="24" rx="10" fill="#1F5F5B"></rect>
+        <rect x="14" y="48" width="418" height="12" fill="#1F5F5B"></rect>
+        <text class="p6aT" x="28" y="53">WHAT THE LOADER DID</text>
+
+        <text class="p6aL" x="32" y="80">BLOCKS ARRIVING, NEWEST ON THE RIGHT</text>
+        <rect x="32" y="88" width="62" height="28" rx="5" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="p6aBk" x="52" y="107">46</text>
+        <rect x="102" y="88" width="62" height="28" rx="5" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="p6aBk" x="122" y="107">47</text>
+        <rect x="172" y="88" width="62" height="28" rx="5" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="p6aBk" x="192" y="107">48</text>
+        <rect x="242" y="88" width="62" height="28" rx="5" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="p6aBk" x="262" y="107">49</text>
+        <rect x="312" y="88" width="62" height="28" rx="5" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="p6aBk" x="332" y="107">50</text>
+
+        <line x1="203" y1="120" x2="203" y2="142" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p6aArI)"></line>
+        <text class="p6aL" x="32" y="138">WAREHOUSE</text>
+
+        <rect x="32" y="146" width="62" height="26" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <rect x="102" y="146" width="62" height="26" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <rect x="172" y="146" width="62" height="26" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <rect x="242" y="146" width="62" height="26" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <rect x="312" y="146" width="62" height="26" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+
+        <text class="p6aM" x="32" y="196">Five blocks in, five blocks of rows written, every one of</text>
+        <text class="p6aM" x="32" y="214">them describing history the chain currently has.</text>
+
+        <rect x="448" y="36" width="418" height="204" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="448" y="36" width="418" height="24" rx="10" fill="#9C3D18"></rect>
+        <rect x="448" y="48" width="418" height="12" fill="#9C3D18"></rect>
+        <text class="p6aT" x="462" y="53">WHAT THE CHAIN DID NEXT</text>
+
+        <text class="p6aL" x="466" y="80">THE LAST THREE BLOCKS ARE REPLACED</text>
+        <rect x="466" y="88" width="62" height="28" rx="5" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="p6aBk" x="486" y="107">46</text>
+        <rect x="536" y="88" width="62" height="28" rx="5" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="p6aBk" x="556" y="107">47</text>
+        <rect x="606" y="88" width="62" height="28" rx="5" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p6aBa" x="620" y="107">48 new</text>
+        <rect x="676" y="88" width="62" height="28" rx="5" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p6aBa" x="690" y="107">49 new</text>
+        <rect x="746" y="88" width="62" height="28" rx="5" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p6aBa" x="760" y="107">50 new</text>
+
+        <line x1="637" y1="120" x2="637" y2="142" stroke="#9C3D18" stroke-width="1.6" marker-end="url(#p6aArA)"></line>
+        <text class="p6aL" x="466" y="138">WAREHOUSE</text>
+
+        <rect x="466" y="146" width="39" height="26" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <rect x="509" y="146" width="39" height="26" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <rect x="552" y="146" width="39" height="26" rx="4" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <rect x="595" y="146" width="39" height="26" rx="4" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <rect x="638" y="146" width="39" height="26" rx="4" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <rect x="681" y="146" width="39" height="26" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <rect x="724" y="146" width="39" height="26" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <rect x="767" y="146" width="39" height="26" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+
+        <line x1="552" y1="180" x2="677" y2="180" stroke="#9C3D18" stroke-width="1.6"></line>
+        <line x1="552" y1="176" x2="552" y2="184" stroke="#9C3D18" stroke-width="1.6"></line>
+        <line x1="677" y1="176" x2="677" y2="184" stroke="#9C3D18" stroke-width="1.6"></line>
+        <text class="p6aCa" x="466" y="202">Three blocks of rows describing history the chain no</text>
+        <text class="p6aM" x="466" y="220">longer has, sitting beside the rows that replaced them.</text>
+
+        <text class="p6aL" x="14" y="268">FOUR PLACES A PIPELINE WOULD NORMALLY NOTICE, AND WHY EACH ONE IS SATISFIED</text>
+
+        <rect x="14" y="276" width="207" height="104" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="276" width="207" height="24" rx="10" fill="#123D3A"></rect>
+        <rect x="14" y="288" width="207" height="12" fill="#123D3A"></rect>
+        <text class="p6aT" x="28" y="293">ROW COUNT</text>
+        <text class="p6aB" x="28" y="320">8 blocks of rows sit</text>
+        <text class="p6aB" x="28" y="336">where 5 did. Volume is</text>
+        <text class="p6aB" x="28" y="352">up, and alerts watch drops.</text>
+
+        <rect x="229" y="276" width="207" height="104" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="229" y="276" width="207" height="24" rx="10" fill="#123D3A"></rect>
+        <rect x="229" y="288" width="207" height="12" fill="#123D3A"></rect>
+        <text class="p6aT" x="243" y="293">SCHEMA</text>
+        <text class="p6aB" x="243" y="320">Every new row is well</text>
+        <text class="p6aB" x="243" y="336">formed. Nothing is null</text>
+        <text class="p6aB" x="243" y="352">and nothing is malformed.</text>
+
+        <rect x="444" y="276" width="207" height="104" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="444" y="276" width="207" height="24" rx="10" fill="#123D3A"></rect>
+        <rect x="444" y="288" width="207" height="12" fill="#123D3A"></rect>
+        <text class="p6aT" x="458" y="293">UNIQUENESS</text>
+        <text class="p6aB" x="458" y="320">A replaced block writes</text>
+        <text class="p6aB" x="458" y="336">new rows, not duplicate</text>
+        <text class="p6aB" x="458" y="352">keys. No constraint trips.</text>
+
+        <rect x="659" y="276" width="207" height="104" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="659" y="276" width="207" height="24" rx="10" fill="#123D3A"></rect>
+        <rect x="659" y="288" width="207" height="12" fill="#123D3A"></rect>
+        <text class="p6aT" x="673" y="293">FRESHNESS</text>
+        <text class="p6aB" x="673" y="320">The newest block is newer</text>
+        <text class="p6aB" x="673" y="336">than before. The service</text>
+        <text class="p6aB" x="673" y="352">level is green and greener.</text>
+
+        <rect x="14" y="398" width="852" height="84" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p6aK" x="30" y="422">The loader is correct. It did exactly what append only means, on every block it was given.</text>
+        <text class="p6aM" x="30" y="442">There is no bug to find and no test that would have caught this, because every check above asks whether the rows that</text>
+        <text class="p6aM" x="30" y="462">arrived are good. All of them are. The question nobody asked is whether the rows already written are still true.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the row count moving up is the cruellest of the four. The one signal that changed moved in the direction everybody reads as healthy.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why no check fires, one at a time<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Data quality checks are almost all statements about rows that arrive. Is this row well formed, is the key unique, is the volume in range, is the newest record recent enough. Every one of those is answered by inspecting the incoming batch, and every one of them is answered correctly here, because the incoming batch is fine. The replacement blocks are real blocks and their rows are real rows.</p>
+        <p>The rows that are wrong are the ones already in the table, and nothing in a normal pipeline goes back to ask whether a row it wrote last week is still supported by the source. That question has no natural home: it is not a schema property, it is not a batch property, and it cannot be answered without re-reading history you have already processed.</p>
+        <p>The freshness check deserves a moment on its own. After a replacement the newest block is newer than it was, the loader is up to date, and the service level indicator improves. The single observable that moved moved in the reassuring direction, so a team watching a dashboard sees the situation get better at the moment it got worse.</p>
+      </div>
+    </details>
+
+    <div class="p6code">
+      <span class="p6cap">The loader, and the branch that does not exist in it</span>
+      <code>// A plain append-only load. There is nothing wrong with this code.
+function onBlock(block) {
+  warehouse.insert(block.height, block.rows);   // append, never update
+}
+
+// What a replacement looks like from in here: nothing. The loader is handed
+// the new blocks and appends them, exactly as it appends every other block.
+//
+// There is no error path because there is no error. Rows arrived and were
+// written. The rows written earlier were never re-examined, because no
+// append-only loader has a reason to re-examine anything.
+//
+// Note what is missing and cannot be added without a second read of history:
+//   if (blockWasReplaced(height)) { ... }   // nothing supplies this predicate</code>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Where the wrong rows sit, which is not evenly spread<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A replacement takes back the most recent blocks, so every orphaned row came from the tip of the chain at the moment the replacement landed. The damage is not scattered uniformly across 200 blocks of history. It is concentrated in short runs immediately before each event, four times over in this run.</p>
+        <p>That concentration matters for who feels it. Long range aggregates dilute it across a lot of correct history. Anything recency weighted does not: a last-24-hours panel, a daily delta, an alerting rule on the newest window, a cohort defined by when somebody first appeared. Those read disproportionately from exactly the blocks a replacement is most likely to take back.</p>
+        <p>So the same 5.75 percent produces very different consequences depending on which report you look at, and a team that measures the error only as a share of the whole table will understate what it does to the numbers people actually watch.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the size and the missing input</span>
+      <h2>511 rows, 5.75 percent, and a table with a hidden parameter</h2>
+      <span class="tag demo">12 min live</span>
+    </div>
+    <p class="lede">Run the undefended loader and read the figure. Then run it again on other draws and watch it stay put, which is what makes it a property of the arrangement rather than an accident of one run. Then look at the lag table, which is the standard first response, and notice two things about it: the middle of it is worse than it looks, and the whole of it is conditional on a number that does not appear anywhere in your warehouse.</p>
+
+    <div class="wk" id="p6-damage">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">Bench B running in this page, with no lag and no defence of any kind. 200 blocks, a replacement every 50.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="p6-seed">Which run of the pipeline</label>
+        <select class="sql-code" id="p6-seed">
+          <option value="5">Run 1</option>
+          <option value="42">Run 2</option>
+          <option value="777">Run 3</option>
+          <option value="20260922">Run 4</option>
+        </select>
+        <label class="sql-label" for="p6-depth">How many blocks a replacement takes back</label>
+        <select class="sql-code" id="p6-depth">
+          <option value="1">1 block</option>
+          <option value="2">2 blocks</option>
+          <option value="3" selected>3 blocks, the bench setting</option>
+          <option value="4">4 blocks</option>
+          <option value="6">6 blocks</option>
+        </select>
+        <div id="p6-out"></div>
+        <p class="sql-note" id="p6-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="p6-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>5.75 percent, and it is not a draw<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>At the bench setting the undefended loader ends with 511 orphaned rows, 5.75 percent of the warehouse. Change the run and the share lands between 5.65 and 5.75 percent across four of them. That narrow band is the useful part: this is not a bad day, it is what this arrangement produces, and a team that saw the figure once and hoped it was unlucky will see it again next month.</p>
+        <p>Now move the depth selector and watch the figure move with it. That is the sentence Part 2 exists for. The share of your warehouse that is wrong is a function of how far back the upstream reaches, and the bench is showing you a family of answers rather than one.</p>
+        <p>One row of the table is worth pointing at while it is on screen: errors raised, zero. Not zero because the bench is being kind. Zero because there is no code path in an append-only loader that could raise one, which Part 1 walked through line by line.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 434" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A bar chart of wrong rows left in the warehouse against finality lag in blocks, for lags zero, one, two, three, four, six and twelve. The bar at lag zero reaches 511 and carries 5.75 percent inside it. The bar at lag one reaches 346 with 3.99 percent, the bar at lag two reaches 172 with 2.03 percent, and lags three, four, six and twelve all read zero with no bar at all. A dashed amber region covers lags one and two and is labelled the dangerous middle. Beneath the axis a second row gives the rows held back and not reported yet at each lag: zero, 44, 84, 125, 168, 249 and 497. A closing band says the bars reach their floor at lag three while the row underneath never stops climbing, since lags three, four, six and twelve all leave zero wrong rows and differ only in holding 125, 168, 249 and 497 rows back.">
+        <style>
+          .p6bH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .p6bA { font: 700 9px Inter, sans-serif; fill: #54655F; }
+          .p6bV { font: 800 11px Inter, sans-serif; fill: #13201E; }
+          .p6bVz { font: 800 11px Inter, sans-serif; fill: #1F5F5B; }
+          .p6bPct { font: 800 9.5px Inter, sans-serif; fill: #FFFFFF; }
+          .p6bX { font: 700 10px Inter, sans-serif; fill: #13201E; }
+          .p6bAx { font: 600 9.5px Inter, sans-serif; fill: #54655F; }
+          .p6bMk { font: 800 9px Inter, sans-serif; fill: #9C3D18; letter-spacing: .07em; }
+          .p6bHd { font: 800 9px Inter, sans-serif; fill: #1F5F5B; letter-spacing: .09em; }
+          .p6bHv { font: 700 10px Inter, sans-serif; fill: #1F5F5B; }
+          .p6bK { font: 800 11.5px Inter, sans-serif; fill: #9C3D18; }
+          .p6bM { font: 400 10px Inter, sans-serif; fill: #54655F; }
+        </style>
+
+        <text class="p6bH" x="14" y="20">Wrong rows against finality lag, with the middle of it named</text>
+
+        <text class="p6bMk" x="197" y="40">THE DANGEROUS MIDDLE</text>
+        <rect x="197" y="46" width="209" height="194" rx="6" fill="#FDF3EE" stroke="#9C3D18" stroke-dasharray="4 4"></rect>
+
+        <line x1="90" y1="60" x2="830" y2="60" stroke="#DCE9E6" stroke-width="1"></line>
+        <line x1="90" y1="150" x2="830" y2="150" stroke="#DCE9E6" stroke-width="1"></line>
+        <line x1="90" y1="240" x2="830" y2="240" stroke="#54655F" stroke-width="1.2"></line>
+        <text class="p6bA" x="82" y="63" text-anchor="end">700</text>
+        <text class="p6bA" x="82" y="153" text-anchor="end">350</text>
+        <text class="p6bA" x="82" y="243" text-anchor="end">0</text>
+
+        <rect x="121" y="106" width="44" height="134" rx="3" fill="#9C3D18"></rect>
+        <text class="p6bV" x="143" y="100" text-anchor="middle">511</text>
+        <text class="p6bPct" x="143" y="128" text-anchor="middle">5.75%</text>
+
+        <rect x="227" y="149" width="44" height="91" rx="3" fill="#9C3D18"></rect>
+        <text class="p6bV" x="249" y="143" text-anchor="middle">346</text>
+        <text class="p6bPct" x="249" y="171" text-anchor="middle">3.99%</text>
+
+        <rect x="332" y="195" width="44" height="45" rx="3" fill="#9C3D18"></rect>
+        <text class="p6bV" x="354" y="189" text-anchor="middle">172</text>
+        <text class="p6bPct" x="354" y="215" text-anchor="middle">2.03%</text>
+
+        <text class="p6bVz" x="460" y="232" text-anchor="middle">0</text>
+        <text class="p6bVz" x="566" y="232" text-anchor="middle">0</text>
+        <text class="p6bVz" x="671" y="232" text-anchor="middle">0</text>
+        <text class="p6bVz" x="777" y="232" text-anchor="middle">0</text>
+
+        <line x1="143" y1="240" x2="143" y2="247" stroke="#54655F" stroke-width="1.2"></line>
+        <line x1="249" y1="240" x2="249" y2="247" stroke="#54655F" stroke-width="1.2"></line>
+        <line x1="354" y1="240" x2="354" y2="247" stroke="#54655F" stroke-width="1.2"></line>
+        <line x1="460" y1="240" x2="460" y2="247" stroke="#54655F" stroke-width="1.2"></line>
+        <line x1="566" y1="240" x2="566" y2="247" stroke="#54655F" stroke-width="1.2"></line>
+        <line x1="671" y1="240" x2="671" y2="247" stroke="#54655F" stroke-width="1.2"></line>
+        <line x1="777" y1="240" x2="777" y2="247" stroke="#54655F" stroke-width="1.2"></line>
+        <text class="p6bX" x="143" y="264" text-anchor="middle">0</text>
+        <text class="p6bX" x="249" y="264" text-anchor="middle">1</text>
+        <text class="p6bX" x="354" y="264" text-anchor="middle">2</text>
+        <text class="p6bX" x="460" y="264" text-anchor="middle">3</text>
+        <text class="p6bX" x="566" y="264" text-anchor="middle">4</text>
+        <text class="p6bX" x="671" y="264" text-anchor="middle">6</text>
+        <text class="p6bX" x="777" y="264" text-anchor="middle">12</text>
+        <text class="p6bAx" x="460" y="282" text-anchor="middle">finality lag, in blocks</text>
+
+        <line x1="90" y1="298" x2="830" y2="298" stroke="#DCE9E6" stroke-width="1.4"></line>
+        <text class="p6bHd" x="90" y="320">ROWS HELD BACK, NOT REPORTED YET</text>
+        <text class="p6bHv" x="143" y="342" text-anchor="middle">0</text>
+        <text class="p6bHv" x="249" y="342" text-anchor="middle">44</text>
+        <text class="p6bHv" x="354" y="342" text-anchor="middle">84</text>
+        <text class="p6bHv" x="460" y="342" text-anchor="middle">125</text>
+        <text class="p6bHv" x="566" y="342" text-anchor="middle">168</text>
+        <text class="p6bHv" x="671" y="342" text-anchor="middle">249</text>
+        <text class="p6bHv" x="777" y="342" text-anchor="middle">497</text>
+
+        <rect x="14" y="360" width="852" height="62" rx="10" fill="#EFF7F5" stroke="#1F5F5B"></rect>
+        <text class="p6bK" x="30" y="384">The bars reach their floor at lag 3. The row underneath them never stops climbing.</text>
+        <text class="p6bM" x="30" y="404">Lags 3, 4, 6 and 12 all leave 0 wrong rows, and the only thing they do differently is hold 125, 168, 249 and 497 rows back.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - lags 1 and 2 are the only configurations on this chart that are both wrong and expensive, which is why the shaded region has a name.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The dangerous middle, and why it is worse than nothing<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Read the first three bars in order. 511, then 346, then 172. A lag of 1 removes about a third of the damage and a lag of 2 removes about two thirds, so both of them are doing something, and that is exactly the problem. The warehouse at lag 1 still holds 346 wrong rows, 3.99 percent of it, and the team now has a documented precaution in place.</p>
+        <p>A configuration that is wrong and looks unprotected keeps generating the discomfort that eventually makes somebody look at it again. A configuration that is wrong and looks protected does not. The concern has been spent, the ticket is closed, the design document says a finality lag is applied, and nothing on any dashboard will ever contradict that sentence. Partial protection here is not a safe middle position, it is the same error with the alarm removed.</p>
+        <p>The arithmetic underneath is not subtle. A replacement takes back the last 3 blocks. At a lag of 1 the loader has already written two of those three. At a lag of 2 it has written one. At a lag of 3 it has written none. The sequence 511, 346, 172, 0 is that sentence counted in rows.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 384" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three boxes in a row forming an equation. The first box, the lag you set, is a number in your loader configuration that you choose and can read. A plus sign joins it to the second box, drawn in amber with a dashed border and a large question mark, the depth you face: how many blocks back a replacement reaches, which is not a column in your data. An equals sign joins those to the third box, is the warehouse correct, which is answerable only when both boxes to its left are filled in. A band below says every row of the lag table is conditional on a number nobody wrote down, and that moving the depth selector in the live box moves the whole table with it. A closing band says Bench B fixes the depth at 3 with a replacement every 50 blocks over 200 blocks because a bench has to fix something, that no figure on the page describes any real network, and that session 7 takes the two defences available and prices what each of them costs.">
+        <style>
+          .p6cH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .p6cT { font: 800 9.5px Inter, sans-serif; fill: #FFFFFF; letter-spacing: .05em; }
+          .p6cB { font: 400 10px Inter, sans-serif; fill: #13201E; }
+          .p6cM { font: 400 10px Inter, sans-serif; fill: #54655F; }
+          .p6cOp { font: 800 22px Inter, sans-serif; fill: #54655F; }
+          .p6cQ { font: 800 30px Inter, sans-serif; fill: #9C3D18; }
+          .p6cK { font: 800 11.5px Inter, sans-serif; fill: #9C3D18; }
+          .p6cKi { font: 800 11.5px Inter, sans-serif; fill: #1F5F5B; }
+        </style>
+
+        <text class="p6cH" x="14" y="20">The lag is a decision with two inputs, and only one of them is yours</text>
+
+        <rect x="14" y="44" width="240" height="104" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="44" width="240" height="24" rx="10" fill="#1F5F5B"></rect>
+        <rect x="14" y="56" width="240" height="12" fill="#1F5F5B"></rect>
+        <text class="p6cT" x="28" y="61">THE LAG YOU SET</text>
+        <text class="p6cB" x="28" y="90">A number in your loader</text>
+        <text class="p6cB" x="28" y="108">configuration. You choose</text>
+        <text class="p6cB" x="28" y="126">it, and you can read it.</text>
+
+        <text class="p6cOp" x="287" y="104" text-anchor="middle">+</text>
+
+        <rect x="320" y="44" width="240" height="104" rx="10" fill="#FDF3EE" stroke="#9C3D18" stroke-dasharray="5 4"></rect>
+        <rect x="320" y="44" width="240" height="24" rx="10" fill="#9C3D18"></rect>
+        <rect x="320" y="56" width="240" height="12" fill="#9C3D18"></rect>
+        <text class="p6cT" x="334" y="61">THE DEPTH YOU FACE</text>
+        <text class="p6cB" x="334" y="90">How many blocks back a</text>
+        <text class="p6cB" x="334" y="108">replacement reaches. Not</text>
+        <text class="p6cB" x="334" y="126">a column in your data.</text>
+        <text class="p6cQ" x="518" y="122">?</text>
+
+        <text class="p6cOp" x="593" y="104" text-anchor="middle">=</text>
+
+        <rect x="626" y="44" width="240" height="104" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="626" y="44" width="240" height="24" rx="10" fill="#123D3A"></rect>
+        <rect x="626" y="56" width="240" height="12" fill="#123D3A"></rect>
+        <text class="p6cT" x="640" y="61">IS THE WAREHOUSE CORRECT?</text>
+        <text class="p6cB" x="640" y="90">Answerable only when</text>
+        <text class="p6cB" x="640" y="108">both of the boxes to the</text>
+        <text class="p6cB" x="640" y="126">left are filled in.</text>
+
+        <rect x="14" y="168" width="852" height="82" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p6cK" x="30" y="192">Every row of the lag table is conditional on a number nobody wrote down.</text>
+        <text class="p6cM" x="30" y="212">Move the depth selector in the live box and the whole table moves with it. A lag of 3 is not a safe value, it is the answer</text>
+        <text class="p6cM" x="30" y="232">to one question, and a team that cannot state the question has picked a number rather than built a defence.</text>
+
+        <rect x="14" y="268" width="852" height="102" rx="10" fill="#EFF7F5" stroke="#1F5F5B"></rect>
+        <text class="p6cKi" x="30" y="292">What the bench fixed, said plainly.</text>
+        <text class="p6cM" x="30" y="312">Bench B uses a depth of 3, a replacement every 50 blocks, and 200 blocks in total, because a bench has to fix something.</text>
+        <text class="p6cM" x="30" y="332">No figure on this page describes any real network, and the depth for whatever you are reading is a question to be answered</text>
+        <text class="p6cM" x="30" y="352">outside the warehouse. Session 7 takes the two defences available and prices what each of them costs.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the question mark is the whole diagram. Everything else on it is arithmetic once that box has a number in it.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What tonight deliberately does not answer<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>There are two mechanisms available against this and neither has been described tonight, on purpose. Holding rows back until the source has stopped changing its mind is one. Removing rows already written when the blocks they came from are replaced is the other. They are not two settings of the same thing, they fail in different circumstances, and they send their bills to different people.</p>
+        <p>Session 7 puts both of them against Bench B and prices them, including the configuration where you build both and the second one never fires. Tonight's contribution to that conversation is the size of the thing being defended against and the question that has to be answered before either defence can be specified.</p>
+        <p>The useful thing to carry out of the room is therefore not a recommendation. It is a measurement and a question: this much of my warehouse would be wrong, and I do not currently know the depth I am designing against.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>One camp says 5.75 percent is not an emergency and treating it as one is how engineering time gets burned on the wrong thing. Their case is that plenty of production datasets carry errors of that order from sampling, from clock skew, from a source system's own corrections, and that nobody rebuilds a pipeline over it. They add a sharper point: the error self-limits, because a report run a day later reads mostly correct history, so the practical exposure is confined to the freshest window and can be managed by not making irreversible decisions on the freshest window.</p>
+        <p>The other camp says the percentage is beside the point, and that quoting it as though it were a tolerance is the actual mistake. Their case rests on three differences. The error is not random, so it does not average out of anything. It is unbounded from inside the warehouse, because the depth could be larger next month and nothing in the table would say so. And it is unmeasured in production: 5.75 percent is a number the bench can produce and your warehouse cannot, so calling it small is a claim about a quantity you have never observed.</p>
+        <p>Both positions are held by people who ship. Notice that they are not disagreeing about the mechanism or about the 511, and that the first camp's argument depends entirely on its last clause. If your organisation genuinely does not make irreversible decisions on the freshest window, the first position is defensible and cheap. If it does, and most do somewhere, then the exposure is concentrated exactly where the decisions are, and the first argument has been refuted by your own reporting calendar rather than by the second camp.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Find out whether your own upstream can take something back</h2>
+      <span class="tag exercise">15 min hands on</span>
+    </div>
+    <p class="lede">Six steps on a pipeline in your own estate, chain or no chain. The first three are answerable in ten minutes and most teams have never been asked any of them.</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Ask whether your upstream can withdraw</h4>
+        <p>Not restate, not correct, not arrive late. Withdraw: can a record you have already loaded cease to exist at the source with nothing sent to tell you? Write yes, no, or nobody knows. The third answer is the most common and it is a finding.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>List the checks you run and mark what each one inspects</h4>
+        <p>Every quality check on the table, with one word each: arriving or resident. Count them. If everything in the list says arriving, you have measured tonight's blind spot in your own pipeline in about five minutes.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Say what your volume alert would do</h4>
+        <p>If your loader wrote a replacement batch alongside the batch it superseded, would any alert fire? Most volume rules trigger on a shortfall. Say out loud what yours does when the count goes up for the wrong reason.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Run the depth selector across its range</h4>
+        <p>In the live box, hold the run fixed and move the depth from 1 to 6. Write down the share of the warehouse that is wrong at each end. That spread is what not knowing the depth costs you in ignorance, expressed as a range you cannot currently narrow.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the missing number as a question, not a guess</h4>
+        <p>One line in your design document: the depth this pipeline is designed against is blank, and here is who would know. Resist filling it in from memory. A number in that slot with no source behind it is worse than a blank, because the blank gets asked about.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Name the report that reads the freshest window</h4>
+        <p>One report, dashboard or alert in your estate that leans on the newest data. That is where a withdrawal would land first and hardest. Bring the name to session 7, because it is the thing the two defences are being chosen for.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> Sort your data quality checks into two piles: ones that inspect rows arriving and ones that inspect rows resident. Almost every team has a full pile and an empty pile, and almost nobody has noticed, because the empty pile has no failures in it. A pipeline whose entire quality suite asks about the incoming batch is silent by construction about every way the past can change, and silence from a check that was never written reads exactly like a pass.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">After a replacement, which of the four checks in Part 1 moves, and in which direction?</p>
+      <div class="qopt">A · Uniqueness fails, because the replacement blocks reuse heights already present</div>
+      <div class="qopt">B · Schema validation fails, because the superseded rows are now inconsistent with the source</div>
+      <div class="qopt">C · Row count and freshness both improve: more rows are present than before and the newest block is newer, so the one signal that changed moved in the reassuring direction</div>
+      <q class="qwhy">Every check inspects rows that arrive, and the rows that arrived are fine. The replacement writes new well formed rows with their own keys, so nothing trips, and the two observables that move both move upward. That is why the situation reads as healthy at the moment it got worse.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">A team sets a finality lag of 1 against a depth of 3 and records it in the design document as a precaution. Why is that position worse than having set no lag at all?</p>
+      <div class="qopt">A · Because the warehouse still holds 346 wrong rows at 3.99 percent, and the team has now spent the concern that would have made somebody look at it again</div>
+      <div class="qopt">B · Because a lag of 1 leaves more wrong rows than a lag of 0 does</div>
+      <div class="qopt">C · Because holding any rows back invalidates the freshness service level</div>
+      <q class="qwhy">A lag of 1 genuinely removes damage, dropping 511 to 346, which is precisely what makes it dangerous. The residual is invisible from inside the warehouse and the documented precaution ensures nobody goes looking for it.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Your team already handles late-arriving records well, with idempotent loads and merge keys. Why does none of that help here?</p>
+      <div class="qopt">A · Because merge keys only work on dimension tables and this is a fact table</div>
+      <div class="qopt">B · Because those patterns handle data that arrives late, which is additive, and this is data that is withdrawn, which is subtractive, so every pattern in the toolkit produces a row where what is needed is the removal of one</div>
+      <div class="qopt">C · It does help, since a replacement is a restatement of an earlier period</div>
+      <q class="qwhy">A merge key resolves a row that turns up after its period. It has nothing to say about a row that was written, counted and reported, and is now unsupported by the source. The first leaves every previously correct figure correct. The second does not.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 7</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty minutes. One inventory and one number, both from a pipeline you actually run.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Finish the arriving-against-resident inventory</h4>
+        <p>Every quality check on one table, sorted into the two piles from step 2, with the count of each. Bring the totals. If the resident pile is empty, write one sentence on what you would have to read twice in order to fill it.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Bring your current lag and where it came from</h4>
+        <p>Whatever delay your loader applies today, in whatever unit, plus an honest note on whether it was a decision or an accident of scheduling. Session 7 prices both defences, and the first question it asks is what you are already paying.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The damage, measured</span><span class="note">511 orphaned rows at 5.75 percent of the warehouse, from a loader with no defect in it.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Stable across runs</span><span class="note">5.65 to 5.75 percent over four runs, so a property of the arrangement rather than one bad draw.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Why four standard checks stay green</span><span class="note">All of them inspect rows arriving. The wrong rows are resident, and nothing re-examines those.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The reassuring signal</span><span class="note">Row count and freshness both improve after a replacement, which is the cruellest detail in the mechanism.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The full lag table</span><span class="note">511, 346, 172, 0, 0, 0, 0 against 0, 44, 84, 125, 168, 249 and 497 rows held back.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The dangerous middle</span><span class="note">A lag shallower than the depth buys partial protection and removes the pressure to look again.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The input nobody writes down</span><span class="note">Every row of the table is conditional on the depth, which is not a column in your data.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Late against withdrawn</span><span class="note">Additive against subtractive, and why the existing toolkit produces rows where one must be removed.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">The two defences and their costs</span><span class="note">Named tonight and left unpriced on purpose. Session 7 puts both against Bench B.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Establishing the depth you face</span><span class="note">Raised tonight as the missing input. Session 7 is where it becomes a design input with a source.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Idempotency and late-arriving craft</span><span class="note">Named and pointed at learn-data-engineering-with-phoebe. The general patterns are theirs.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Why branches get replaced at all</span><span class="note">The prerequisite is learn-blockchain-with-phoebe and it is assumed rather than repeated.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Named networks, and any real replacement depth</span><span class="note">Every figure here comes from the generator in w3-live.js and describes nothing outside it.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Anything to do with price, markets or holdings</span><span class="note">Out of scope by design, and nothing here is advice of any kind.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The one sentence.</strong> 511 rows, 5.75 percent of the warehouse, describing history the chain no longer has, and nothing errored.</div>
+      <div class="cheat-item"><strong>It is not a draw.</strong> 5.65 to 5.75 percent across four runs. This is what the arrangement produces, not a bad month.</div>
+      <div class="cheat-item"><strong>Why it is silent.</strong> Every check inspects rows arriving. The wrong rows are resident, and nothing re-reads those.</div>
+      <div class="cheat-item"><strong>The cruel detail.</strong> Row count and freshness both improve. The only signals that move move the reassuring way.</div>
+      <div class="cheat-item"><strong>The lag table.</strong> 511, 346, 172, 0 at lags 0 to 3, then 0 at 4, 6 and 12, holding 125, 168, 249 and 497 rows.</div>
+      <div class="cheat-item"><strong>The dangerous middle.</strong> Lag 1 leaves 3.99 percent wrong and a closed ticket. Partial protection removes the alarm, not the error.</div>
+      <div class="cheat-item"><strong>The missing input.</strong> You cannot choose a lag without the depth, and the depth is not in your data.</div>
+      <div class="cheat-item"><strong>The distinction.</strong> Late is additive and your toolkit expects it. Withdrawn is subtractive and nothing in it applies.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 6 of 10 · learn-web3-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p5-sybils-and-adversarial-counts.html">← Practitioner session 5 · Sybils and adversarial counts</a>
+        <a href="p7-designing-for-retraction.html">Practitioner session 7 · Designing for retraction →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/w3-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof W3 === "undefined") return;
+  var seedSel = document.getElementById("p6-seed");
+  var depthSel = document.getElementById("p6-depth");
+  var out = document.getElementById("p6-out");
+  var verdict = document.getElementById("p6-verdict");
+  var self = document.getElementById("p6-self");
+
+  function comma(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+  function pct(x) { return (Math.round(x * 10000) / 100).toFixed(2) + "%"; }
+
+  function render() {
+    var s = Number(seedSel.value);
+    var d = Number(depthSel.value);
+    var r = W3.runPipeline({ finalityLag: 0, retract: false, reorgDepth: d, seed: s });
+
+    var html = '<table class="sql-table"><thead><tr><th>What the run did</th><th>Value</th><th>How a warehouse would know</th></tr></thead><tbody>';
+    html += "<tr><td>Blocks processed</td><td>" + comma(r.blocks) + "</td><td>counted by the loader</td></tr>";
+    html += "<tr><td>Replacements, each " + d + " block" + (d === 1 ? "" : "s") + " deep</td><td>" + r.reorgs + "</td><td>the chain, not you</td></tr>";
+    html += "<tr><td>Rows written to the warehouse</td><td>" + comma(r.rowsWritten) + "</td><td>counted by the loader</td></tr>";
+    html += '<tr><td>Rows describing history the chain no longer has</td><td><b class="p6-bad">'
+      + comma(r.orphanedRows) + "</b></td><td><b>it would not</b></td></tr>";
+    html += '<tr><td>Share of the warehouse that is wrong</td><td><b class="p6-bad">'
+      + pct(r.wrongRowShare) + "</b></td><td><b>it would not</b></td></tr>";
+    html += '<tr><td>Errors raised by the loader</td><td><b class="p6-ok">0</b></td><td>there is no code path that raises one</td></tr>';
+    html += "</tbody></table>";
+    out.innerHTML = html;
+
+    var base = W3.runPipeline({ finalityLag: 0, retract: false, reorgDepth: 3, seed: 5 });
+    var v = "This run leaves " + comma(r.orphanedRows) + " wrong rows, " + pct(r.wrongRowShare)
+      + " of the warehouse, and raised nothing.";
+    if (d === 3) {
+      v += " At the bench depth of 3 the four runs land between 5.65 and 5.75 percent, so the figure is a property of the arrangement rather than of this draw.";
+    } else {
+      v += " Against the bench depth of 3 on run 1, which leaves " + comma(base.orphanedRows) + " at "
+        + pct(base.wrongRowShare) + ", the difference is entirely the depth. That number is an input you have to establish, not one you can read here.";
+    }
+    verdict.textContent = v;
+
+    var t = W3.selfTest();
+    self.textContent = t.ok
+      ? "The generator's five properties pass in this browser, including the one that checks a lag deeper than the replacement orphans nothing. Nothing here describes a real network."
+      : "The generator's self test did not pass in this browser, so nothing above should be believed.";
+  }
+
+  seedSel.addEventListener("change", render);
+  depthSel.addEventListener("change", render);
+  render();
+})();
+</script>
+<style>
+  #p6-damage .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 20rem; }
+  #p6-damage table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+  #p6-damage .p6-bad { color: var(--amber); }
+  #p6-damage .p6-ok { color: var(--indigo); }
+  .p6code {
+    background: var(--indigo-50);
+    border: 1px solid var(--hairline);
+    border-left: 4px solid var(--indigo);
+    border-radius: 12px;
+    padding: 1rem 1.15rem 1.1rem;
+    margin: 1rem 0 1.4rem;
+    overflow-x: auto;
+  }
+  .p6code .p6cap {
+    display: block;
+    font-family: Inter, -apple-system, sans-serif;
+    font-size: .68rem;
+    font-weight: 800;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--indigo);
+    margin-bottom: 1rem;
+  }
+  .p6code code {
+    display: block;
+    white-space: pre;
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: .8rem;
+    line-height: 1.75;
+    color: var(--ink);
+  }
+</style>
+</body>
+</html>

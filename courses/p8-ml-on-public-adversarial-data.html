@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 8 of 10. Three properties of a public adversarial dataset that change how a model is built: the features are readable by anyone, 240 of about 1,000 address rows belong to 4 operators, and 5.75 percent of a naive load describes history that is gone.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="ML on public adversarial data - learn web3 with phoebe">
+<meta property="og:description" content="Practitioner session 8 of 10. The unit of analysis decides more than the model choice, and clustering raises the operator share of the training population from 24.4 percent to 34.3 percent against a truth of 1.3.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-web3-with-phoebe/courses/p8-ml-on-public-adversarial-data.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ML on public adversarial data - learn web3 with phoebe">
+<meta name="twitter:description" content="Your features are public, your labels may be manufactured, and your training set can be withdrawn. None of the three is a property of the model.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 8 · ML on public adversarial data - learn web3 with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-web3-with-phoebe</a> / Practitioner session 8 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Web3 with Phoebe · Practitioner session 8 of 10</div>
+    <h1>ML on public <span class="accent">adversarial data</span></h1>
+    <p class="sub">Three things are true about Larkfield's rows that are not true about the datasets modelling practice was built on. The features are readable by everyone, including the people who produce the inputs. The population is not a sample of anything, because 240 of about 1,000 address rows were created on purpose by 4 parties. And 5.75 percent of a naive load describes history the chain no longer has, so a training set frozen without a finality lag contains events that did not happen. Each of those is measured on the benches, and none of them is fixed by choosing a different model.</p>
+    <div class="chip-row">
+      <span class="chip level">🔧 Practitioner track</span>
+      <span class="chip audience">Anyone training a model on ledger rows</span>
+      <span class="chip audience">Anyone signing off a model's evaluation</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · Three properties</span>
+      <span class="a3" style="flex:3">18-30 · The unit of analysis</span>
+      <span class="a4" style="flex:3">30-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The model is the last decision, and the smallest one</h2>
+    </div>
+    <p class="lede">A modelling brief on this data looks ordinary right up to the point where somebody asks where the rows came from. Larkfield has a table, it has a grain, it has a target worth predicting, and every library on the shelf will fit something to it without complaining. What has changed is underneath the table. Three properties of the source decide most of the outcome before a single hyperparameter is chosen, and all three of them are measurable tonight rather than arguable.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The three properties named and priced: 195 addresses your only feature is blind on and a blind spot anyone can enumerate, 240 of about 1,000 rows belonging to 4 parties, and 511 rows in a naive load describing history that is gone. The measurement most people do not expect, which is that clustering the addresses raises the operator share of the training population from 24.4 percent to 34.3 percent against a truth of 1.3. And the habit that follows: settle the unit of analysis, the label source and the load discipline before anyone opens a modelling library, because the model choice cannot reach any of them.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What is actually different here<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Plenty of datasets are noisy, imbalanced or drifting, and the craft for all three is well developed. None of that craft is what is being tested tonight. Noise is a property of measurement. What Larkfield has is a property of authorship: some of these rows exist because a party decided they should exist, and that party knows what Larkfield can compute from them, because the columns are public.</p>
+        <p>That is a narrow difference and it has wide consequences. It means the training distribution is not a sample from a population, it is a population that was partly assembled. It means an evaluation set drawn the same way inherits the same composition. And it means a feature's usefulness is not a stable fact about the world, because the thing the feature reads is produced by somebody who can also read the feature.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Larkfield's first model scored well and shipped. The evaluation was an average over address rows, which is the default in every tutorial and the default in their notebook. Nobody had written down that a quarter of those rows belonged to four parties, because nobody had computed it. The model was good at the traffic those four parties produce and that is most of what the score was measuring.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words used tonight<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Unit of analysis.</strong> What one row of the training table represents. Tonight it is an address, a clustered entity, or a real party, and the three give different answers to the same question.</li>
+          <li><strong>Grain.</strong> The same idea said in a warehouse accent. Worth keeping both words, because the modelling side and the pipeline side rarely notice they are talking about one decision.</li>
+          <li><strong>Population composition.</strong> Who is in the table and in what proportion. On ordinary data this is an accident of collection. Here part of it is a choice somebody else made.</li>
+          <li><strong>One-sided error.</strong> An error that can only run in one direction. Bench A's clustering never fuses two parties, on any seed, so the count it produces can be too high and can never be too low.</li>
+          <li><strong>Observable features.</strong> Features computed from columns that anyone can read. Not a security property, a modelling one: the inputs and the blind spots are both public.</li>
+          <li><strong>Finality lag.</strong> How far behind the tip a loader stays before writing a block's rows. Session 7 priced it. Tonight it is a property of the training set rather than of the report.</li>
+          <li><strong>Operator.</strong> A party running many addresses deliberately. Bench A has 4 of them holding 60 addresses each, and the generator knows which is which so the truth can be checked.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the three properties</span>
+      <h2>Public features, authored labels, vanishing rows</h2>
+      <span class="tag concept">15 min live</span>
+    </div>
+    <p class="lede">Take the three one at a time, each with the number the benches put on it. They are independent of each other, they are all present at once, and each one lands on a different part of the modelling workflow: the feature step, the population step, and the step where somebody freezes a snapshot and calls it a training set.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 524" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three panels, one per property. Panel one, your features are public: a box of three row bars with two readers to its right, one labelled you and one labelled anyone, both with arrows pointing into the same box. A measured tile reads 195 addresses your only feature says nothing about. Body text says 787 of 982 addresses ever appear as a spend input and the rest carry no evidence at all. Panel two, your labels may be manufactured: a single bar representing 982 address rows with the leftmost 240 shaded amber and labelled 24.4 percent chosen by four parties, above a short axis marking truth at 304, clustered at 676 to 707 and naive at 982. A measured tile reads 240 of about 1,000 rows belong to 4 parties. Panel three, your training set can be withdrawn: a warehouse bar with a thin amber slice marked 511 rows, 5.75 percent, and a box labelled training set frozen at the tip which carries every one of those rows. A measured tile reads 5.75 percent of a naive load describes history the chain dropped. A closing band says none of the three is fixed by a better model because none of them is a property of the model.">
+        <style>
+          .p8aH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .p8aT { font: 800 9.5px Inter, sans-serif; fill: #FFFFFF; }
+          .p8aL { font: 800 9px Inter, sans-serif; fill: #54655F; letter-spacing: .1em; }
+          .p8aB { font: 400 10.5px Inter, sans-serif; fill: #13201E; }
+          .p8aM { font: 400 9.5px Inter, sans-serif; fill: #54655F; }
+          .p8aS { font: 700 9px Inter, sans-serif; fill: #1F5F5B; }
+          .p8aSa { font: 700 8.5px Inter, sans-serif; fill: #9C3D18; }
+          .p8aSm { font: 400 8.5px Inter, sans-serif; fill: #13201E; }
+          .p8aSw { font: 800 8.5px Inter, sans-serif; fill: #FFFFFF; }
+          .p8aSg { font: 400 8.5px Inter, sans-serif; fill: #54655F; }
+          .p8aBig { font: 800 20px Inter, sans-serif; fill: #9C3D18; }
+          .p8aTile { font: 600 9.5px Inter, sans-serif; fill: #54655F; }
+          .p8aK { font: 800 11.5px Inter, sans-serif; fill: #9C3D18; }
+        </style>
+        <defs>
+          <marker id="p8aArI" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1F5F5B"></path></marker>
+          <marker id="p8aArG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#54655F"></path></marker>
+        </defs>
+
+        <text class="p8aH" x="14" y="20">Three properties of the source, each measured, each landing on a different step of the workflow.</text>
+
+        <!-- ===== PANEL 1 ===== -->
+        <rect x="14" y="34" width="278" height="368" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="34" width="278" height="26" rx="10" fill="#123D3A"></rect>
+        <rect x="14" y="47" width="278" height="13" fill="#123D3A"></rect>
+        <text class="p8aT" x="28" y="52">1 · YOUR FEATURES ARE PUBLIC</text>
+
+        <text class="p8aL" x="28" y="82">THE ONLY EVIDENCE THERE IS</text>
+        <rect x="28" y="90" width="132" height="62" rx="6" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <line x1="40" y1="104" x2="148" y2="104" stroke="#8FBDB8" stroke-width="4" stroke-linecap="round"></line>
+        <line x1="40" y1="118" x2="148" y2="118" stroke="#8FBDB8" stroke-width="4" stroke-linecap="round"></line>
+        <line x1="40" y1="132" x2="148" y2="132" stroke="#8FBDB8" stroke-width="4" stroke-linecap="round"></line>
+        <circle cx="212" cy="104" r="10" fill="#1F5F5B"></circle>
+        <line x1="198" y1="104" x2="166" y2="104" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p8aArI)"></line>
+        <circle cx="212" cy="138" r="10" fill="#54655F"></circle>
+        <line x1="198" y1="138" x2="166" y2="138" stroke="#54655F" stroke-width="1.6" marker-end="url(#p8aArG)"></line>
+        <text class="p8aSm" x="228" y="108">you</text>
+        <text class="p8aSg" x="228" y="142">anyone</text>
+        <text class="p8aS" x="28" y="174">The same columns, the same rows.</text>
+        <text class="p8aM" x="28" y="200">Internal telemetry is private by</text>
+        <text class="p8aM" x="28" y="216">default. These columns never were.</text>
+
+        <rect x="28" y="254" width="250" height="54" rx="7" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p8aBig" x="42" y="288">195</text>
+        <text class="p8aTile" x="88" y="280">addresses your one feature</text>
+        <text class="p8aTile" x="88" y="296">says nothing at all about</text>
+
+        <text class="p8aB" x="28" y="330">787 of 982 addresses ever appear</text>
+        <text class="p8aB" x="28" y="347">as a spend input. The rest carry</text>
+        <text class="p8aB" x="28" y="364">no evidence, and that list is public.</text>
+
+        <!-- ===== PANEL 2 ===== -->
+        <rect x="301" y="34" width="278" height="368" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="301" y="34" width="278" height="26" rx="10" fill="#123D3A"></rect>
+        <rect x="301" y="47" width="278" height="13" fill="#123D3A"></rect>
+        <text class="p8aT" x="315" y="52">2 · YOUR LABELS MAY BE MANUFACTURED</text>
+
+        <text class="p8aL" x="315" y="82">ONE ROW PER ADDRESS, SEED 11</text>
+        <rect x="315" y="90" width="250" height="26" rx="4" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <rect x="315" y="90" width="61" height="26" rx="4" fill="#9C3D18"></rect>
+        <text class="p8aSw" x="323" y="107">240</text>
+        <text class="p8aSm" x="386" y="107">742 ordinary addresses</text>
+        <line x1="315" y1="124" x2="376" y2="124" stroke="#9C3D18" stroke-width="1.8"></line>
+        <text class="p8aSa" x="315" y="140">24.4%, and 4 parties chose it</text>
+
+        <text class="p8aL" x="315" y="166">WHAT THE ROWS SAY ABOUT PARTIES</text>
+        <text class="p8aS" x="331" y="184" text-anchor="middle">truth</text>
+        <text class="p8aSg" x="470" y="184" text-anchor="middle">clustered</text>
+        <text class="p8aSg" x="557" y="184" text-anchor="middle">naive</text>
+        <line x1="323" y1="196" x2="565" y2="196" stroke="#54655F" stroke-width="1.2"></line>
+        <line x1="331" y1="190" x2="331" y2="202" stroke="#1F5F5B" stroke-width="2.4"></line>
+        <line x1="470" y1="191" x2="470" y2="201" stroke="#54655F" stroke-width="1.4"></line>
+        <line x1="557" y1="191" x2="557" y2="201" stroke="#54655F" stroke-width="1.4"></line>
+        <text class="p8aSm" x="331" y="216" text-anchor="middle">304</text>
+        <text class="p8aSg" x="470" y="216" text-anchor="middle">676 to 707</text>
+        <text class="p8aSg" x="557" y="216" text-anchor="middle">982</text>
+        <text class="p8aSa" x="315" y="236">a ceiling, never a correction</text>
+
+        <rect x="315" y="254" width="250" height="54" rx="7" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p8aBig" x="329" y="288">240</text>
+        <text class="p8aTile" x="375" y="280">of about 1,000 rows belong</text>
+        <text class="p8aTile" x="375" y="296">to 4 parties, not to 240</text>
+
+        <text class="p8aB" x="315" y="330">The composition of the training</text>
+        <text class="p8aB" x="315" y="347">population is not an accident of</text>
+        <text class="p8aB" x="315" y="364">collection. Part of it is authored.</text>
+
+        <!-- ===== PANEL 3 ===== -->
+        <rect x="588" y="34" width="278" height="368" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="588" y="34" width="278" height="26" rx="10" fill="#123D3A"></rect>
+        <rect x="588" y="47" width="278" height="13" fill="#123D3A"></rect>
+        <text class="p8aT" x="602" y="52">3 · YOUR TRAINING SET CAN BE WITHDRAWN</text>
+
+        <text class="p8aL" x="602" y="82">A NAIVE LOAD, 200 BLOCKS</text>
+        <rect x="602" y="90" width="250" height="30" rx="5" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <rect x="602" y="90" width="15" height="30" rx="5" fill="#9C3D18"></rect>
+        <text class="p8aSm" x="640" y="109">8,883 rows a report would see</text>
+        <line x1="609" y1="124" x2="609" y2="140" stroke="#9C3D18" stroke-width="1.6"></line>
+        <text class="p8aSa" x="602" y="154">511 rows, 5.75%, and nothing errored</text>
+
+        <rect x="602" y="176" width="250" height="52" rx="6" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="p8aS" x="616" y="198">TRAINING SET, frozen at the tip</text>
+        <text class="p8aSg" x="616" y="216">carries every one of those rows</text>
+
+        <rect x="602" y="254" width="250" height="54" rx="7" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p8aBig" x="616" y="288">5.75%</text>
+        <text class="p8aTile" x="686" y="280">of a naive load describes</text>
+        <text class="p8aTile" x="686" y="296">history the chain dropped</text>
+
+        <text class="p8aB" x="602" y="330">A training set assembled with no</text>
+        <text class="p8aB" x="602" y="347">finality lag contains events that</text>
+        <text class="p8aB" x="602" y="364">did not happen.</text>
+
+        <rect x="14" y="424" width="852" height="84" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p8aK" x="30" y="450">None of the three is fixed by a better model, because none of them is a property of the model.</text>
+        <text class="p8aB" x="30" y="474">They are properties of who can read the columns, who chose the population, and whether the rows you trained on still exist.</text>
+        <text class="p8aB" x="30" y="492">The model choice is made after all three are settled, and here all three are settled by somebody other than you.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the three panels are independent of each other and all three are true at once, which is why no single mitigation covers the set.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Your features are public, and so are their blind spots<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Feature engineering on internal telemetry is a private act. You decide what to log, you decide what to derive, and the people who produce the events cannot see either decision. Here the derivation is the only part that is private, and even that is not much of a secret, because the co-spend signal is the standard one and anyone working this data reaches for it.</p>
+        <p>The sharper point is the blind spot rather than the feature. On seed 11, 787 of 982 addresses ever appear as a spend input at all. The remaining 195 are seen only as recipients, so the one feature available says nothing whatsoever about them. That is an ordinary coverage gap with one unusual property: anybody can compute exactly which 195 they are, from the same rows, with no access to Larkfield's warehouse.</p>
+        <p>A coverage gap you can enumerate from the outside is a different object from a coverage gap that lives in your logs. It is not a reason to stop using the feature. It is a reason to write down what the feature cannot see, in the model card, in the same place you write down what it can, because somebody else already has that list.</p>
+      </div>
+    </details>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The population was partly written by four parties<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A table of one row per address looks like a sample. It is not. Across all five seeds of Bench A, exactly 240 addresses out of roughly a thousand belong to 4 operators running 60 each on purpose. That is about 24 percent of the training rows, and the 24 was not a fact about the world, it was a decision made by four parties who could have chosen 20 or 600.</p>
+        <p>This is why the word manufactured is worth keeping instead of softening it to imbalanced. Class imbalance is something you correct for, because the imbalance in the sample is an artefact of collection and the population underneath is fixed. Here the population underneath is not fixed. Reweighting to the observed composition reweights to a number somebody else set.</p>
+        <p>And the standard remedy does not remove it. Clustering by co-spend brings the count from 982 down to 696 on seed 11, which is an improvement, and the improvement is a ceiling rather than a correction. The truth is 304 and the clustered figure is still 2.3 times it. Session 4 measured that; tonight the consequence is that the training table is still mostly made of rows that do not correspond one to one with parties.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>A snapshot frozen at the tip is not a snapshot<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Session 7 priced the finality lag as a reporting decision. It is also a training decision, and it is a worse one, because a report is republished and a frozen training set is not. Bench B's naive loader ends the run with 511 rows, 5.75 percent of the warehouse, describing blocks that were replaced. A training set cut from that warehouse has those rows in it.</p>
+        <p>What makes this different from ordinary label noise is that the rows are not wrong in a random direction. They are all the tail of the table, the most recent blocks, which is precisely the region a time-based split puts in the validation fold. So the defect concentrates in the part of the data that is being used to decide whether the model works.</p>
+        <p>The fix is not a modelling fix and it costs nothing clever: apply a lag before you cut the snapshot, record the lag you used alongside the snapshot, and treat a training set with no recorded lag as a training set of unknown composition. That is a line in a manifest, and almost nobody writes it.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>One camp says that a model should be trained at the grain the data actually has, which is the address, and that any attempt to model entities is importing an inference error into the features. Their case is concrete: the clustering is a heuristic with a known one-sided error, so training on clustered rows means training on a population whose composition depends on how well the heuristic happened to work in that month. Address grain is at least a stable definition. Whatever it fails to capture, it fails to capture the same way every time, and a stable wrong unit is easier to reason about than a unit that moves.</p>
+        <p>The other camp says that a model whose rows are not parties cannot answer a question about parties, and most of the questions worth asking are about parties. Training at address grain produces a model that is well calibrated on a population nobody cares about, and every downstream user will quietly read its output as being about people, because the output will be labelled with something that sounds like a person. On this view the inference error in the clustering is real and it is the smaller error, and the right move is to model at entity grain and carry the bound through to the output.</p>
+        <p>Both camps are staffed by people who have shipped models on identity-ambiguous data. Notice that Bench A does not settle the argument and cannot: it shows the clustering is a ceiling with zero wrong merges, which supports the second camp, and it also shows the ceiling is 2.3 times the truth and moves between 676 and 707 across months, which supports the first. What the bench does settle is that nobody may hold either position without stating which grain they are on, because the two produce different numbers on the same rows.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the unit of analysis</span>
+      <h2>The unit of analysis outweighs the model choice</h2>
+      <span class="tag demo">12 min live</span>
+    </div>
+    <p class="lede">Here is the measurement that changes how this session is usually taught. Clustering the addresses is the step everyone reaches for to make the population more honest. On Bench A it makes the operator share of the training population larger, not smaller, and by a wide margin. The step is still worth taking. It is just not doing what people assume it is doing.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three horizontal bars comparing units of analysis on seed 11, teal for ordinary parties and amber for the four operators. One row per address: 982 rows, 240 of them operator, 24.4 percent. One row per clustered entity: 696 rows, 239 of them operator, 34.3 percent. One row per true entity: 304 rows, 4 of them operator, 1.3 percent. A note says clustering raised the operator share from 24.4 percent to 34.3 percent because ordinary addresses merge when they co-spend and operator addresses mostly do not. A closing band says the truth is 4 operators among 304 parties, and an average over address rows gives those 4 parties about 19 times the weight they hold among real parties, and about 26 times over clustered rows.">
+        <style>
+          .p8bH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .p8bL { font: 800 9px Inter, sans-serif; fill: #54655F; letter-spacing: .1em; }
+          .p8bN { font: 700 10.5px Inter, sans-serif; fill: #13201E; }
+          .p8bC { font: 400 9.5px Inter, sans-serif; fill: #54655F; }
+          .p8bIn { font: 800 9.5px Inter, sans-serif; fill: #FFFFFF; }
+          .p8bInk { font: 700 9.5px Inter, sans-serif; fill: #123D3A; }
+          .p8bPc { font: 800 11px Inter, sans-serif; fill: #9C3D18; }
+          .p8bPt { font: 800 11px Inter, sans-serif; fill: #1F5F5B; }
+          .p8bKa { font: 800 10.5px Inter, sans-serif; fill: #9C3D18; }
+          .p8bM { font: 400 10px Inter, sans-serif; fill: #54655F; }
+          .p8bK { font: 800 11.5px Inter, sans-serif; fill: #1F5F5B; }
+          .p8bB { font: 400 10.5px Inter, sans-serif; fill: #13201E; }
+        </style>
+
+        <text class="p8bH" x="14" y="20">Same rows, three units of analysis. The operator share moves, and once it moves the wrong way.</text>
+
+        <rect x="14" y="32" width="852" height="268" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <text class="p8bL" x="30" y="56">SEED 11 · TEAL IS ORDINARY PARTIES, AMBER IS THE FOUR OPERATORS</text>
+
+        <!-- bar 1 -->
+        <text class="p8bN" x="30" y="88">one row per address</text>
+        <text class="p8bC" x="30" y="105">982 rows</text>
+        <rect x="216" y="76" width="544" height="32" rx="4" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <rect x="216" y="76" width="133" height="32" rx="4" fill="#9C3D18"></rect>
+        <text class="p8bIn" x="226" y="96">240</text>
+        <text class="p8bInk" x="360" y="96">742</text>
+        <text class="p8bPc" x="774" y="90">24.4%</text>
+        <text class="p8bC" x="774" y="105">operator</text>
+
+        <!-- bar 2 -->
+        <text class="p8bN" x="30" y="148">one row per clustered entity</text>
+        <text class="p8bC" x="30" y="165">696 rows</text>
+        <rect x="216" y="136" width="386" height="32" rx="4" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <rect x="216" y="136" width="132" height="32" rx="4" fill="#9C3D18"></rect>
+        <text class="p8bIn" x="226" y="156">239</text>
+        <text class="p8bInk" x="359" y="156">457</text>
+        <text class="p8bPc" x="774" y="150">34.3%</text>
+        <text class="p8bC" x="774" y="165">operator</text>
+
+        <!-- bar 3 -->
+        <text class="p8bN" x="30" y="208">one row per true entity</text>
+        <text class="p8bC" x="30" y="225">304 rows, the generator knows</text>
+        <rect x="216" y="196" width="168" height="32" rx="4" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <line x1="218" y1="196" x2="218" y2="228" stroke="#9C3D18" stroke-width="4"></line>
+        <text class="p8bInk" x="232" y="216">300 people</text>
+        <text class="p8bPt" x="774" y="210">1.3%</text>
+        <text class="p8bC" x="774" y="225">operator</text>
+        <line x1="218" y1="234" x2="218" y2="246" stroke="#9C3D18" stroke-width="1.6"></line>
+        <text class="p8bKa" x="226" y="250">4 operators</text>
+
+        <text class="p8bKa" x="30" y="276">Clustering raised the operator share of the training population from 24.4 percent to 34.3 percent.</text>
+        <text class="p8bM" x="30" y="293">Ordinary addresses merge because they co-spend. Operator addresses mostly do not, so they come through the step almost intact.</text>
+
+        <rect x="14" y="318" width="852" height="66" rx="10" fill="#EFF7F5" stroke="#1F5F5B"></rect>
+        <text class="p8bK" x="30" y="342">The truth is 4 operators among 304 parties, which is 1.3 percent of the parties that exist.</text>
+        <text class="p8bB" x="30" y="364">An average over address rows gives those 4 parties about 19 times the weight they hold among real parties. Over clustered rows, about 26 times.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the third bar is the one you do not have. It is drawn to the same scale so the size of the first two can be read against it rather than against each other.</figcaption>
+    </figure>
+
+    <div class="wk" id="p8-grain">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">Bench A running in this page. Change the month and watch the operator share of the training population move under a fixed method.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="p8-seed">Which month of Larkfield data to train on</label>
+        <select class="sql-code" id="p8-seed">
+          <option value="11">Month A</option>
+          <option value="101">Month B</option>
+          <option value="2024">Month C</option>
+          <option value="7">Month D</option>
+          <option value="55555">Month E</option>
+        </select>
+        <div id="p8-out"></div>
+        <p class="sql-note" id="p8-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="p8-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Evaluation inherits the composition, and the direction<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>An evaluation set drawn from the same rows has the same composition as the training set, which is the whole point of drawing it that way and is usually correct. It stops being correct when the composition is not a property of the world. A score averaged over address rows on seed 11 is a weighted average in which the four operators carry 24.4 percent of the weight, and on clustered rows they carry 34.3 percent. Among real parties they are 1.3 percent.</p>
+        <p>So a model that handles operator traffic well and ordinary traffic poorly gets a good score, and the score is not lying about anything it claims to measure. It is an honest average over the rows it was given. The rows were the decision.</p>
+        <p>The second half is the direction. Bench A reports zero wrongly merged clusters on all five seeds, which means the clustering error only ever fails to join addresses that belong together. A count taken from these rows can come out too high and cannot come out too low. Any metric built on top of that population inherits the same one-sidedness, so an evaluation that looks well calibrated is calibrated against a ceiling.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 408" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A single axis showing the entity count. A solid teal marker stands at 304 labelled truth. A teal band sits at 676 to 707 labelled clustered. A pale amber band sits at 982 to 1025 labelled naive. An amber arrow runs from the truth marker rightwards past both bands, labelled every error points this way and none points back. Below, three tiles: zero clusters wrongly merged on all five seeds, 392 addresses still split from their owner on seed 11, and 2.3 times, the clustered count against the truth. A closing band says a one-sided error is a different kind of error, that a count taken from these rows cannot come out too low, and that a model calibrated against them is calibrated against a ceiling.">
+        <style>
+          .p8cH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .p8cL { font: 800 9px Inter, sans-serif; fill: #54655F; letter-spacing: .1em; }
+          .p8cTr { font: 800 9.5px Inter, sans-serif; fill: #1F5F5B; }
+          .p8cSg { font: 800 9.5px Inter, sans-serif; fill: #54655F; }
+          .p8cV { font: 700 9.5px Inter, sans-serif; fill: #13201E; }
+          .p8cA { font: 800 10px Inter, sans-serif; fill: #9C3D18; }
+          .p8cBigT { font: 800 20px Inter, sans-serif; fill: #1F5F5B; }
+          .p8cBigA { font: 800 20px Inter, sans-serif; fill: #9C3D18; }
+          .p8cTile { font: 600 9.5px Inter, sans-serif; fill: #54655F; }
+          .p8cK { font: 800 11.5px Inter, sans-serif; fill: #9C3D18; }
+          .p8cB { font: 400 10.5px Inter, sans-serif; fill: #13201E; }
+        </style>
+        <defs>
+          <marker id="p8cArA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9C3D18"></path></marker>
+        </defs>
+
+        <text class="p8cH" x="14" y="20">One axis, three positions, and an error that has only one direction available to it.</text>
+
+        <rect x="14" y="32" width="852" height="186" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <text class="p8cL" x="30" y="56">PARTIES BEHIND ONE MONTH OF LARKFIELD ROWS</text>
+
+        <text class="p8cTr" x="273" y="84" text-anchor="middle">TRUTH</text>
+        <text class="p8cSg" x="544" y="96" text-anchor="middle">CLUSTERED</text>
+        <text class="p8cSg" x="762" y="96" text-anchor="middle">NAIVE</text>
+
+        <rect x="533" y="106" width="22" height="24" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <rect x="747" y="106" width="31" height="24" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <line x1="60" y1="130" x2="830" y2="130" stroke="#54655F" stroke-width="1.2"></line>
+        <line x1="273" y1="90" x2="273" y2="138" stroke="#1F5F5B" stroke-width="2.6"></line>
+
+        <text class="p8cV" x="273" y="154" text-anchor="middle">304</text>
+        <text class="p8cV" x="544" y="154" text-anchor="middle">676 to 707</text>
+        <text class="p8cV" x="762" y="154" text-anchor="middle">982 to 1,025</text>
+
+        <line x1="279" y1="180" x2="740" y2="180" stroke="#9C3D18" stroke-width="1.8" marker-end="url(#p8cArA)"></line>
+        <text class="p8cA" x="300" y="202">every error points this way, and none of them points back</text>
+
+        <rect x="14" y="236" width="276" height="56" rx="8" fill="#EFF7F5" stroke="#1F5F5B"></rect>
+        <text class="p8cBigT" x="30" y="272">0</text>
+        <text class="p8cTile" x="60" y="264">clusters wrongly merged,</text>
+        <text class="p8cTile" x="60" y="280">on all five seeds</text>
+
+        <rect x="302" y="236" width="276" height="56" rx="8" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p8cBigA" x="318" y="272">392</text>
+        <text class="p8cTile" x="366" y="264">addresses still split from</text>
+        <text class="p8cTile" x="366" y="280">their owner, seed 11</text>
+
+        <rect x="590" y="236" width="276" height="56" rx="8" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p8cBigA" x="606" y="272">2.3x</text>
+        <text class="p8cTile" x="666" y="264">the clustered count</text>
+        <text class="p8cTile" x="666" y="280">against the truth of 304</text>
+
+        <rect x="14" y="310" width="852" height="80" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p8cK" x="30" y="334">A one-sided error is not a small error. It is a different kind of error.</text>
+        <text class="p8cB" x="30" y="356">Every metric computed on this population inherits the direction. A count taken from these rows cannot come out too low,</text>
+        <text class="p8cB" x="30" y="374">so a model that looks calibrated against them is calibrated against a ceiling rather than against the truth.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the gap between the teal marker and the two bands is the error, and there is no band anywhere to the left of the marker.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Anything that triggers a payment gets optimised against<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The last consequence is the plainest and the one with no technical remedy. Larkfield's product issues a reward for activity. If a model's output decides who receives a reward, then the model's output is worth something, and something worth money on a public dataset will be optimised against by whoever it pays. Bench A already contains the shape of that: four parties running 240 addresses, and the generator does not need to know why they did it for the count to be wrong.</p>
+        <p>What is worth stating precisely is the boundary of what the bench shows. It shows that a population can be substantially composed by a small number of parties, that the standard remedy leaves most of that composition in place, and that the composition is invisible in any metric computed at address grain. It does not show any particular method anybody used, and nothing here is a description of how to do it.</p>
+        <p>The operational consequence is a governance one rather than a modelling one. A model whose output moves money needs the question "who benefits if this score is wrong in this specific direction" answered in writing before it ships, and the answer belongs next to the evaluation rather than in a risk register somebody reads annually. If nobody can name the beneficiary, that is not reassurance, it is the same gap that made the address count look like a user count.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What a model card has to say on this data<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Most model documentation templates have a field for the training data and it is usually filled in with a table name and a date range. On this data, three fields decide whether the document is worth anything, and none of them is standard.</p>
+        <p>The first is the unit of analysis, stated as a noun and not as a table name. "One row per address" and "one row per clustered entity" are different models with different meanings and the same schema, and the widget above shows they have different populations. A reader who cannot tell which one they are holding will read the output as being about people, because that is what the surrounding sentences will be about.</p>
+        <p>The second is the load discipline of the snapshot: the finality lag applied before the rows were frozen, as a number, with the reorganisation depth it was chosen against. A snapshot with no recorded lag is a snapshot of unknown composition, and Bench B says how unknown: 5.75 percent of a naive load at depth 3, concentrated in the most recent blocks.</p>
+        <p>The third is the direction of the known error. Not its magnitude, which moves between months, but its sign, which does not. Recording that the entity count is a ceiling with zero observed wrong merges tells a reader something they can act on immediately, which is that any downstream figure derived from it may be revised downwards and will never be revised upwards. That single sentence prevents more misuse than a page of metrics.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Take the three properties to a model you already have</h2>
+      <span class="tag exercise">15 min hands on</span>
+    </div>
+    <p class="lede">Six steps, on a model in your own estate, whether or not it touches a ledger. Bring the training set you wrote down for homework. Most of these take ten minutes and have never been asked.</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Say your unit of analysis out loud</h4>
+        <p>Not the table name. What one row is, as a noun. Then ask the person who reads the output what they think one row is. If the two nouns differ, stop the exercise here, because that is the finding and it outranks the other five.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Find the largest single contributor of rows</h4>
+        <p>One party, one source, one integration. What share of your training rows do they account for? Bench A's answer is 24.4 percent for four parties combined. If you cannot compute yours in an afternoon, that is also an answer.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ask who else can see your features</h4>
+        <p>For each feature, mark whether its input is produced by somebody who can also observe it. On internal telemetry most will be no. Count the yes column and keep the number, because it is the part of your feature set that is not a stable fact about the world.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write down what your features are blind on</h4>
+        <p>The rows where the feature has no evidence at all, as a count and as a rule. Seed 11 has 195 of 982. Then ask whether somebody outside your team could derive that same list from data they already have.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Check the lag on your snapshot</h4>
+        <p>How far behind the source was the cut? If the answer is "the latest data we had", your validation fold is made of the least settled rows in the table. Write the lag into the snapshot manifest today, even if today's value is zero.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Name the sign of your largest known error</h4>
+        <p>Not the size, the direction. Can your headline number be too high, too low, or both? If both, say which is more likely and why. A number that can only be wrong one way is a different object from a number with noise on it.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> Before agreeing to a modelling brief on data you did not generate, ask three questions in this order. What is one row. Who chose how many of these rows exist. And can the rows I trained on be withdrawn. Nothing in the modelling toolkit answers any of the three, and the answers decide more of the outcome than every choice that comes after them.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">A team clusters Larkfield's addresses by co-spend before training, reasoning that it will make the population closer to a population of real parties. What does Bench A measure?</p>
+      <div class="qopt">A · The operator share falls from 24.4 percent to roughly 12 percent, halving the distortion</div>
+      <div class="qopt">B · The operator share rises from 24.4 percent to 34.3 percent, because ordinary addresses merge when they co-spend and operator addresses mostly do not</div>
+      <div class="qopt">C · The operator share is unchanged, since clustering does not remove any rows</div>
+      <q class="qwhy">The step is still worth taking, because 696 is closer to 304 than 982 is. It just does the opposite of what is assumed to the composition: it compresses the part of the population that leaves evidence and leaves the part that does not almost intact.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Why is "your labels may be manufactured" a different problem from ordinary class imbalance?</p>
+      <div class="qopt">A · Because manufactured rows are always mislabelled, whereas imbalanced classes are correctly labelled</div>
+      <div class="qopt">B · Because imbalance can be measured and manufactured composition cannot</div>
+      <div class="qopt">C · Because reweighting assumes the population underneath the sample is fixed, and here part of that population was chosen by four parties who could have chosen a different number</div>
+      <q class="qwhy">Imbalance is an artefact of collection over a population that exists independently of you. Reweighting to the observed composition is reasonable there. Here the observed composition is partly an authored quantity, so reweighting to it reweights to somebody else's decision.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">A training set is cut from a naive append-only load with no finality lag. Beyond the 5.75 percent of rows that are wrong, what makes this worse for a model than for a report?</p>
+      <div class="qopt">A · The wrong rows are concentrated in the most recent blocks, which is exactly the region a time-based split puts in the validation fold, and a frozen snapshot is not republished the way a report is</div>
+      <div class="qopt">B · Models are more sensitive to small percentages of bad rows than reports are</div>
+      <div class="qopt">C · There is no difference, since 5.75 percent is 5.75 percent wherever it lands</div>
+      <q class="qwhy">The defect is not spread evenly. It sits at the tail, which is the part a temporal split uses to decide whether the model works, and the snapshot that carries it is frozen and shipped rather than recomputed next week.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 9</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty five minutes. One written line about a model, and one result you find suspicious.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Write the three missing model card fields</h4>
+        <p>For one model you own: the unit of analysis as a noun, the load discipline of the snapshot with a number, and the sign of the largest known error. Three lines. Bring them, and bring the field you could not fill in.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Bring a result that looked too good</h4>
+        <p>Any measurement from your own work where a control, a filter or a safeguard appeared to give complete protection. It does not have to have been wrong. Session 9 is a bench that reported exactly that and was, and the way it was caught is the transferable part.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Features that anyone can read</span><span class="note">787 of 982 addresses carry co-spend evidence, 195 carry none, and the list of which is public.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">A population partly authored</span><span class="note">240 of about 1,000 address rows belong to 4 parties, on every seed, by their choice and not by collection.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">A training set that can be withdrawn</span><span class="note">511 rows, 5.75 percent of a naive load, describing blocks that were replaced, concentrated at the tail.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The unit of analysis, measured</span><span class="note">24.4 percent operator at address grain, 34.3 at clustered grain, 1.3 in truth. Same rows, one decision.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Evaluation inherits the composition</span><span class="note">An honest average over rows somebody else composed, weighting 4 parties about 19 times their real share.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The one-sided error, carried through</span><span class="note">Zero wrong merges on all five seeds, so every derived figure is a ceiling and can never be revised upwards.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Three model card fields nobody fills in</span><span class="note">Unit of analysis as a noun, the lag on the snapshot as a number, and the sign of the largest known error.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">The finality lag as a reporting decision</span><span class="note">Priced in session 7. Tonight it returns as a property of a frozen snapshot instead.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Trusting a bench that reports a defence working</span><span class="note">Raised tonight through the load discipline. Session 9 is the bench here that got it wrong and how it was caught.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Probabilistic record linkage</span><span class="note">Fuzzy matching, blocking and scoring live in learn-entity-resolution-with-phoebe.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Chain mechanics and why branches get replaced</span><span class="note">The prerequisite is learn-blockchain-with-phoebe and it is assumed rather than repeated.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Any method for manipulating a real system</span><span class="note">Not described anywhere here. Only what the generator produced and what the benches measured on it.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Anything to do with price, markets or holdings</span><span class="note">Out of scope by design, and nothing here is advice of any kind.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The one sentence.</strong> The features are public, the population is partly authored, and the rows can be withdrawn. No model choice reaches any of the three.</div>
+      <div class="cheat-item"><strong>Public blind spots.</strong> 195 of 982 addresses have no co-spend evidence, and anyone can compute which 195 without touching your warehouse.</div>
+      <div class="cheat-item"><strong>240 of about 1,000.</strong> Four parties, 60 addresses each, on every seed. A quarter of the training rows, chosen rather than collected.</div>
+      <div class="cheat-item"><strong>The grain is the decision.</strong> Operator share is 24.4 percent per address, 34.3 percent per clustered entity, 1.3 percent in truth.</div>
+      <div class="cheat-item"><strong>Clustering compresses the wrong half.</strong> It merges the addresses that co-spend. Operators mostly do not, so they come through nearly intact.</div>
+      <div class="cheat-item"><strong>Evaluation is an honest average.</strong> Over rows somebody else composed. A score per address gives 4 parties about 19 times their real weight.</div>
+      <div class="cheat-item"><strong>The sign, not the size.</strong> Zero wrong merges on five seeds means every derived count is a ceiling and can only ever be revised downwards.</div>
+      <div class="cheat-item"><strong>The snapshot manifest.</strong> Record the finality lag on the cut. 5.75 percent of a naive load is wrong, and it sits in your validation fold.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 8 of 10 · learn-web3-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p7-designing-for-retraction.html">← Practitioner session 7 · Designing for retraction</a>
+        <a href="p9-the-bench-that-fooled-itself.html">Practitioner session 9 · The bench that fooled itself →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/w3-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof W3 === "undefined") return;
+  var sel = document.getElementById("p8-seed");
+  var out = document.getElementById("p8-out");
+  var verdict = document.getElementById("p8-verdict");
+  var self = document.getElementById("p8-self");
+
+  function comma(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+  function pc(a, b) { return (Math.round((a / b) * 1000) / 10).toFixed(1) + "%"; }
+
+  function render() {
+    var s = Number(sel.value);
+    var world = W3.makeWorld({ seed: s });
+    var txs = W3.makeTransactions(world, { seed: s + 1 });
+    var cl = W3.clusterByCoSpend(world, txs);
+    var sc = W3.scoreClustering(world, cl);
+
+    var isOp = world.owner.map(function (o) { return o.indexOf("operator-") === 0; });
+    var opAddrs = 0, a;
+    for (a = 0; a < isOp.length; a++) if (isOp[a]) opAddrs++;
+
+    var seenRoot = {}, opClusters = 0;
+    for (a = 0; a < world.addresses.length; a++) {
+      var r = cl.uf.find(a);
+      if (!seenRoot[r]) { seenRoot[r] = true; if (isOp[a]) opClusters++; }
+    }
+
+    var trueOps = world.sybils;
+    var trueEnt = sc.trueEntities;
+
+    var shareAddr = opAddrs / sc.addresses;
+    var shareClus = opClusters / sc.clustered;
+    var shareTrue = trueOps / trueEnt;
+
+    var html = '<table class="sql-table"><thead><tr><th>One row is</th><th>Rows</th><th>Operator rows</th><th>Operator share</th><th>What you are training on</th></tr></thead><tbody>';
+    html += "<tr><td>an address</td><td>" + comma(sc.addresses) + "</td><td>" + comma(opAddrs)
+      + '</td><td><b class="p8-bad">' + pc(opAddrs, sc.addresses) + "</b></td><td>a population a quarter chosen by 4 parties</td></tr>";
+    html += "<tr><td>a clustered entity</td><td>" + comma(sc.clustered) + "</td><td>" + comma(opClusters)
+      + '</td><td><b class="p8-bad">' + pc(opClusters, sc.clustered) + "</b></td><td>the step meant to help raised the share</td></tr>";
+    html += "<tr><td>a real party</td><td>" + comma(trueEnt) + "</td><td>" + comma(trueOps)
+      + '</td><td><b class="p8-ok">' + pc(trueOps, trueEnt) + "</b></td><td>not available to you, only to the generator</td></tr>";
+    html += "</tbody></table>";
+    out.innerHTML = html;
+
+    var liftAddr = Math.round(shareAddr / shareTrue);
+    var liftClus = Math.round(shareClus / shareTrue);
+
+    verdict.textContent = "Clustering moved the operator share from " + pc(opAddrs, sc.addresses) + " to "
+      + pc(opClusters, sc.clustered) + " while the truth stayed at " + pc(trueOps, trueEnt)
+      + ". An average over address rows gives those " + trueOps + " parties about " + liftAddr
+      + " times the weight they hold among real parties, and over clustered rows about " + liftClus
+      + " times. Wrongly merged clusters: " + sc.mixedClusters + ", which is why every count here is a ceiling.";
+  }
+
+  var t = W3.selfTest();
+  self.textContent = t.ok
+    ? "The generator's five properties pass in this browser, so the shares above are the shares any correct run gives. Nothing here describes a real network."
+    : "The generator's self test did not pass in this browser, so nothing above should be believed.";
+
+  sel.addEventListener("change", render);
+  render();
+})();
+</script>
+<style>
+  #p8-grain .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 16rem; }
+  #p8-grain table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+  #p8-grain .p8-bad { color: var(--amber); }
+  #p8-grain .p8-ok { color: var(--indigo); }
+</style>
+</body>
+</html>

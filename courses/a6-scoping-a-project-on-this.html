@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 6 of 6. Six questions to ask before agreeing to build a data or AI product on a public ledger, each paired with the answer that would change your mind, built from the five sessions before it.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Scoping a project on this - learn web3 with phoebe">
+<meta property="og:description" content="Leader session 6 of 6. The technology decision is downstream of whether the parties distrust each other, and most of the cost lands on the data team rather than on the people who chose it.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-web3-with-phoebe/courses/a6-scoping-a-project-on-this.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Scoping a project on this - learn web3 with phoebe">
+<meta name="twitter:description" content="A lag of 1 still leaves 3.99 percent of the warehouse wrong. The lag has to match the reorg depth, and that is the input nobody writes down.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 6 · Scoping a project on this - learn web3 with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-web3-with-phoebe</a> / Leader session 6 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Web3 with Phoebe · Leader session 6 of 6</div>
+    <h1>Scoping a <span class="accent">project on this</span></h1>
+    <p class="sub">Five sessions of findings turn into six questions, and the questions are only worth asking if you know in advance what answer would move you. So each one comes paired with the answer that changes your mind, in both directions. One of the six is a number nobody writes down, and it is worth a measured example rather than an assertion, so it gets one. The last few minutes are the one-line version, which is shorter and more uncomfortable than the six questions it summarises.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Leader track</span>
+      <span class="chip audience">Anyone who has to say yes or no to a proposal</span>
+      <span class="chip audience">Anyone who will be carrying it afterwards</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-20 · The six questions</span>
+      <span class="a3" style="flex:3">20-32 · The number nobody writes down</span>
+      <span class="a4" style="flex:3">32-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Six questions, and what a good answer sounds like</h2>
+    </div>
+    <p class="lede">A list of questions is easy to produce and easy to ignore, because a question with no stated acceptance criterion is answered by whoever is most confident in the room. So each of the six below is written with the answer that would move you attached to it, which does two things: it makes a vague answer visibly vague, and it commits you in advance rather than after you have heard how the proposal is going.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Six questions you can ask in a real meeting, each traced to the session that produced it and each paired with the answer that would change your position. A measured example of the one question that is a number, so you can say why it matters rather than asserting that it does. A clear picture of who makes the decision and who carries it, drawn rather than complained about. And the one line that fits on a card, which is where the whole thing lands.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why an unanswered question is an answer<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Four of the six have a property worth noticing: a vague answer and a bad answer look the same from outside, and both mean the same thing in practice. If nobody can say what stays off the permanent record, the boundary has not been drawn. If nobody can name a reorg depth, the lag was chosen by default. If nobody can name the party who benefits from the metric, nobody has looked.</p>
+        <p>That makes these questions cheap to ask and hard to deflect, which is the point. You are not asking anybody to predict the future or defend a technology choice. You are asking whether a specific decision has been made yet, and the absence of an answer is itself the finding.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Larkfield's proposal was approved with five of these six unanswered, and none of the five was hidden. Nobody asked, because the meeting was about whether the product idea was good and these read like implementation detail. Four of the five became work for the data team within a year, and the fifth is still waiting.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words that keep coming back<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>The boundary.</strong> What goes on the permanent record and what deliberately stays off it. Session 4, and the first question.</li>
+          <li><strong>Counterparty.</strong> Any party that has to accept the record as authoritative. Session 5, and the second question.</li>
+          <li><strong>Unit of identity.</strong> What one row of your reporting counts. Addresses, entities or people, and they are three different numbers. Session 2.</li>
+          <li><strong>Error direction.</strong> Which way a method is wrong. One-sided error gives a bound, two-sided error gives a number you must trust.</li>
+          <li><strong>Reorg depth.</strong> How far back the recent history can be replaced. The number the fifth question is about, and the one nobody writes down.</li>
+          <li><strong>Finality lag.</strong> How long you wait before loading. A defence that works only if it is at least as deep as the reorg.</li>
+          <li><strong>Retraction.</strong> Removing already loaded rows when their source is replaced. A separate defence with a separate cost, and the two are easily confused.</li>
+          <li><strong>Paying metric.</strong> Any published number that causes money or resource to move. Session 3, and the sixth question.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the six questions</span>
+      <h2>Six questions, each with the answer that moves you</h2>
+      <span class="tag concept">17 min live</span>
+    </div>
+    <p class="lede">These are in the order you would actually ask them, which is not the order the sessions came in. The first two decide whether there is a project at all. The next three decide what it costs to run. The last one decides whether the number at the end of it will mean anything.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 566" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Six numbered cards in two columns and three rows. Each card carries a question, the session it comes from, and the answer that would change your mind. One, what exactly goes on and what deliberately stays off, from session four. Two, who are the counterparties and do they actually distrust each other, from session five. Three, what is the unit of identity in the reporting and which way does it err, from session two. Four, what happens when a record turns out to be wrong, from session four. Five, what reorg depth are you designing for, from the practitioner bench. Six, who is paid by the metric you are about to publish, from session three.">
+        <style>
+          .a6aH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .a6aN { font: 800 13px Inter, sans-serif; fill: #FFFFFF; }
+          .a6aQ { font: 800 11.5px Inter, sans-serif; fill: #13201E; }
+          .a6aF { font: 800 8.5px Inter, sans-serif; fill: #54655F; letter-spacing: .1em; }
+          .a6aC { font: 800 8.5px Inter, sans-serif; fill: #9C3D18; letter-spacing: .1em; }
+          .a6aB { font: 400 10px Inter, sans-serif; fill: #13201E; }
+        </style>
+
+        <text class="a6aH" x="14" y="20">Six questions, in the order you would actually ask them.</text>
+
+        <!-- card 1 -->
+        <rect x="14" y="36" width="418" height="158" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <circle cx="44" cy="66" r="15" fill="#1F5F5B"></circle>
+        <text class="a6aN" x="40" y="71">1</text>
+        <text class="a6aQ" x="70" y="62">What exactly goes on the permanent</text>
+        <text class="a6aQ" x="70" y="78">record, and what deliberately stays off?</text>
+        <text class="a6aF" x="70" y="98">FROM SESSION 4</text>
+        <line x1="34" y1="112" x2="412" y2="112" stroke="#DCE9E6" stroke-width="1"></line>
+        <text class="a6aC" x="34" y="130">THE ANSWER THAT MOVES ME</text>
+        <text class="a6aB" x="34" y="148">A two column list that already exists, where the permanent</text>
+        <text class="a6aB" x="34" y="164">side holds events and one opaque reference and nothing else.</text>
+        <text class="a6aB" x="34" y="180">"We will work that out during the build" is a no.</text>
+
+        <!-- card 2 -->
+        <rect x="448" y="36" width="418" height="158" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <circle cx="478" cy="66" r="15" fill="#1F5F5B"></circle>
+        <text class="a6aN" x="474" y="71">2</text>
+        <text class="a6aQ" x="504" y="62">Who are the counterparties, and do</text>
+        <text class="a6aQ" x="504" y="78">they actually distrust each other?</text>
+        <text class="a6aF" x="504" y="98">FROM SESSION 5</text>
+        <line x1="468" y1="112" x2="846" y2="112" stroke="#DCE9E6" stroke-width="1"></line>
+        <text class="a6aC" x="468" y="130">THE ANSWER THAT MOVES ME</text>
+        <text class="a6aB" x="468" y="148">Nobody in the room can name a keeper the others would</text>
+        <text class="a6aB" x="468" y="164">accept. If a keeper can be named, a database with an audit</text>
+        <text class="a6aB" x="468" y="180">log is cheaper on every count and can still fix a row.</text>
+
+        <!-- card 3 -->
+        <rect x="14" y="206" width="418" height="158" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <circle cx="44" cy="236" r="15" fill="#1F5F5B"></circle>
+        <text class="a6aN" x="40" y="241">3</text>
+        <text class="a6aQ" x="70" y="232">What is the unit of identity in the</text>
+        <text class="a6aQ" x="70" y="248">reporting, and which way does it err?</text>
+        <text class="a6aF" x="70" y="268">FROM SESSION 2</text>
+        <line x1="34" y1="282" x2="412" y2="282" stroke="#DCE9E6" stroke-width="1"></line>
+        <text class="a6aC" x="34" y="300">THE ANSWER THAT MOVES ME</text>
+        <text class="a6aB" x="34" y="318">A ceiling with a stated method and no floor claimed. A point</text>
+        <text class="a6aB" x="34" y="334">estimate of people is the wrong shape however carefully it</text>
+        <text class="a6aB" x="34" y="350">is caveated, because the caveat is the part that drops off.</text>
+
+        <!-- card 4 -->
+        <rect x="448" y="206" width="418" height="158" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <circle cx="478" cy="236" r="15" fill="#1F5F5B"></circle>
+        <text class="a6aN" x="474" y="241">4</text>
+        <text class="a6aQ" x="504" y="232">What happens when a record turns</text>
+        <text class="a6aQ" x="504" y="248">out to be wrong?</text>
+        <text class="a6aF" x="504" y="268">FROM SESSION 4</text>
+        <line x1="468" y1="282" x2="846" y2="282" stroke="#DCE9E6" stroke-width="1"></line>
+        <text class="a6aC" x="468" y="300">THE ANSWER THAT MOVES ME</text>
+        <text class="a6aB" x="468" y="318">Somebody describes the sequence out loud: the annotation,</text>
+        <text class="a6aB" x="468" y="334">the read path rule, and a named reader who will miss it.</text>
+        <text class="a6aB" x="468" y="350">A silence here means the boundary has not been drawn.</text>
+
+        <!-- card 5 -->
+        <rect x="14" y="376" width="418" height="158" rx="10" fill="#FFFFFF" stroke="#9C3D18"></rect>
+        <circle cx="44" cy="406" r="15" fill="#9C3D18"></circle>
+        <text class="a6aN" x="40" y="411">5</text>
+        <text class="a6aQ" x="70" y="402">What reorg depth are you designing</text>
+        <text class="a6aQ" x="70" y="418">for, and where did that number come from?</text>
+        <text class="a6aF" x="70" y="438">MEASURED IN PART 2</text>
+        <line x1="34" y1="452" x2="412" y2="452" stroke="#DCE9E6" stroke-width="1"></line>
+        <text class="a6aC" x="34" y="470">THE ANSWER THAT MOVES ME</text>
+        <text class="a6aB" x="34" y="488">A number with a source, a lag at least that deep, and</text>
+        <text class="a6aB" x="34" y="504">retraction treated as a separate defence. "We load it as it</text>
+        <text class="a6aB" x="34" y="520">arrives" is 5.75 percent wrong and nothing errors.</text>
+
+        <!-- card 6 -->
+        <rect x="448" y="376" width="418" height="158" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <circle cx="478" cy="406" r="15" fill="#1F5F5B"></circle>
+        <text class="a6aN" x="474" y="411">6</text>
+        <text class="a6aQ" x="504" y="402">Who is paid by the metric you are</text>
+        <text class="a6aQ" x="504" y="418">about to publish?</text>
+        <text class="a6aF" x="504" y="438">FROM SESSION 3</text>
+        <line x1="468" y1="452" x2="846" y2="452" stroke="#DCE9E6" stroke-width="1"></line>
+        <text class="a6aC" x="468" y="470">THE ANSWER THAT MOVES ME</text>
+        <text class="a6aB" x="468" y="488">A named party and the cheapest way for them to move it.</text>
+        <text class="a6aB" x="468" y="504">If the answer is that nobody benefits, that is because</text>
+        <text class="a6aB" x="468" y="520">nobody has looked, not because nobody does.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - card 5 is amber because it is the only one of the six whose answer is a number, and the only one where a plausible-sounding answer can still be wrong by a measurable amount.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The first two decide whether there is a project<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Question one is the boundary from session 4, and the reason it goes first is that it is the only decision in the whole arrangement that is genuinely reversible before the build and genuinely irreversible afterwards. Everything else on this list can be improved later at some cost. What went on the permanent record cannot.</p>
+        <p>Question two is the two-question test from session 5 compressed into one, and it is the one people resent most, because it asks about relationships in a meeting that was supposed to be about technology. Ask it anyway, and ask it in the form that does the work: not "do you trust each other" but "who would keep the record if we did not do it this way, and would everyone accept them". A name that everyone accepts means the machinery is buying tolerance of a distrust that is not present, and session 5 was clear about what that costs.</p>
+        <p>If the first two come back well, the project may be worth doing. If either comes back vague, nothing further on the list matters yet, because you are scoping something that has not been decided.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The next three decide what it costs to run<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Questions three, four and five are the standing operational load, and they are the three that land on a data team specifically. Three is session 2: what your reporting counts and which way it is wrong. The acceptance criterion is the shape of the answer rather than its accuracy, because a ceiling with a stated method survives being repeated by somebody who was not in the room, and a point estimate with a caveat does not.</p>
+        <p>Four is session 4, and it is the question that produces the most informative silence on the list. You are not asking for a policy. You are asking somebody to narrate an incident: a record is wrong, what happens next, who does what, and who ends up reading the wrong value anyway. Anyone who has drawn the boundary can do this in twenty seconds.</p>
+        <p>Five is the one with a number, which is why it gets part 2 rather than a sentence. The honest version of this question is not "have you thought about reorgs", which everybody answers yes to. It is "what depth are you designing for and where did the number come from", and then a lag at least that deep, with retraction discussed separately.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Question six, and why it is last rather than first<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Session 3's finding is arguably the most severe on the list, so putting it sixth looks like an ordering mistake. It is deliberate. The first five are about whether the thing can be built and what it will cost to operate. The sixth is about whether the output will mean anything, and that question only becomes answerable once you know what is being published to whom.</p>
+        <p>There is a second reason. The first five can be answered by the people proposing the project. The sixth usually cannot, because the party who benefits from the metric is often somewhere else in the organisation, or outside it entirely, and asking the question in the design meeting is how you find out that nobody owns the answer. That discovery is worth more than the answer would have been.</p>
+        <p>The failure mode to watch for is a confident "nobody benefits, it is just a reporting metric". Session 3 measured what that reasoning costs: the conditions for manufactured identity are permanently present, the cost of one more of them is one more row, and the resulting rows do not trip anything. A metric that nobody is paid to move is a claim about the incentive landscape, and it needs the same evidence as any other claim.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the number nobody writes down</span>
+      <h2>Question five, measured rather than asserted</h2>
+      <span class="tag concept">12 min live</span>
+    </div>
+    <p class="lede">Five of the six questions are answered in words. This one is answered with an integer, and a plausible integer can be wrong in a way that is invisible from inside the pipeline. The practitioner bench runs a warehouse loader against a source whose recent history gets replaced, and the result is worth having in your head before you ask anybody the question.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 426" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A grouped bar chart across seven finality lag settings, 0, 1, 2, 3, 4, 6 and 12. For each lag, an amber bar shows rows left wrong and a pale bar shows rows held back from the report. At lag 0 there are 511 wrong rows and none held back. At lag 1, 346 wrong and 44 held. At lag 2, 172 wrong and 84 held. At lag 3 the wrong rows reach zero and 125 are held. At lag 4, zero wrong and 168 held. At lag 6, zero wrong and 249 held. At lag 12, zero wrong and 497 held. Lags 1 and 2 are highlighted underneath as the dangerous middle. A closing band says the lag has to match the reorg depth and going deeper buys nothing, that a lag of 1 still leaves 3.99 percent wrong, and that the real question is what reorg depth you are designing for.">
+        <style>
+          .a6bH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .a6bV { font: 700 8.5px Inter, sans-serif; fill: #13201E; }
+          .a6bVa { font: 700 8.5px Inter, sans-serif; fill: #9C3D18; }
+          .a6bAx { font: 400 9px Inter, sans-serif; fill: #54655F; }
+          .a6bLg { font: 700 9px Inter, sans-serif; fill: #13201E; }
+          .a6bBr { font: 800 8.5px Inter, sans-serif; fill: #9C3D18; letter-spacing: .08em; }
+          .a6bK { font: 800 11.5px Inter, sans-serif; fill: #9C3D18; }
+          .a6bM { font: 400 11px Inter, sans-serif; fill: #54655F; }
+          .a6bN { font: 800 11px Inter, sans-serif; fill: #13201E; }
+        </style>
+
+        <text class="a6bH" x="14" y="20">A 3 block reorg, four times over 200 blocks, against seven choices of how long to wait.</text>
+
+        <rect x="600" y="32" width="11" height="11" fill="#9C3D18"></rect>
+        <text class="a6bLg" x="617" y="42">rows left wrong</text>
+        <rect x="712" y="32" width="11" height="11" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a6bLg" x="729" y="42">rows held back</text>
+
+        <rect x="181" y="50" width="222" height="200" fill="#FDF3EE"></rect>
+
+        <line x1="70" y1="50" x2="70" y2="250" stroke="#CFDEDA" stroke-width="1.2"></line>
+        <line x1="70" y1="250" x2="850" y2="250" stroke="#CFDEDA" stroke-width="1.4"></line>
+        <line x1="64" y1="250" x2="70" y2="250" stroke="#CFDEDA" stroke-width="1.2"></line>
+        <line x1="64" y1="200" x2="70" y2="200" stroke="#CFDEDA" stroke-width="1.2"></line>
+        <line x1="64" y1="150" x2="70" y2="150" stroke="#CFDEDA" stroke-width="1.2"></line>
+        <line x1="64" y1="100" x2="70" y2="100" stroke="#CFDEDA" stroke-width="1.2"></line>
+        <line x1="64" y1="50" x2="70" y2="50" stroke="#CFDEDA" stroke-width="1.2"></line>
+        <text class="a6bAx" x="58" y="253" text-anchor="end">0</text>
+        <text class="a6bAx" x="58" y="203" text-anchor="end">130</text>
+        <text class="a6bAx" x="58" y="153" text-anchor="end">260</text>
+        <text class="a6bAx" x="58" y="103" text-anchor="end">390</text>
+        <text class="a6bAx" x="58" y="53" text-anchor="end">520</text>
+
+        <rect x="86" y="53" width="34" height="197" fill="#9C3D18"></rect>
+        <text class="a6bVa" x="103" y="46" text-anchor="middle">511</text>
+        <text class="a6bV" x="149" y="246" text-anchor="middle">0</text>
+        <text class="a6bAx" x="126" y="270" text-anchor="middle">lag 0</text>
+
+        <rect x="197" y="117" width="34" height="133" fill="#9C3D18"></rect>
+        <text class="a6bVa" x="214" y="110" text-anchor="middle">346</text>
+        <rect x="243" y="233" width="34" height="17" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a6bV" x="260" y="226" text-anchor="middle">44</text>
+        <text class="a6bAx" x="237" y="270" text-anchor="middle">lag 1</text>
+
+        <rect x="308" y="184" width="34" height="66" fill="#9C3D18"></rect>
+        <text class="a6bVa" x="325" y="177" text-anchor="middle">172</text>
+        <rect x="354" y="218" width="34" height="32" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a6bV" x="371" y="211" text-anchor="middle">84</text>
+        <text class="a6bAx" x="348" y="270" text-anchor="middle">lag 2</text>
+
+        <text class="a6bVa" x="436" y="246" text-anchor="middle">0</text>
+        <rect x="465" y="202" width="34" height="48" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a6bV" x="482" y="195" text-anchor="middle">125</text>
+        <text class="a6bAx" x="459" y="270" text-anchor="middle">lag 3</text>
+
+        <text class="a6bVa" x="547" y="246" text-anchor="middle">0</text>
+        <rect x="576" y="185" width="34" height="65" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a6bV" x="593" y="178" text-anchor="middle">168</text>
+        <text class="a6bAx" x="570" y="270" text-anchor="middle">lag 4</text>
+
+        <text class="a6bVa" x="658" y="246" text-anchor="middle">0</text>
+        <rect x="687" y="154" width="34" height="96" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a6bV" x="704" y="147" text-anchor="middle">249</text>
+        <text class="a6bAx" x="681" y="270" text-anchor="middle">lag 6</text>
+
+        <text class="a6bVa" x="769" y="246" text-anchor="middle">0</text>
+        <rect x="798" y="59" width="34" height="191" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a6bV" x="815" y="52" text-anchor="middle">497</text>
+        <text class="a6bAx" x="792" y="270" text-anchor="middle">lag 12</text>
+
+        <line x1="181" y1="284" x2="403" y2="284" stroke="#9C3D18" stroke-width="2"></line>
+        <text class="a6bBr" x="292" y="300" text-anchor="middle">THE DANGEROUS MIDDLE</text>
+
+        <rect x="14" y="316" width="852" height="104" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="a6bK" x="30" y="342">The lag has to match the reorg depth, and going deeper than that buys nothing at all.</text>
+        <text class="a6bM" x="30" y="364">At lag 3 the wrong rows reach zero. At 6 and 12 they are also zero, and the only difference is 249 and 497 rows held back from</text>
+        <text class="a6bM" x="30" y="382">the report. A lag of 1 still leaves 3.99 percent of the warehouse wrong, which feels like a precaution and is mistaken for safety.</text>
+        <text class="a6bN" x="30" y="406">So the question is not what lag to use. It is what reorg depth you are designing for, and that is the input nobody writes down.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - at lag 0 nothing errors, no job fails and 5.75 percent of the warehouse describes history the source no longer has. The only visible symptom is the report being wrong.</figcaption>
+    </figure>
+
+    <div class="wk" id="a6-lag">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The warehouse loader, running in this page. Two defences, deliberately on separate controls, because conflating them is a known trap.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="a6-seed">Which run of Larkfield's loader</label>
+        <select class="sql-code" id="a6-seed">
+          <option value="5">Run A</option>
+          <option value="42">Run B</option>
+          <option value="777">Run C</option>
+          <option value="20260922">Run D</option>
+        </select>
+        <label class="sql-label" for="a6-lag-in">Defence one, how many blocks you wait before loading: <b id="a6-lag-val">0</b></label>
+        <input class="sql-code" id="a6-lag-in" type="range" min="0" max="12" step="1" value="0">
+        <label class="sql-label" for="a6-ret">Defence two, whether you remove rows whose source was replaced</label>
+        <select class="sql-code" id="a6-ret">
+          <option value="0">No, append only</option>
+          <option value="1">Yes, retract them</option>
+        </select>
+        <div id="a6-out"></div>
+        <p class="sql-note" id="a6-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="a6-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Two defences, and why they must be kept apart<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Waiting and retracting are different mechanisms with different costs, and the box above puts them on separate controls for a reason. Waiting keeps rows out of the report until they are settled, so it costs freshness and it costs nothing else. Retracting lets rows in and removes them afterwards, so it costs nothing in freshness and it means your published figures move after publication.</p>
+        <p>They are easy to blur together because both end up with a clean warehouse, and blurring them produces a specific error: a shallow lag that appears to solve a deep reorg because the retraction was quietly doing the work. An earlier version of this bench made exactly that mistake and made a one block lag look like a fix for a three block reorg. The practitioner track spends a whole session on how that was caught.</p>
+        <p>The practical form of the question is therefore two questions in a trenchcoat, and you should separate them when you ask. What depth are we waiting for, and do we retract as well. A project that answers only the second has chosen to publish figures that move. A project that answers only the first has chosen staleness. Both are legitimate and neither is the default anybody meant to choose.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Where the cost lands, drawn rather than complained about<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Five sessions have produced a consistent pattern that is worth stating plainly at the end rather than implying throughout. The decision to build on this is made once, quickly, by people who are evaluating a product idea. The consequences are continuous, and they arrive at a different desk.</p>
+        <p>That is not an accusation of bad faith, and treating it as one gets you nowhere. It is a structural feature of how the costs are shaped: the boundary decision looks like an implementation detail in the room where it is made, and looks like the whole job eighteen months later. The read path, the bound that has to be re-explained every quarter, the loader lag, the metric that no amount of engineering will fix.</p>
+        <p>The remedy is not louder objection. It is the six questions, asked before the decision rather than after, by the people who will be carrying it. That is the entire argument for spending forty five minutes on a list of questions.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two boxes joined by an arrow. On the left, the decision, made in one afternoon by a product owner, a sponsor and a supplier. On the right, the cost, arriving every month afterwards at the data team, listed as the read path that only grows, a bound that must be re-explained each quarter, a loader lag nobody chose, and a metric no engineering will fix. A closing band states the one line version: the technology decision is downstream of whether the parties distrust each other, and most of the cost lands on the data team rather than on the people who chose it.">
+        <style>
+          .a6cH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .a6cT { font: 800 10px Inter, sans-serif; fill: #FFFFFF; }
+          .a6cB { font: 400 10.5px Inter, sans-serif; fill: #13201E; }
+          .a6cS { font: 400 9px Inter, sans-serif; fill: #54655F; }
+          .a6cK { font: 800 12.5px Inter, sans-serif; fill: #9C3D18; }
+          .a6cM { font: 400 11px Inter, sans-serif; fill: #54655F; }
+        </style>
+        <defs>
+          <marker id="a6cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9C3D18"></path></marker>
+        </defs>
+
+        <text class="a6cH" x="14" y="20">Who makes the decision, and who carries it.</text>
+
+        <rect x="14" y="40" width="250" height="150" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="40" width="250" height="24" rx="10" fill="#123D3A"></rect>
+        <rect x="14" y="52" width="250" height="12" fill="#123D3A"></rect>
+        <text class="a6cT" x="28" y="57">THE DECISION · ONE AFTERNOON</text>
+        <circle cx="50" cy="94" r="12" fill="#54655F"></circle>
+        <circle cx="86" cy="94" r="12" fill="#54655F"></circle>
+        <circle cx="122" cy="94" r="12" fill="#54655F"></circle>
+        <text class="a6cS" x="34" y="126">a product owner, a sponsor, a supplier</text>
+        <text class="a6cB" x="34" y="150">They are evaluating a product idea,</text>
+        <text class="a6cB" x="34" y="168">and none of this looks like part of it.</text>
+
+        <line x1="270" y1="115" x2="298" y2="115" stroke="#9C3D18" stroke-width="2" marker-end="url(#a6cAr)"></line>
+
+        <rect x="306" y="40" width="560" height="150" rx="10" fill="#FFFFFF" stroke="#9C3D18"></rect>
+        <rect x="306" y="40" width="560" height="24" rx="10" fill="#9C3D18"></rect>
+        <rect x="306" y="52" width="560" height="12" fill="#9C3D18"></rect>
+        <text class="a6cT" x="320" y="57">THE COST · EVERY MONTH AFTERWARDS, AT THE DATA TEAM</text>
+        <rect x="326" y="80" width="252" height="24" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a6cB" x="336" y="96">a read path that only ever grows</text>
+        <rect x="594" y="80" width="252" height="24" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a6cB" x="604" y="96">a bound re-explained every quarter</text>
+        <rect x="326" y="112" width="252" height="24" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a6cB" x="336" y="128">a loader lag nobody chose on purpose</text>
+        <rect x="594" y="112" width="252" height="24" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a6cB" x="604" y="128">a metric no engineering will fix</text>
+        <text class="a6cS" x="326" y="160">None of it is recoverable by working harder, and none of it appears in the decision it came from.</text>
+
+        <rect x="14" y="210" width="852" height="106" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="a6cK" x="30" y="242">The technology decision is downstream of whether the parties distrust each other.</text>
+        <text class="a6cK" x="30" y="266">Most of the cost lands on the data team rather than on the people who chose it.</text>
+        <text class="a6cM" x="30" y="292">Which is why the six questions are asked before the decision, by the people who will be carrying it afterwards, and why an</text>
+        <text class="a6cM" x="30" y="310">unanswered one counts as an answer rather than as something to follow up.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - nothing in the left box is done in bad faith. The shape of the cost is what makes it invisible from there, which is the case for asking rather than for objecting.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Run the six on something real, out loud</h2>
+      <span class="tag build">13 min hands on</span>
+    </div>
+    <p class="lede">No code. Six steps on a proposal that exists in your organisation, said in the room. The aim is to leave with one proposal scored against all six and one question you know you cannot currently answer.</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Say the six from memory</h4>
+        <p>Boundary, counterparties, unit of identity, what happens when a record is wrong, reorg depth, who is paid. Most people lose the fifth, which is the one with a measurable wrong answer.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Pick a real proposal and run one and two</h4>
+        <p>Is there a written boundary, and can anybody name a keeper the others would accept. Answer both out loud before going further. If either is vague, stop and say what that means rather than continuing politely.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Narrate a wrong record</h4>
+        <p>Someone describes the sequence: the wrong record, the annotation, the read path rule, the reader who misses it. Time it. Anyone who can do it in twenty seconds has drawn the boundary; anyone who cannot has not.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Set the lag to 1 and look at it</h4>
+        <p>In the live box, leave retraction off and set the lag to 1. Read the wrong row count and the share. Say why that setting is worse than no precaution at all, in terms of what somebody would believe about it.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Separate the two defences out loud</h4>
+        <p>Turn retraction on at lag 0, then off at lag 3. Both give you a clean warehouse and they cost different things. Say which cost your organisation would rather pay, and why, in one sentence each.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Name the question you cannot answer</h4>
+        <p>One of the six will have no answer available in the room. Write it down with the name of the person who could answer it. That name, and that question, is the actual output of tonight.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> Ask the six before the decision, not after, and ask them as a person who will be carrying the result rather than as a sceptic. Say the acceptance criterion out loud with the question, so that a vague answer is visibly vague to everyone in the room and not only to you. And treat an unanswered question as a finding rather than as an action item, because an action item gets carried forward and a finding changes the meeting.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">A team says they have thought about history being replaced and have set a one block wait. Against a three block reorg, what have they actually bought?</p>
+      <div class="qopt">A · Complete protection, since any wait removes the problem</div>
+      <div class="qopt">B · Roughly a third of the protection, which is proportionate to the wait</div>
+      <div class="qopt">C · A setting that still leaves 3.99 percent of the warehouse wrong and is worse than no precaution, because it will be mistaken for safety</div>
+      <q class="qwhy">A lag shallower than the reorg is the dangerous middle. It reduces the wrong rows from 511 to 346 and it leaves a team believing the problem is handled. The lag has to be at least as deep as the reorg, and going deeper than that only holds more rows back.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">In a design review, nobody can name who would keep the shared record if the project did not use this machinery. What does that tell you?</p>
+      <div class="qopt">A · That there is no keeper the parties would accept, which is the condition under which the machinery earns its cost</div>
+      <div class="qopt">B · That the parties have not thought about governance and the project should be paused</div>
+      <div class="qopt">C · Nothing useful, since the keeper question is about operations rather than architecture</div>
+      <q class="qwhy">That is the question in the form that does the work. A name everyone accepts means a database with an audit log is cheaper on every dimension and can fix a row as well. No such name means you are in the one cell of four where the costs of sessions 1 to 4 are buying something.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">What is the one-line version of all six sessions?</p>
+      <div class="qopt">A · Public ledgers are unsuitable for reporting, and the data team should say so early</div>
+      <div class="qopt">B · The technology decision is downstream of whether the parties distrust each other, and most of the cost lands on the data team rather than on the people who chose it</div>
+      <div class="qopt">C · With enough engineering, a public ledger can be made to behave like a warehouse</div>
+      <q class="qwhy">The first half is the finding from session 5 and it decides whether there should be a project. The second half is the pattern running through sessions 1 to 4 and it decides who needs to be in the room when the decision is made.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">After session 6</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty minutes, on the question you could not answer and on where to go next.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Send the question to the person who can answer it</h4>
+        <p>The one from step 6, with its acceptance criterion attached, so that a vague reply is visibly vague. Give it a date. An unanswered question with no date becomes an assumption within a month.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Put the six somewhere you will find them</h4>
+        <p>The cheat sheet below is the card version. Keep it wherever your design review notes live rather than wherever your training notes live, because the two are not the same place and only one of them gets opened.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Decide whether you need the practitioner track</h4>
+        <p>If you or your team will be building any of this, the ten practitioner sessions start at reading a chain as a dataset and end with both benches driven by the reader. If you are only signing things off, the six you have just done are the whole of it.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Six questions, in asking order</span><span class="note">Boundary, counterparties, unit of identity, a wrong record, reorg depth, and who is paid by the metric.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">An acceptance criterion for each</span><span class="note">The answer that would move you, stated in advance so that a vague answer is visibly vague in the room.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The keeper question</span><span class="note">Not "do you trust each other" but "who would keep the record otherwise, and would everyone accept them".</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The reorg depth, measured</span><span class="note">511 wrong rows at lag 0, 346 at lag 1, zero from lag 3, and 249 and 497 rows held back at lag 6 and 12.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Waiting and retracting kept apart</span><span class="note">Two defences with different costs, on separate controls, because conflating them produced a known false result.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Where the cost lands</span><span class="note">Decided in one afternoon by people evaluating a product idea, carried monthly by a data team that was not there.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The one line version</span><span class="note">Downstream of distrust, and paid for by the data team. The whole of the leader track on a card.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Building any of it</span><span class="note">The practitioner track runs from reading a chain as a dataset to both benches driven by the reader.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Chain mechanics, including how a reorg happens</span><span class="note">Assumed from learn-blockchain-with-phoebe rather than repeated.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Probabilistic record linkage</span><span class="note">Fellegi-Sunter, blocking and string comparison live in learn-entity-resolution-with-phoebe.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">What any law requires, and anything about price or markets</span><span class="note">Obligations live in learn-gdpr-with-phoebe. Nothing here is advice of any kind.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The one line.</strong> The technology decision is downstream of whether the parties distrust each other, and most of the cost lands on the data team.</div>
+      <div class="cheat-item"><strong>Question 1.</strong> What goes on, what stays off. Moves me: a two column list that already exists.</div>
+      <div class="cheat-item"><strong>Question 2.</strong> Who are the counterparties. Moves me: nobody can name a keeper the others would accept.</div>
+      <div class="cheat-item"><strong>Question 3.</strong> Unit of identity and error direction. Moves me: a ceiling with a stated method and no floor claimed.</div>
+      <div class="cheat-item"><strong>Question 4.</strong> What happens when a record is wrong. Moves me: somebody narrates it in twenty seconds.</div>
+      <div class="cheat-item"><strong>Question 5.</strong> What reorg depth. Moves me: a number with a source, and a lag at least that deep.</div>
+      <div class="cheat-item"><strong>Question 6.</strong> Who is paid by the metric. Moves me: a named party and the cheapest way for them to move it.</div>
+      <div class="cheat-item"><strong>The two defences.</strong> Waiting costs freshness. Retracting means published figures move. Never treat them as one.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Leader session 6 of 6 · learn-web3-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="a5-what-actually-gets-better.html">← Leader session 5 · What actually gets better</a>
+        <a href="p1-reading-a-chain-as-a-dataset.html">Practitioner session 1 · Reading a chain as a dataset →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/w3-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof W3 === "undefined") return;
+  var sel = document.getElementById("a6-seed");
+  var lag = document.getElementById("a6-lag-in");
+  var lagVal = document.getElementById("a6-lag-val");
+  var ret = document.getElementById("a6-ret");
+  var out = document.getElementById("a6-out");
+  var verdict = document.getElementById("a6-verdict");
+  var self = document.getElementById("a6-self");
+
+  function comma(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+
+  function render() {
+    var s = Number(sel.value);
+    var l = Number(lag.value);
+    var r = ret.value === "1";
+    lagVal.textContent = String(l);
+
+    var run = W3.runPipeline({ seed: s, finalityLag: l, retract: r });
+    var pct = (run.wrongRowShare * 100).toFixed(2);
+
+    var html = '<table class="sql-table"><thead><tr><th>Quantity</th><th>Value</th><th>What it costs you</th></tr></thead><tbody>';
+    html += "<tr><td>Reorg depth in this run</td><td>" + run.reorgDepth + " blocks</td><td>the input the question is about</td></tr>";
+    html += "<tr><td>Blocks you waited before loading</td><td>" + run.finalityLag + "</td><td>defence one</td></tr>";
+    html += "<tr><td>Rows held back from the report</td><td>" + comma(run.rowsStillHeld) + "</td><td>the price of waiting, paid in freshness</td></tr>";
+    html += "<tr><td>Rows removed after their source was replaced</td><td>" + comma(run.correctedRows) + "</td><td>" + (r ? "defence two, paid in figures that move after publication" : "defence two is switched off") + "</td></tr>";
+    html += '<tr><td>Rows left describing history the source no longer has</td><td><b class="a6-bad">' + comma(run.orphanedRows) + "</b></td><td>" + pct + " percent of the warehouse, and nothing errors</td></tr>";
+    html += "</tbody></table>";
+    out.innerHTML = html;
+
+    var msg;
+    if (run.orphanedRows === 0 && l >= run.reorgDepth && !r) {
+      msg = "A lag of " + l + " is at least as deep as the " + run.reorgDepth + " block reorg, so nothing wrong is ever loaded and retraction has nothing to do. The cost is "
+        + comma(run.rowsStillHeld) + " rows held back from the report.";
+    } else if (run.orphanedRows === 0 && r && l < run.reorgDepth) {
+      msg = "Clean, but not because of the lag. Retraction removed " + comma(run.correctedRows)
+        + " rows after they had been loaded, so your published figures move after publication. That is defence two doing the work, and a lag of " + l + " on its own would not have been enough.";
+    } else if (run.orphanedRows === 0) {
+      msg = "Both defences are on and the warehouse is clean. The lag of " + l + " alone was sufficient, so retraction removed "
+        + comma(run.correctedRows) + " rows and the second defence is not what saved you here.";
+    } else {
+      msg = "A lag of " + l + " against a " + run.reorgDepth + " block reorg leaves " + comma(run.orphanedRows)
+        + " rows wrong, " + pct + " percent of the warehouse. No job failed and no check fired.";
+    }
+    verdict.textContent = msg;
+  }
+
+  var t = W3.selfTest();
+  self.textContent = t.ok
+    ? "The generator's five properties pass in this browser, so these are the numbers any correct run gives. Nothing here describes a real network."
+    : "The generator's self test did not pass in this browser, so nothing above should be believed.";
+
+  sel.addEventListener("change", render);
+  lag.addEventListener("input", render);
+  ret.addEventListener("change", render);
+  render();
+})();
+</script>
+<style>
+  #a6-lag .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 24rem; }
+  #a6-lag input[type="range"] { max-width: 20rem; padding: 0; }
+  #a6-lag table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+  #a6-lag .a6-bad { color: var(--amber); }
+</style>
+</body>
+</html>

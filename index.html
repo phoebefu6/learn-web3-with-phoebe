@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Sixteen sessions on what public, adversarial, retractable data does to a data or AI project. Real clustering, a real warehouse loader, measured numbers, no coins and no price talk anywhere. Free.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Learn Web3 with Phoebe">
+<meta property="og:description" content="Free data, no gatekeeper, and a source that can withdraw what it already told you. A data and AI course, not a technology tour.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-web3-with-phoebe/">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Learn Web3 with Phoebe">
+<meta name="twitter:description" content="304 real parties behind about 1,000 addresses, and 511 warehouse rows wrong with every check green.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Learn Web3 with Phoebe</title>
+<link rel="stylesheet" href="assets/style.css?v=1">
+<style>
+
+  .stats-row { display: flex; gap: 2.4rem; margin-top: 1.5rem; flex-wrap: wrap; }
+  .stat b { display: block; font-size: 2.1rem; font-weight: 800; line-height: 1.05; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: .72rem; opacity: .85; text-transform: uppercase; letter-spacing: .09em; font-weight: 600; }
+
+  .course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+  .course-card {
+    border: 1px solid var(--hairline);
+    border-top: 4px solid var(--diff, var(--indigo));
+    border-radius: var(--radius);
+    padding: 1.2rem 1.3rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    text-decoration: none;
+    color: var(--ink);
+    background: #fff;
+    transition: box-shadow .15s ease, border-color .15s ease, transform .15s ease;
+    position: relative;
+  }
+  .course-card:hover { border-color: var(--indigo-soft); border-top-color: var(--diff, var(--indigo)); box-shadow: 0 8px 28px rgba(31,95,91,.16); transform: translateY(-3px); }
+  .course-card .cicon { font-size: 1.7rem; line-height: 1; }
+  .course-card .cnum { font-size: .72rem; font-weight: 700; color: var(--indigo); text-transform: uppercase; letter-spacing: .1em; }
+  .course-card h3 { font-size: 1.05rem; font-weight: 800; line-height: 1.3; }
+  .course-card p { font-size: .85rem; color: var(--muted); flex: 1; }
+  .course-card .meta { display: flex; gap: .4rem; flex-wrap: wrap; }
+
+  .diff-legend { display: flex; gap: 1rem; margin-top: 1.6rem; font-size: .74rem; color: var(--muted); font-weight: 600; flex-wrap: wrap; }
+  .diff-legend i { display: inline-block; width: .85rem; height: .35rem; border-radius: 999px; margin-right: .35rem; vertical-align: middle; }
+
+  .paths { margin-top: 2.6rem; }
+  .paths h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: .3rem; }
+  .paths .plede { color: var(--muted); font-size: .92rem; margin-bottom: .8rem; }
+  .path { display: flex; gap: .55rem; align-items: center; padding: .75rem 0; border-bottom: .5px solid var(--hairline); flex-wrap: wrap; }
+  .path:last-child { border-bottom: none; }
+  .path b { min-width: 15.5rem; font-size: .9rem; }
+  .path .pstep { background: var(--indigo-50); color: var(--indigo); border-radius: 999px; padding: .16rem .68rem; font-weight: 700; font-size: .8rem; text-decoration: none; transition: all .12s ease; }
+  .path .pstep:hover { background: var(--indigo); color: #fff; }
+  .path .parr { color: var(--faint); font-weight: 700; }
+
+  .mm-section { margin-top: 1.6rem; }
+  .mm-section h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: .2rem; }
+  .mm-section .mm-lede { color: var(--muted); font-size: .92rem; margin-bottom: .4rem; }
+  .mm-wrap { border: 1px solid var(--hairline); border-radius: var(--radius); background: linear-gradient(180deg,#fff,#EFF7F5); padding: .6rem; overflow-x: auto; }
+  .mm-svg { width: 100%; height: auto; display: block; max-width: 60rem; margin: 0 auto; min-width: 34rem; }
+  .mm-link { cursor: pointer; text-decoration: none; }
+  .mm-node rect { transition: opacity .15s ease, filter .15s ease; }
+  .mm-node text { pointer-events: none; }
+  .mm-link:hover .mm-node rect { filter: brightness(1.06); }
+  .mm-edge { transition: opacity .15s ease; }
+
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn with Phoebe · Emerging Tech</div>
+    <h1>Learn <span class="accent">Web3</span> with Phoebe</h1>
+    <p class="sub">This is a data and AI course, not a technology tour. Larkfield is a team that decided to build on public chain data, and everything that happened to them afterwards happened to their pipeline. The upside is real and it is not the one in the marketing: no access negotiation, no SLA, no gatekeeper, full history available to anyone. The bill arrives in three places. The unit of identity is an address rather than a person, so a count of about 1,000 active addresses stands for 304 real parties and the standard cleanup only gets you to 696. Some of that population is manufactured on purpose by people paid to move the number. And the source can withdraw what it already told you, which leaves 511 rows of your warehouse describing history that no longer exists, with every check green. Six leader sessions on the decision, ten practitioner sessions on the build, and two benches that run in the page rather than quoting a table.</p>
+    <div class="stats-row">
+      <div class="stat"><b data-count="16">16</b><span>sessions, two tracks</span></div>
+      <div class="stat"><b data-count="304">304</b><span>real parties behind about 1,000 addresses</span></div>
+      <div class="stat"><b data-count="511">511</b><span>wrong rows, every check green</span></div>
+      <div class="stat"><b data-count="5">5</b><span>engine properties, one added after a near miss</span></div>
+      <div class="stat"><b data-count="45">45</b><span>min per session</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>Leader track 🧭 <span style="font-size:.85rem;font-weight:600;color:var(--muted)">· six sessions, no code</span></h2>
+      <p class="plede">For anyone being asked to approve, fund or explain a project that reads chain data. What genuinely improves for a data team, what an active user count is actually counting, who is paid to move it, what a source that retracts does to a report, when a database does the same job better, and the six questions to ask before the decision rather than after.</p>
+    </div>
+    <div class="course-grid">
+      <a class="course-card" href="courses/a1-the-data-is-public-now.html" style="--diff:#FBBF24">
+        <span class="cicon">🌐</span>
+        <span class="cnum">Leader session 1 · start here</span>
+        <h3>The data is public now</h3>
+        <p>What changes for a data team when the source has no owner. Some of it is a genuine improvement and some of it is a tax.</p>
+        <span class="meta"><span class="pill amber">▶ Start here</span></span>
+      </a>
+      <a class="course-card" href="courses/a2-the-user-count-that-is-not-one.html" style="--diff:#FBBF24">
+        <span class="cicon">👥</span>
+        <span class="cnum">Leader session 2</span>
+        <h3>The user count that is not one</h3>
+        <p>About 1,000 addresses, 304 parties, 696 after cleaning. Nothing is ever wrongly merged, which makes the figure a ceiling.</p>
+      </a>
+      <a class="course-card" href="courses/a3-numbers-people-are-paid-to-move.html" style="--diff:#FB923C">
+        <span class="cicon">🎯</span>
+        <span class="cnum">Leader session 3</span>
+        <h3>Numbers people are paid to move</h3>
+        <p>Four operators running 60 addresses each look exactly like 240 people, and the clustering only partly separates them.</p>
+      </a>
+      <a class="course-card" href="courses/a4-you-cannot-take-it-back.html" style="--diff:#FB923C">
+        <span class="cicon">↩️</span>
+        <span class="cnum">Leader session 4</span>
+        <h3>You cannot take it back</h3>
+        <p>A record that cannot be deleted moves the correction into the read path, forever, for every reader.</p>
+      </a>
+      <a class="course-card" href="courses/a5-what-actually-gets-better.html" style="--diff:#F87171">
+        <span class="cicon">⚖️</span>
+        <span class="cnum">Leader session 5</span>
+        <h3>What actually gets better</h3>
+        <p>Four claimed benefits, tested against a database with an audit log. Inside one organisation the database wins on all four.</p>
+      </a>
+      <a class="course-card" href="courses/a6-scoping-a-project-on-this.html" style="--diff:#F87171">
+        <span class="cicon">📋</span>
+        <span class="cnum">Leader session 6</span>
+        <h3>Scoping a project on this</h3>
+        <p>Six questions with an acceptance criterion each, asked before the decision by the people who will carry it.</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>Practitioner track 🛠️ <span style="font-size:.85rem;font-weight:600;color:var(--muted)">· ten sessions, hands on</span></h2>
+      <p class="plede">For whoever has to build it and defend its numbers. Reading a chain as a dataset, the indexer that turns out to be the product, entity resolution on addresses, a counterfactual sweep done correctly, a reorganisation going through a warehouse, designing for retraction, a model on top of all three problems, and the session where this course's own bench was caught being wrong.</p>
+    </div>
+    <div class="course-grid">
+      <a class="course-card" href="courses/p1-reading-a-chain-as-a-dataset.html" style="--diff:#FBBF24">
+        <span class="cicon">🔎</span>
+        <span class="cnum">Practitioner session 1 · start here</span>
+        <h3>Reading a chain as a dataset</h3>
+        <p>No SLA, no backfill request, no gatekeeper. The same absence produces all four, and two of them are yours to solve.</p>
+        <span class="meta"><span class="pill amber">▶ Start here</span></span>
+      </a>
+      <a class="course-card" href="courses/p2-the-indexer-is-the-product.html" style="--diff:#FB923C">
+        <span class="cicon">🏗️</span>
+        <span class="cnum">Practitioner session 2</span>
+        <h3>The indexer is the product</h3>
+        <p>A normal pipeline with three abnormal properties, and why two competent teams publish different numbers and both are right.</p>
+      </a>
+      <a class="course-card" href="courses/p3-addresses-are-not-people.html" style="--diff:#FB923C">
+        <span class="cicon">🔗</span>
+        <span class="cnum">Practitioner session 3</span>
+        <h3>Addresses are not people</h3>
+        <p>Co-spend clustering with a union-find. A co-spend is evidence; the absence of one is not, and that asymmetry is the result.</p>
+      </a>
+      <a class="course-card" href="courses/p4-measuring-the-clustering.html" style="--diff:#FB923C">
+        <span class="cicon">📐</span>
+        <span class="cnum">Practitioner session 4</span>
+        <h3>Measuring the clustering</h3>
+        <p>In the bench the truth is 304 and the error is measurable. In production it is not, so what can you still honestly say.</p>
+      </a>
+      <a class="course-card" href="courses/p5-sybils-and-adversarial-counts.html" style="--diff:#F87171">
+        <span class="cicon">🪞</span>
+        <span class="cnum">Practitioner session 5</span>
+        <h3>Sybils and adversarial counts</h3>
+        <p>A counterfactual sweep built properly. Better Sybil detection chases 31 of the 392, and the other 361 was there anyway.</p>
+      </a>
+      <a class="course-card" href="courses/p6-reorgs-hit-your-warehouse.html" style="--diff:#F87171">
+        <span class="cicon">💥</span>
+        <span class="cnum">Practitioner session 6</span>
+        <h3>Reorgs hit your warehouse</h3>
+        <p>511 wrong rows and every check green. The loader is correct code doing exactly what append-only means.</p>
+      </a>
+      <a class="course-card" href="courses/p7-designing-for-retraction.html" style="--diff:#F87171">
+        <span class="cicon">🧯</span>
+        <span class="cnum">Practitioner session 7</span>
+        <h3>Designing for retraction</h3>
+        <p>Late data is additive and your tools expect it. Withdrawn data is subtractive and almost nothing downstream survives it.</p>
+      </a>
+      <a class="course-card" href="courses/p8-ml-on-public-adversarial-data.html" style="--diff:#EF4444">
+        <span class="cicon">🤖</span>
+        <span class="cnum">Practitioner session 8</span>
+        <h3>ML on public adversarial data</h3>
+        <p>Public features, manufactured labels, a training set that can be withdrawn. None of the three is a property of the model.</p>
+      </a>
+      <a class="course-card" href="courses/p9-the-bench-that-fooled-itself.html" style="--diff:#EF4444">
+        <span class="cicon">🪤</span>
+        <span class="cnum">Practitioner session 9</span>
+        <h3>The bench that fooled itself</h3>
+        <p>This bench was wrong, three self tests passed anyway, and the reasoning that caught it generalises well past here.</p>
+      </a>
+      <a class="course-card" href="courses/p10-the-larkfield-bench.html" style="--diff:#EF4444">
+        <span class="cicon">🎛️</span>
+        <span class="cnum">Practitioner session 10 · capstone</span>
+        <h3>The Larkfield bench</h3>
+        <p>Both benches, every input exposed. Two exchange rates come out, and the cleaning step turns out to have a slope of 1.</p>
+      </a>
+    </div>
+    <div class="diff-legend">
+      <span><i style="background:#FBBF24"></i>Foundations</span>
+      <span><i style="background:#FB923C"></i>Working depth</span>
+      <span><i style="background:#F87171"></i>Advanced</span>
+      <span><i style="background:#EF4444"></i>Hardest</span>
+    </div>
+  </section>
+
+  <section class="section mm-section">
+    <h2>The whole thing on one page</h2>
+    <p class="mm-lede">Every idea in the course and the session that owns it. Click any node to jump there.</p>
+    <div class="mm-wrap"><div id="mindmap"></div></div>
+  </section>
+
+  <section class="section">
+    <div class="paths">
+      <h2>Three ways through</h2>
+      <p class="plede">Everyone starts at session 1 of their track. These are the shortest useful routes if you cannot take all sixteen.</p>
+      <div class="path"><b>Somebody wants to build on this</b>
+        <a class="pstep" href="courses/a1-the-data-is-public-now.html">What changes</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a5-what-actually-gets-better.html">What improves</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a6-scoping-a-project-on-this.html">Six questions</a>
+      </div>
+      <div class="path"><b>I have to defend a user number</b>
+        <a class="pstep" href="courses/a2-the-user-count-that-is-not-one.html">What it counts</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p3-addresses-are-not-people.html">Clustering</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p5-sybils-and-adversarial-counts.html">The sweep</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p10-the-larkfield-bench.html">The bench</a>
+      </div>
+      <div class="path"><b>I own the pipeline</b>
+        <a class="pstep" href="courses/p2-the-indexer-is-the-product.html">The indexer</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p6-reorgs-hit-your-warehouse.html">Reorgs</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p7-designing-for-retraction.html">Retraction</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p9-the-bench-that-fooled-itself.html">The near miss</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="paths">
+      <h2>What is real here</h2>
+      <p class="plede">Every number in this course was computed before any page quoted it. The world is generated on purpose so that the truth is knowable; the algorithms run over it are the ordinary ones.</p>
+      <table class="pp-strip" style="width:100%;border-collapse:collapse">
+        <tr><td style="padding:.5rem 0;font-weight:700">The clustering</td><td style="padding:.5rem 0;color:var(--muted)">A real union-find over real co-spend links, scored against a truth of 304 parties. Across 1,365 settings, the number of clusters holding two real parties is 0</td></tr>
+        <tr><td style="padding:.5rem 0;font-weight:700">The warehouse</td><td style="padding:.5rem 0;color:var(--muted)">A loader running over a chain that reorganises. Measured over 4 seeds, 5 depths and every lag: about 169 wrong rows per block of depth minus lag</td></tr>
+        <tr><td style="padding:.5rem 0;font-weight:700">The engine checks itself</td><td style="padding:.5rem 0;color:var(--muted)">Five properties on every page load. The fourth exists because the first three all passed against a fault, and session 9 is the record of it</td></tr>
+        <tr><td style="padding:.5rem 0;font-weight:700">No coins</td><td style="padding:.5rem 0;color:var(--muted)">No cryptocurrency, no price, no token, no trading. No figure here describes a real network, and nothing here is investment advice</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span class="meta">part of <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a> · by Phoebe Fu · nothing here is investment advice · chain mechanics live in <a href="https://phoebefu6.github.io/learn-blockchain-with-phoebe/">learn blockchain ↗</a> and record linkage in <a href="https://phoebefu6.github.io/learn-entity-resolution-with-phoebe/">learn entity resolution ↗</a></span>
+  </footer>
+
+</main>
+
+<script>
+window.MINDMAP_DATA = {
+  "title": "Web3 data",
+  "centerColor": "#123D3A",
+  "sessions": [
+    {
+      "label": "A source with no owner",
+      "href": "courses/a1-the-data-is-public-now.html",
+      "concepts": [
+        {
+          "label": "Chain as a dataset",
+          "href": "courses/p1-reading-a-chain-as-a-dataset.html"
+        },
+        {
+          "label": "The indexer",
+          "href": "courses/p2-the-indexer-is-the-product.html"
+        },
+        {
+          "label": "No SLA, no gatekeeper",
+          "href": "courses/p1-reading-a-chain-as-a-dataset.html"
+        }
+      ]
+    },
+    {
+      "label": "The unit of identity",
+      "href": "courses/a2-the-user-count-that-is-not-one.html",
+      "concepts": [
+        {
+          "label": "Co-spend clustering",
+          "href": "courses/p3-addresses-are-not-people.html"
+        },
+        {
+          "label": "A ceiling, not an estimate",
+          "href": "courses/p4-measuring-the-clustering.html"
+        },
+        {
+          "label": "Truth you cannot see",
+          "href": "courses/p4-measuring-the-clustering.html"
+        }
+      ]
+    },
+    {
+      "label": "A counted population",
+      "href": "courses/a3-numbers-people-are-paid-to-move.html",
+      "concepts": [
+        {
+          "label": "Sybils",
+          "href": "courses/p5-sybils-and-adversarial-counts.html"
+        },
+        {
+          "label": "The counterfactual sweep",
+          "href": "courses/p5-sybils-and-adversarial-counts.html"
+        },
+        {
+          "label": "The share flip",
+          "href": "courses/p8-ml-on-public-adversarial-data.html"
+        }
+      ]
+    },
+    {
+      "label": "A source that retracts",
+      "href": "courses/a4-you-cannot-take-it-back.html",
+      "concepts": [
+        {
+          "label": "Reorgs",
+          "href": "courses/p6-reorgs-hit-your-warehouse.html"
+        },
+        {
+          "label": "Finality lag",
+          "href": "courses/p7-designing-for-retraction.html"
+        },
+        {
+          "label": "Subtractive corrections",
+          "href": "courses/p7-designing-for-retraction.html"
+        }
+      ]
+    },
+    {
+      "label": "Modelling on top",
+      "href": "courses/a5-what-actually-gets-better.html",
+      "concepts": [
+        {
+          "label": "Public features",
+          "href": "courses/p8-ml-on-public-adversarial-data.html"
+        },
+        {
+          "label": "Manufactured labels",
+          "href": "courses/p8-ml-on-public-adversarial-data.html"
+        },
+        {
+          "label": "Benches that fool you",
+          "href": "courses/p9-the-bench-that-fooled-itself.html"
+        }
+      ]
+    },
+    {
+      "label": "Deciding and defending",
+      "href": "courses/a6-scoping-a-project-on-this.html",
+      "concepts": [
+        {
+          "label": "Six questions",
+          "href": "courses/a6-scoping-a-project-on-this.html"
+        },
+        {
+          "label": "The two exchange rates",
+          "href": "courses/p10-the-larkfield-bench.html"
+        },
+        {
+          "label": "The Larkfield bench",
+          "href": "courses/p10-the-larkfield-bench.html"
+        }
+      ]
+    }
+  ]
+};
+</script>
+<script src="assets/mindmap.js?v=1"></script>
+<script src="assets/app.js?v=1"></script>
+</body>
+</html>

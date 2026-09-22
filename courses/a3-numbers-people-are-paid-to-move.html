@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 3 of 6. Goodhart's problem with two features it does not usually have: the target is published, and the actor can manufacture identities instead of changing behaviour. 4 operators, 240 addresses, and a metric that pays for them.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Numbers people are paid to move - learn web3 with phoebe">
+<meta property="og:description" content="Leader session 3 of 6. On a public ledger the metric and the incentive live in the same place, so an adversarial user base is the default assumption rather than a risk to be assessed.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-web3-with-phoebe/courses/a3-numbers-people-are-paid-to-move.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Numbers people are paid to move - learn web3 with phoebe">
+<meta name="twitter:description" content="4 operators running 60 addresses each are indistinguishable from 240 people by address count alone, and the clustering only partly separates them.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 3 · Numbers people are paid to move - learn web3 with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-web3-with-phoebe</a> / Leader session 3 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Web3 with Phoebe · Leader session 3 of 6</div>
+    <h1>Numbers people are <span class="accent">paid to move</span></h1>
+    <p class="sub">A measure that becomes a target stops being a good measure. Everybody knows that sentence and almost nobody has met the version Larkfield is living in, where the target is published in the mechanism that pays it and the party responding to it can make more of itself rather than merely behave differently. Session 2 measured half of this already: 4 operators running 60 addresses each, 240 rows that no address count can tell apart from 240 people. Tonight is what those two extra features do to every metric Larkfield reports.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Leader track</span>
+      <span class="chip audience">Anyone who signs off a metric that triggers a payment</span>
+      <span class="chip audience">Anyone planning detection work</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-17 · Two extra features</span>
+      <span class="a3" style="flex:3">17-30 · The measurement</span>
+      <span class="a4" style="flex:3">30-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The adversary you were going to assess, who is already in the data</h2>
+    </div>
+    <p class="lede">Session 1 named the fourth coupling and left it as a sentence: the metric and the incentive to move it sit at the same address. Session 2 then measured a gap of about 400 between a reported ceiling and the truth and found that most of it was ordinary people, not operators. Tonight takes the operators seriously anyway, because the reason they matter is not the size of their contribution to that particular gap. It is that they are evidence of a standing property of the dataset, and that property changes what a metric is.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Goodhart's problem with the two features it does not usually carry, named separately so you can check for each one. The measured version of the second feature: 240 addresses made by 4 parties, sitting inside a count of about a thousand, with the clustering removing only part of them. A working rule for reading any published metric as a target from the day it is published rather than from the day somebody abuses it. And the genuine disagreement about whether publishing the definition of a metric makes the gaming worse or only makes it visible.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why an adversary is a default and not a risk item<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A risk register asks how likely something is and what it would cost. That framing works when the thing is an event. It does not work here, because on a public ledger the conditions for the behaviour are permanently present: the rule is readable, participation is open, and one party can hold as many addresses as it cares to create. There is no state of the world in which those conditions are absent, so there is no probability to estimate.</p>
+        <p>The shift that follows is small to say and large to run. You stop asking whether the user base is adversarial and start asking which share of it is, and in which direction that biases each number you publish. The first question has a yes or no answer that is always yes. The second has an answer you can measure, report and act on, which is what the live box in part 2 does.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Larkfield's risk review scored this as low likelihood, on the reasoning that the rewards were modest and the product was young. Both of those were true. Neither of them was relevant, because the cost of presenting as sixty parties instead of one is sixty rows, and the review had implicitly priced the behaviour as if it required sixty people.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words that keep coming back<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Target.</strong> A measure that somebody is rewarded against. The moment a measure becomes one, its relationship to the thing it was measuring starts to come apart.</li>
+          <li><strong>Published target.</strong> A target whose exact definition is readable by the parties responding to it, without being told and without asking. Part 1.</li>
+          <li><strong>Manufactured identity.</strong> An address created so that a count of addresses reads higher. Not a disguise and not a breach, just a row.</li>
+          <li><strong>Operator.</strong> In Larkfield's world, a party deliberately running many addresses. There are 4 of them and they run 60 each.</li>
+          <li><strong>Adversarial data.</strong> A dataset where some rows exist because somebody wanted your metric to read differently. Session 1 named it, tonight measures it.</li>
+          <li><strong>Ceiling.</strong> The clustered figure from session 2. An upper bound on the entity count, with no floor.</li>
+          <li><strong>Detection.</strong> Work aimed at finding deliberate multi-address behaviour. Session 2 measured how much of the gap it can possibly recover, and the answer was small.</li>
+          <li><strong>Record linkage.</strong> Joining records about the same party by fuzzy attributes and probability. That craft lives in <b>learn-entity-resolution-with-phoebe</b>; the evidence here is transaction structure, so the machinery differs.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the two extra features</span>
+      <h2>Goodhart, with the two parts nobody warns you about</h2>
+      <span class="tag concept">14 min live</span>
+    </div>
+    <p class="lede">The familiar version has a target set inside a building, an actor who has to guess what is counted, one identity per actor, and feedback that arrives slowly and incompletely. Every mitigation ever written for it assumes at least one of those. On a public ledger the first three are gone and the fourth runs the other way, and the honest way to see that is to draw the same three parts twice.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 542" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The same three parts of a targeted metric drawn twice. Top row, normally: the target is a rule box inside a dashed wall with an outsider stopped at the wall and a question mark, so the target has to be guessed; the actor is one solid circle with one arrow into a box labelled changed behaviour; the feedback is a dashed arrow from a metric box to a distant reader, arriving slowly. Bottom row, on a public ledger: the same rule box now sits inside a faded outline with three readers pulling from it directly; the actor is one amber circle fanning out into twelve small amber circles, so identities are created rather than behaviour changed; the feedback is a solid arrow from the metric to the actor and an amber return path from the actor back into the metric box. A closing band says the two features the usual version does not have are that the target is published and the actor can make more of itself.">
+        <style>
+          .a3aH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .a3aL { font: 800 10px Inter, sans-serif; fill: #54655F; letter-spacing: .12em; }
+          .a3aT { font: 800 10px Inter, sans-serif; fill: #FFFFFF; }
+          .a3aB { font: 400 11px Inter, sans-serif; fill: #13201E; }
+          .a3aS { font: 400 8.5px Inter, sans-serif; fill: #54655F; }
+          .a3aSd { font: 400 9px Inter, sans-serif; fill: #13201E; }
+          .a3aSb { font: 700 9px Inter, sans-serif; fill: #1F5F5B; }
+          .a3aQ { font: 800 18px Inter, sans-serif; fill: #9C3D18; }
+          .a3aK { font: 800 11.5px Inter, sans-serif; fill: #9C3D18; }
+          .a3aM { font: 400 11px Inter, sans-serif; fill: #54655F; }
+        </style>
+        <defs>
+          <marker id="a3aArI" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#123D3A"></path></marker>
+          <marker id="a3aArA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9C3D18"></path></marker>
+        </defs>
+
+        <text class="a3aH" x="14" y="20">Three parts of a targeted metric, drawn twice. Nothing was redesigned; the wall came off.</text>
+        <text class="a3aL" x="14" y="42">NORMALLY, ON A TARGET YOU SET</text>
+
+        <!-- row A -->
+        <rect x="14" y="50" width="276" height="168" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="50" width="276" height="24" rx="10" fill="#123D3A"></rect>
+        <rect x="14" y="62" width="276" height="12" fill="#123D3A"></rect>
+        <text class="a3aT" x="28" y="67">1 · THE TARGET</text>
+        <rect x="44" y="88" width="152" height="62" rx="8" fill="none" stroke="#1F5F5B" stroke-width="1.6" stroke-dasharray="5 4"></rect>
+        <rect x="58" y="100" width="124" height="38" rx="5" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a3aSb" x="68" y="115">THE RULE</text>
+        <text class="a3aS" x="68" y="130">what counts as active</text>
+        <circle cx="240" cy="119" r="11" fill="#54655F"></circle>
+        <text class="a3aQ" x="234" y="100">?</text>
+        <line x1="227" y1="119" x2="204" y2="119" stroke="#CFDEDA" stroke-width="2" stroke-dasharray="3 3"></line>
+        <text class="a3aS" x="28" y="170">the rule is not readable from outside the wall</text>
+        <text class="a3aB" x="28" y="192">A target somebody has to</text>
+        <text class="a3aB" x="28" y="209">guess at before gaming it.</text>
+
+        <rect x="302" y="50" width="276" height="168" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="302" y="50" width="276" height="24" rx="10" fill="#123D3A"></rect>
+        <rect x="302" y="62" width="276" height="12" fill="#123D3A"></rect>
+        <text class="a3aT" x="316" y="67">2 · THE ACTOR</text>
+        <circle cx="346" cy="112" r="14" fill="#1F5F5B"></circle>
+        <text class="a3aS" x="326" y="146">one party</text>
+        <line x1="366" y1="112" x2="402" y2="112" stroke="#123D3A" stroke-width="1.6" marker-end="url(#a3aArI)"></line>
+        <rect x="406" y="93" width="126" height="38" rx="5" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a3aSd" x="416" y="116">changed behaviour</text>
+        <text class="a3aS" x="316" y="170">one identity, and it is the only one available</text>
+        <text class="a3aB" x="316" y="192">To move the number the</text>
+        <text class="a3aB" x="316" y="209">party has to act differently.</text>
+
+        <rect x="590" y="50" width="276" height="168" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="590" y="50" width="276" height="24" rx="10" fill="#123D3A"></rect>
+        <rect x="590" y="62" width="276" height="12" fill="#123D3A"></rect>
+        <text class="a3aT" x="604" y="67">3 · THE FEEDBACK</text>
+        <rect x="608" y="93" width="96" height="38" rx="5" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a3aSb" x="630" y="116">metric</text>
+        <line x1="710" y1="112" x2="766" y2="112" stroke="#8FBDB8" stroke-width="1.6" stroke-dasharray="4 4" marker-end="url(#a3aArI)"></line>
+        <circle cx="794" cy="112" r="12" fill="#54655F"></circle>
+        <text class="a3aS" x="608" y="146">published once a month, in aggregate</text>
+        <text class="a3aS" x="604" y="170">the actor learns late, partially and by inference</text>
+        <text class="a3aB" x="604" y="192">Slow feedback, so gaming</text>
+        <text class="a3aB" x="604" y="209">is costly and uncertain.</text>
+
+        <text class="a3aL" x="14" y="242">WHEN THE TARGET IS ON THE LEDGER</text>
+
+        <!-- row B -->
+        <rect x="14" y="250" width="276" height="168" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="250" width="276" height="24" rx="10" fill="#9C3D18"></rect>
+        <rect x="14" y="262" width="276" height="12" fill="#9C3D18"></rect>
+        <text class="a3aT" x="28" y="267">1 · THE TARGET</text>
+        <rect x="44" y="288" width="152" height="62" rx="8" fill="none" stroke="#CFDEDA" stroke-width="1.6" stroke-dasharray="2 6"></rect>
+        <rect x="58" y="300" width="124" height="38" rx="5" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a3aSb" x="68" y="315">THE RULE</text>
+        <text class="a3aS" x="68" y="330">what counts as active</text>
+        <circle cx="238" cy="296" r="9" fill="#1F5F5B"></circle>
+        <circle cx="238" cy="319" r="9" fill="#9C3D18"></circle>
+        <circle cx="238" cy="342" r="9" fill="#54655F"></circle>
+        <line x1="226" y1="298" x2="204" y2="302" stroke="#123D3A" stroke-width="1.4" marker-end="url(#a3aArI)"></line>
+        <line x1="226" y1="319" x2="204" y2="319" stroke="#123D3A" stroke-width="1.4" marker-end="url(#a3aArI)"></line>
+        <line x1="226" y1="340" x2="204" y2="336" stroke="#123D3A" stroke-width="1.4" marker-end="url(#a3aArI)"></line>
+        <text class="a3aS" x="28" y="370">anyone can read the exact rule and what it rewards</text>
+        <text class="a3aB" x="28" y="392">The target is published as</text>
+        <text class="a3aB" x="28" y="409">part of the mechanism.</text>
+
+        <rect x="302" y="250" width="276" height="168" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="302" y="250" width="276" height="24" rx="10" fill="#9C3D18"></rect>
+        <rect x="302" y="262" width="276" height="12" fill="#9C3D18"></rect>
+        <text class="a3aT" x="316" y="267">2 · THE ACTOR</text>
+        <circle cx="338" cy="319" r="14" fill="#9C3D18"></circle>
+        <line x1="354" y1="311" x2="378" y2="305" stroke="#9C3D18" stroke-width="1.4" marker-end="url(#a3aArA)"></line>
+        <line x1="354" y1="327" x2="378" y2="333" stroke="#9C3D18" stroke-width="1.4" marker-end="url(#a3aArA)"></line>
+        <circle cx="398" cy="302" r="6" fill="#9C3D18"></circle>
+        <circle cx="420" cy="302" r="6" fill="#9C3D18"></circle>
+        <circle cx="442" cy="302" r="6" fill="#9C3D18"></circle>
+        <circle cx="464" cy="302" r="6" fill="#9C3D18"></circle>
+        <circle cx="486" cy="302" r="6" fill="#9C3D18"></circle>
+        <circle cx="508" cy="302" r="6" fill="#9C3D18"></circle>
+        <circle cx="398" cy="336" r="6" fill="#9C3D18"></circle>
+        <circle cx="420" cy="336" r="6" fill="#9C3D18"></circle>
+        <circle cx="442" cy="336" r="6" fill="#9C3D18"></circle>
+        <circle cx="464" cy="336" r="6" fill="#9C3D18"></circle>
+        <circle cx="486" cy="336" r="6" fill="#9C3D18"></circle>
+        <circle cx="508" cy="336" r="6" fill="#9C3D18"></circle>
+        <text class="a3aS" x="316" y="370">one party, as many identities as it decides to create</text>
+        <text class="a3aB" x="316" y="392">Moving the number needs</text>
+        <text class="a3aB" x="316" y="409">no change of behaviour.</text>
+
+        <rect x="590" y="250" width="276" height="168" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="590" y="250" width="276" height="24" rx="10" fill="#9C3D18"></rect>
+        <rect x="590" y="262" width="276" height="12" fill="#9C3D18"></rect>
+        <text class="a3aT" x="604" y="267">3 · THE FEEDBACK</text>
+        <rect x="608" y="293" width="96" height="38" rx="5" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a3aSb" x="630" y="316">metric</text>
+        <line x1="710" y1="312" x2="766" y2="312" stroke="#9C3D18" stroke-width="1.8" marker-end="url(#a3aArA)"></line>
+        <circle cx="794" cy="312" r="12" fill="#9C3D18"></circle>
+        <path d="M 794 326 L 794 348 L 656 348 L 656 335" fill="none" stroke="#9C3D18" stroke-width="1.8" marker-end="url(#a3aArA)"></path>
+        <text class="a3aS" x="604" y="370">the actor reads its own effect as soon as it lands</text>
+        <text class="a3aB" x="604" y="392">Immediate and exact, so</text>
+        <text class="a3aB" x="604" y="409">gaming is cheap to verify.</text>
+
+        <rect x="14" y="442" width="852" height="84" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="a3aK" x="30" y="466">Two features the usual version does not have: the target is published, and the actor can make more of itself.</text>
+        <text class="a3aM" x="30" y="488">Either one on its own is manageable with the usual playbook. Together they mean the metric is a specification, the specification</text>
+        <text class="a3aM" x="30" y="506">is public, and the population it counts can be manufactured by anyone who reads it. Part 2 puts measured numbers on the second.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the bottom middle panel is the one with no equivalent in the familiar version. The actor did not behave differently. It became more numerous.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Feature one: the target is published<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every mitigation written for a targeted metric leans somewhere on the actor not knowing the exact rule. Hold the definition back. Change it without announcing. Keep the thresholds in a document that does not circulate. Measure something adjacent so the obvious lever is not the one being counted. All of these work by putting a gap between what the actor thinks is counted and what actually is.</p>
+        <p>On a public ledger that gap cannot be created, because the rule that issues the reward is readable by anyone in exactly the form that runs. There is no version of it held back. An actor does not have to infer what triggers the reward from its own results over three months, which is the slow and error-prone route; the actor reads it, once, and is then correct about it.</p>
+        <p>The consequence is that secrecy stops being available as a control, and any plan that quietly depended on it has to be replaced rather than tightened. That is not the same as saying nothing can be done, and part 2's build-along works on what is left.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Feature two: the actor can make more of itself<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The second feature is the larger one and it is the one with no precedent in the usual framing. In the familiar version an actor facing a target changes what it does. It works the measured thing harder and the unmeasured thing less, and the damage is that your measure and your intent come apart. The actor remains one actor throughout, which is why the harm is describable as distortion.</p>
+        <p>Here the actor has a second move. Rather than changing behaviour it can change how many of it there are, because an identity in this dataset is an address and an address is a row. A party wanting a per-party count to read higher does not need to do anything differently. It needs to be more numerous, and being more numerous is free of everything except the rows.</p>
+        <p>That breaks the mitigation of last resort as well. When you cannot hide the rule, the standard fallback is to normalise the metric per user, so that working the lever harder does not help. Per user normalisation assumes the user count is a fact about the world. It is a fact about the data, and the data is what the actor is adding to.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the two features have to be checked separately<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>It is tempting to treat these as one phenomenon, and the reason not to is that they come apart in other settings and the remedies differ. A published target with a fixed identity set is a familiar situation: published benchmark criteria, published inspection standards, published eligibility rules. It is uncomfortable and it is workable, and the working answer is usually to make the target hard to satisfy without also doing the underlying thing.</p>
+        <p>A manufacturable identity set with a private target is also familiar, in a smaller way: a referral programme where one person can hold several accounts, but nobody outside knows exactly what qualifies. The working answer there is verification at the point of identity, and the cost of it is borne once per identity.</p>
+        <p>Larkfield has both at once, so neither answer survives on its own. Making the target hard to satisfy without doing the underlying thing does not help when the underlying thing can be done sixty times by one party. Verifying identity is the right instinct and it is a decision about the product rather than the pipeline, since the only place to attach a verification is before the address becomes eligible. Session 6 puts that in the scoping questions, where it belongs, because by the time a data team meets this the choice has already been made.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the measurement</span>
+      <h2>240 addresses, 4 parties, and a count that cannot tell</h2>
+      <span class="tag concept">13 min live</span>
+    </div>
+    <p class="lede">Session 2 ran the co-spend method over Larkfield's month and reported three numbers. The same run also contains the answer to a different question, which is what share of the count exists because the metric pays for it. In Larkfield's world 4 operators run 60 addresses each. That is 240 addresses, made on purpose, sitting inside a count of about a thousand.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The same month counted three ways, drawn as three horizontal bars on a shared scale from 0 to 1,000. The first bar, addresses seen, runs to about 1,000 and is split into a pale segment labelled 300 people holding one to four addresses each and an amber segment labelled 240 made by 4 operators. The second bar, after the co-spend method, is shorter and labelled 676 to 707 clusters. The third bar, the truth, is much shorter still and labelled 304 entities, 300 people and 4 operators. Below is an axis with tick marks at 0, 250, 500, 750 and 1,000. A closing band says that by address count 4 parties and 240 people are the same thing, and that the part that is new tonight is that those 240 addresses exist because the metric pays for them.">
+        <style>
+          .a3bH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .a3bL { font: 800 10px Inter, sans-serif; fill: #54655F; letter-spacing: .1em; }
+          .a3bIn { font: 700 9px Inter, sans-serif; fill: #13201E; }
+          .a3bInW { font: 700 9px Inter, sans-serif; fill: #FFFFFF; }
+          .a3bV { font: 800 11.5px Inter, sans-serif; fill: #13201E; }
+          .a3bAx { font: 400 8.5px Inter, sans-serif; fill: #54655F; }
+          .a3bK { font: 800 11.5px Inter, sans-serif; fill: #9C3D18; }
+          .a3bM { font: 400 11px Inter, sans-serif; fill: #54655F; }
+          .a3bN { font: 800 11px Inter, sans-serif; fill: #13201E; }
+        </style>
+
+        <text class="a3bH" x="14" y="20">One month of Larkfield, counted three ways, on one scale.</text>
+
+        <text class="a3bL" x="14" y="52">ADDRESSES SEEN</text>
+        <rect x="14" y="60" width="502" height="40" rx="4" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a3bIn" x="26" y="84">300 people holding one to four addresses each</text>
+        <rect x="516" y="60" width="158" height="40" rx="4" fill="#9C3D18"></rect>
+        <text class="a3bInW" x="528" y="84">240 made by 4</text>
+        <text class="a3bV" x="688" y="85">about 1,000</text>
+
+        <text class="a3bL" x="14" y="128">AFTER THE CO-SPEND METHOD</text>
+        <rect x="14" y="136" width="459" height="40" rx="4" fill="#8FBDB8" stroke="#1F5F5B"></rect>
+        <text class="a3bIn" x="26" y="160">it joins some of them and then runs out of evidence</text>
+        <text class="a3bV" x="487" y="161">676 to 707 clusters</text>
+
+        <text class="a3bL" x="14" y="204">THE TRUTH</text>
+        <rect x="14" y="212" width="201" height="40" rx="4" fill="#1F5F5B"></rect>
+        <text class="a3bInW" x="26" y="236">300 people and 4 operators</text>
+        <text class="a3bV" x="229" y="237">304 entities</text>
+
+        <line x1="14" y1="266" x2="680" y2="266" stroke="#CFDEDA" stroke-width="1.4"></line>
+        <line x1="14" y1="266" x2="14" y2="273" stroke="#CFDEDA" stroke-width="1.4"></line>
+        <line x1="179" y1="266" x2="179" y2="273" stroke="#CFDEDA" stroke-width="1.4"></line>
+        <line x1="344" y1="266" x2="344" y2="273" stroke="#CFDEDA" stroke-width="1.4"></line>
+        <line x1="509" y1="266" x2="509" y2="273" stroke="#CFDEDA" stroke-width="1.4"></line>
+        <line x1="674" y1="266" x2="674" y2="273" stroke="#CFDEDA" stroke-width="1.4"></line>
+        <text class="a3bAx" x="14" y="286" text-anchor="middle">0</text>
+        <text class="a3bAx" x="179" y="286" text-anchor="middle">250</text>
+        <text class="a3bAx" x="344" y="286" text-anchor="middle">500</text>
+        <text class="a3bAx" x="509" y="286" text-anchor="middle">750</text>
+        <text class="a3bAx" x="674" y="286" text-anchor="middle">1,000</text>
+
+        <rect x="14" y="304" width="852" height="110" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="a3bK" x="30" y="330">By address count, 4 parties and 240 people are the same thing.</text>
+        <text class="a3bM" x="30" y="352">Nothing in the rows separates them and nothing outside the rows can be joined in to settle it. The co-spend method removes</text>
+        <text class="a3bM" x="30" y="370">about half of the total error and leaves a ceiling of 676 to 707 against a truth of 304. Both of those are session 2 results.</text>
+        <text class="a3bN" x="30" y="396">What is new tonight: those 240 addresses exist because the metric pays for them.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber block is not a data quality defect. It is the product working exactly as specified, counted by a metric that was not designed to notice.</figcaption>
+    </figure>
+
+    <div class="wk" id="a3-paid">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The generator and the clustering, both running in this page. Move the operators and watch which of the four numbers responds.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="a3-seed">Month of Larkfield data</label>
+        <select class="sql-code" id="a3-seed">
+          <option value="11">Month A</option>
+          <option value="101">Month B</option>
+          <option value="2024">Month C</option>
+          <option value="7">Month D</option>
+          <option value="55555">Month E</option>
+        </select>
+        <label class="sql-label" for="a3-addr">Addresses each of the 4 operators runs: <b id="a3-addr-val">60</b></label>
+        <input class="sql-code" id="a3-addr" type="range" min="0" max="60" step="5" value="60">
+        <div id="a3-out"></div>
+        <p class="sql-note" id="a3-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="a3-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Drag it to zero, and then read the truth row<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Set the operators to run no addresses at all and the manufactured rows disappear from the count, which is what you would expect. The row worth staring at is the one below: the truth drops by 4 and the reported ceiling drops by a great deal more than 4. The four operators were four entities. They were being counted as something close to two hundred.</p>
+        <p>Now walk the slider back up and watch how the reported ceiling responds. It rises, and it rises by less than the number of addresses added, because the co-spend method does catch some of them. It never catches all of them, and the shortfall goes straight into the number Larkfield publishes as a bound.</p>
+        <p>Two things are worth saying out loud at this point. The first is that this is not a detection failure, since detection is exactly what the method is doing and it is doing it correctly. The second is that a party who wanted to defeat the method entirely would not have to work at it; session 2 measured that operator discipline moves the clustered count by 31 against a gap of 392, so the method is not being beaten by tradecraft. It is being outnumbered.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Read every published metric as a target from day one<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The practical rule that comes out of this is narrow enough to apply on a Monday. When a metric is published and a payment is attached to it, you do not wait for evidence of gaming before treating the figure as gamed. You write down, at the moment of publication, which direction the metric can be pushed and what one additional identity buys the pusher. Then you decide whether you are prepared to report it at all.</p>
+        <p>The reason to do this at publication rather than at first incident is that the first incident is not observable. There is no alert for an address that behaved normally. The 240 rows in Larkfield's month did not trip anything, would not trip anything, and are only visible here because the generator knows the answer. On real rows you would have the count and nothing else.</p>
+        <p>The version of this that a leader can hold people to is a single line in the definition of every metric that triggers a payment: who benefits if this number goes up, and what is the cheapest way for them to make it go up. If that line is empty the metric has not been reviewed, whatever else was checked.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>One camp holds that you should publish the reporting definition in full, alongside the reward rule that is already public. Their argument is that the definition is effectively recoverable anyway: a determined party can infer it by watching what gets counted, and will, so withholding it disadvantages only the honest participants, your own analysts and anyone auditing you. Publishing also forces the definition to be good, because a rule that embarrasses you when read is a rule that should not be paying anyone.</p>
+        <p>The other camp holds that recoverable in principle and handed over in writing are different things, and the difference is measured in how many parties bother. Every published clause is a specification for satisfying it cheaply, and the people who read specifications carefully are exactly the ones you do not want optimising. On this view the reward rule has to be public because it executes, and the reporting definition does not, so keep them apart: pay on one and report on another, and never publish the second.</p>
+        <p>Both are held by people who have watched a metric collapse. The disagreement is empirical rather than philosophical, and it turns on how many parties will do the inference work if you do not do it for them. Notice that the second position has a cost the first does not: a reporting definition nobody outside can see is a figure nobody outside can check, which gives up the one advantage session 1 credited to the public arrangement in the first place.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Find the metric somebody is already paid to move</h2>
+      <span class="tag build">15 min hands on</span>
+    </div>
+    <p class="lede">No code. Six steps on the live box above and on a metric your own organisation publishes, said out loud in the room. The aim is to leave with one metric you would now describe differently, and the sentence you would use.</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Say the two features back</h4>
+        <p>Published target, manufacturable identity. One sentence each, without notes. Then say which of the two your own organisation already has somewhere, because most have the first without ever calling it that.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Run the slider to both ends</h4>
+        <p>Set the operators to 0 and then to 60. Write down what the truth row does and what the reported ceiling does. The two movements are different sizes and the difference is the whole point of the box.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Pick a metric that triggers a payment</h4>
+        <p>Anything where a number moving causes money or resource to move: a bonus, a rebate, a tier, a budget allocation, a supplier credit. Write down who receives it and how the number reaches them.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the cheapest way to move it</h4>
+        <p>Not the most likely way, the cheapest. One line. Then write what it costs the person doing it, in their currency rather than yours. If the cost is one row, say so plainly and sit with it.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Check whether you were relying on secrecy</h4>
+        <p>Look at your answer to step 4 and ask what stops it today. If any part of the answer is that they do not know the rule, mark it, because that control is unavailable on a public mechanism and you have just found the shape of the replacement you need.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Decide what you would report instead</h4>
+        <p>Given the direction the metric can be pushed, write the sentence you would put in a board pack. Session 2's shape is the model: a bound with a stated direction beats a point estimate. Keep it. Session 4 is about what happens when you have to correct one of these after the fact.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> Before asking how accurate a metric is, ask who is paid by it and what one more identity buys them. Accuracy is a property of the pipeline and it can be improved by engineering. The other thing is a property of the arrangement, it cannot, and a clean pipeline reporting a gamed metric is a faster route to the same wrong decision.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Which two features does the Larkfield version of a targeted metric have that the familiar version does not?</p>
+      <div class="qopt">A · The metric is computed more often, and more people can see the result</div>
+      <div class="qopt">B · The data volume is larger, and the pipeline is harder to operate</div>
+      <div class="qopt">C · The target is published as part of the mechanism that pays it, and the party responding to it can create identities rather than only change behaviour</div>
+      <q class="qwhy">Both are structural rather than incidental. A published target removes secrecy as a control, and a manufacturable identity set removes per user normalisation as a fallback, because the user count is itself made of the thing the actor is adding.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">A team proposes normalising Larkfield's headline figure per active user, so that raw activity cannot inflate it. Why does that not work here?</p>
+      <div class="qopt">A · Because the active user count is built from addresses, and adding addresses is exactly what the party gaming the metric is doing, so the denominator moves with the numerator</div>
+      <div class="qopt">B · Because per user normalisation is always statistically invalid</div>
+      <div class="qopt">C · Because the clustering is too slow to compute a denominator each month</div>
+      <q class="qwhy">Per user normalisation assumes the user count is an independent fact about the world. Here it is a count of rows in the same dataset the actor is writing to, so it is not independent of the behaviour it is supposed to control for.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Larkfield's risk review scored deliberate multi-address behaviour as low likelihood because the rewards were modest. What is wrong with that reasoning?</p>
+      <div class="qopt">A · Nothing, since smaller rewards genuinely do attract less of this behaviour</div>
+      <div class="qopt">B · It priced the behaviour as if presenting as many parties required many people, when the conditions for it are permanently present and the cost of one more identity is one more row</div>
+      <div class="qopt">C · It should have used a higher likelihood band while keeping the same framing</div>
+      <q class="qwhy">A likelihood estimate fits an event. This is a standing property of the arrangement: the rule is readable, participation is open and identity is free to create. There is no state of the world in which those are absent, so the useful question is what share, in which direction, not whether.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 4</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty minutes, on the metric you chose in step 3 and on one figure your team has already published.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Add the missing line to one metric definition</h4>
+        <p>Who benefits if this number goes up, and what is the cheapest way for them to make it go up. Two clauses, in the definition itself rather than in a separate risk document. Bring the before and the after.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Find a published figure you would now withdraw</h4>
+        <p>One number your team has already reported that you would state differently after tonight. Write the corrected sentence. Then try to work out how you would actually issue the correction, and bring what you find, because session 4 is about a dataset that has no mechanism for taking anything back.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Goodhart with two extra features</span><span class="note">A published target and a manufacturable identity set, drawn as one mechanism twice and checked separately.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Secrecy is not available as a control</span><span class="note">The rule that pays is readable in the form that runs, so every mitigation that depends on a definition gap has to be replaced.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">240 addresses made by 4 parties</span><span class="note">4 operators running 60 addresses each, inside a count of about 1,000, with the clustering removing only part of them.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Why per user normalisation fails here</span><span class="note">The denominator is built from the same rows the actor is adding to, so it is not independent of what it is meant to control for.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Adversarial as a default, not a risk item</span><span class="note">The conditions are permanently present, so the question is what share and in which direction rather than how likely.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The line every paying metric needs</span><span class="note">Who benefits if this goes up, and what is the cheapest way for them to make it go up.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Correcting a figure you already published</span><span class="note">Reached tonight in the homework. Session 4 is the correction path, or the absence of one.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Verification before an address becomes eligible</span><span class="note">Named tonight as a product decision rather than a pipeline one. Session 6 puts it in the scoping questions.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">The clustering method itself</span><span class="note">Measured in session 2 and taught to working depth on the practitioner track.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Probabilistic record linkage</span><span class="note">Fuzzy matching, blocking and scoring live in learn-entity-resolution-with-phoebe.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Chain mechanics, and anything about price or markets</span><span class="note">Assumed from learn-blockchain-with-phoebe, and out of scope by design. Nothing here is advice of any kind.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The one sentence.</strong> The metric and the incentive live in the same place, and the population being counted can be written to by the people being counted.</div>
+      <div class="cheat-item"><strong>Feature one.</strong> The target is published in the form that runs. Secrecy is gone as a control, not weakened.</div>
+      <div class="cheat-item"><strong>Feature two.</strong> The actor can be more numerous instead of behaving differently. One more identity costs one more row.</div>
+      <div class="cheat-item"><strong>The measured version.</strong> 4 operators, 60 addresses each, 240 rows inside a count of about 1,000.</div>
+      <div class="cheat-item"><strong>Why normalising fails.</strong> The denominator is made of the same rows the actor is adding to.</div>
+      <div class="cheat-item"><strong>Not a risk item.</strong> The conditions never go away, so ask what share and which direction, never how likely.</div>
+      <div class="cheat-item"><strong>The missing line.</strong> Who benefits if this goes up, and what is the cheapest way for them to make it go up.</div>
+      <div class="cheat-item"><strong>The open question.</strong> You published a figure and it was wrong. Session 4 is what taking it back involves here.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Leader session 3 of 6 · learn-web3-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="a2-the-user-count-that-is-not-one.html">← Leader session 2 · The user count that is not one</a>
+        <a href="a4-you-cannot-take-it-back.html">Leader session 4 · You cannot take it back →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/w3-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof W3 === "undefined") return;
+  var sel = document.getElementById("a3-seed");
+  var addr = document.getElementById("a3-addr");
+  var addrVal = document.getElementById("a3-addr-val");
+  var out = document.getElementById("a3-out");
+  var verdict = document.getElementById("a3-verdict");
+  var self = document.getElementById("a3-self");
+
+  function comma(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+
+  function render() {
+    var s = Number(sel.value);
+    var m = Number(addr.value);
+    addrVal.textContent = String(m);
+
+    var world = W3.makeWorld({ seed: s, sybilAddrs: m });
+    var txs = W3.makeTransactions(world, { seed: s + 1 });
+    var cl = W3.clusterByCoSpend(world, txs);
+    var sc = W3.scoreClustering(world, cl);
+    var made = 4 * m;
+
+    var html = '<table class="sql-table"><thead><tr><th>Quantity</th><th>Value</th><th>Who decides it</th></tr></thead><tbody>';
+    html += "<tr><td>Addresses in the month</td><td>" + comma(sc.addresses) + "</td><td>partly Larkfield's users, partly the operators</td></tr>";
+    html += '<tr><td>Of those, made by the 4 operators</td><td><b class="a3-made">' + comma(made) + "</b></td><td>4 parties, on purpose, one row each</td></tr>";
+    html += "<tr><td>Clusters the method returns</td><td>" + comma(sc.clustered) + "</td><td>the ceiling Larkfield would report</td></tr>";
+    html += "<tr><td>Entities, the truth</td><td>" + comma(sc.trueEntities) + "</td><td>known only to the generator</td></tr>";
+    html += "<tr><td>Inflation left in the reported ceiling</td><td>" + comma(sc.clustered - sc.trueEntities) + "</td><td>links the method had no evidence to make</td></tr>";
+    html += "</tbody></table>";
+    out.innerHTML = html;
+
+    verdict.textContent = m === 0
+      ? "With the operators running no addresses at all the truth is " + comma(sc.trueEntities)
+        + " and the reported ceiling is still " + comma(sc.clustered)
+        + ". The remaining gap is ordinary people whose addresses never got spent together, which is session 2's finding and is nobody's doing."
+      : "4 parties present " + comma(made) + " addresses. The month shows " + comma(sc.addresses)
+        + " and the reported ceiling is " + comma(sc.clustered) + " against a truth of " + comma(sc.trueEntities)
+        + ". No row in this data says which " + comma(made) + " they are.";
+  }
+
+  var t = W3.selfTest();
+  self.textContent = t.ok
+    ? "The generator's five properties pass in this browser, so these are the numbers any correct run gives. Nothing here describes a real network."
+    : "The generator's self test did not pass in this browser, so nothing above should be believed.";
+
+  sel.addEventListener("change", render);
+  addr.addEventListener("input", render);
+  render();
+})();
+</script>
+<style>
+  #a3-paid .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 14rem; }
+  #a3-paid input[type="range"] { max-width: 20rem; padding: 0; }
+  #a3-paid table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+  #a3-paid .a3-made { color: var(--amber); }
+</style>
+</body>
+</html>

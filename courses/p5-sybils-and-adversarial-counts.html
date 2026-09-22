@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 5 of 10. Four operators run 60 addresses each inside a count of about 1,000. Vary their discipline from 50 to 100 percent and the clustered count moves 666 to 697: a swing of 31 against a gap of 392.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Sybils and adversarial counts - learn web3 with phoebe">
+<meta property="og:description" content="Practitioner session 5 of 10. Build the counterfactual, run the sweep, and find out how little of the error the adversary actually controls.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-web3-with-phoebe/courses/p5-sybils-and-adversarial-counts.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sybils and adversarial counts - learn web3 with phoebe">
+<meta name="twitter:description" content="A better Sybil heuristic chases 31 of the 392. The other 361 is there before anybody does anything at all.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 5 · Sybils and adversarial counts - learn web3 with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-web3-with-phoebe</a> / Practitioner session 5 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Web3 with Phoebe · Practitioner session 5 of 10</div>
+    <h1>Sybils and <span class="accent">adversarial counts</span></h1>
+    <p class="sub">Four operators run 60 addresses each, so 240 of Larkfield's roughly 1,000 addresses exist because somebody made them. Tonight is the experiment that prices them, built properly: pin the world, move exactly one field, re-run the clustering, and read the swing. On month A the clustered count travels from 666 to 697 as operator discipline goes from 50 percent to 100 percent. That is 31, against a gap of 392, and it points your next fortnight of engineering somewhere other than where you were going to spend it.</p>
+    <div class="chip-row">
+      <span class="chip level">🔧 Practitioner track</span>
+      <span class="chip audience">Whoever is about to build Sybil detection</span>
+      <span class="chip audience">Whoever owns the active-address figure</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · Building the counterfactual</span>
+      <span class="a3" style="flex:3">18-30 · The result</span>
+      <span class="a4" style="flex:3">30-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>You wrote a number down. Here is the experiment that checks it.</h2>
+    </div>
+    <p class="lede">Session 4 ended by asking for a single figure: how much smaller would the clustered count get if all four operators stopped being careful and co-spent like everybody else? Most people in the room write something large, because the operators are the deliberate part of the problem and deliberate things feel like they dominate. The number is measurable on Bench A in about fifteen lines, and tonight starts by building the measurement rather than by revealing it, because the way this experiment is assembled is the transferable part.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A counterfactual sweep built correctly, with the seed convention that makes it valid and the one mistake that silently invalidates it. The measured answer on month A: 666 at 50 percent discipline, 697 at 100 percent, a swing of 31 against a gap of 392 clusters. Three sources of over-count laid out side by side with an honest note that they are not a partition, including the 195 addresses on month A that never appear as a spend input at all. And the engineering conclusion that follows, which is that a smarter Sybil heuristic is aimed at the smaller part of the problem.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Discipline is a knob here and a guess in production<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Bench A has a field called <span class="mono">sybilDiscipline</span>. It is the probability that an operator sending a transaction avoids putting two of its own addresses into the same input list. At 1.0 an operator never co-spends and leaves no structural trace of common control. At 0.5 it co-spends about as often as an ordinary holder does.</p>
+        <p>Nothing in a warehouse exposes that field. You cannot read an operator's tradecraft off the rows, because the rows are the tradecraft: a careful operator's transactions look exactly like 60 unrelated people's transactions, which is the entire point of being careful. So the only place the question can be answered is a bench where the generator knows who owns what, and the answer transfers because it is a statement about the method rather than about this particular world.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Larkfield had a detection project scoped and costed before this sweep was run: heuristics on timing, on amount rounding, on funding patterns, six weeks of work for two engineers. The sweep took an afternoon and changed the scope, not because the detection ideas were bad but because it put a ceiling on what any of them could recover.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words used tonight<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Operator.</strong> A party deliberately running many addresses. Bench A has 4 of them, 60 addresses each, so 240 addresses of the roughly 1,000.</li>
+          <li><strong>Discipline.</strong> How reliably an operator avoids co-spending from two of its own addresses. Swept from 50 percent to 100 percent tonight.</li>
+          <li><strong>Counterfactual sweep.</strong> Re-running one pipeline many times with exactly one input changed and everything else pinned. The whole of tonight's method.</li>
+          <li><strong>Pinned seed.</strong> A generator seed held constant so that two runs describe the same world. Bench A uses world seed <span class="mono">s</span> and transaction seed <span class="mono">s + 1</span>.</li>
+          <li><strong>Swing.</strong> The distance between the two ends of a sweep. Here 31 clusters, and the quantity the sweep exists to produce.</li>
+          <li><strong>Ever spent.</strong> An address that has appeared at least once as a transaction input. 787 of 982 on month A.</li>
+          <li><strong>Structural error.</strong> Error present before any party does anything deliberate. Tonight's headline is that most of the error is this kind.</li>
+          <li><strong>Record linkage.</strong> Joining records about one party through fuzzy attributes and agreement weights, where extra features genuinely help. That craft is <b>learn-entity-resolution-with-phoebe</b>, and the evidence base there is different enough that its intuitions do not carry.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the experiment</span>
+      <h2>Pin four things, move one, and know which one you moved</h2>
+      <span class="tag concept">15 min live</span>
+    </div>
+    <p class="lede">A counterfactual sweep is worth exactly as much as its pinning. Four stages run on every pass: the world, the transactions, the clustering, the score. Three of them must be byte-identical between passes or the difference you measure is not the difference you named. The one that varies is a single field in stage two, and the commonest way this experiment gets run wrong is to let the world move with it.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 526" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The sweep drawn as a four stage pipeline with one varying input. Stage one, the world: 300 people and 4 operators running 60 addresses each, built from world seed s which never moves. Stage two, the transactions, drawn with an amber header: 4,000 of them from transaction seed s plus 1, a co-spend rate of 0.25 for ordinary holders, and operator discipline as the only field that varies. Stage three, the clustering: co-spend union find, with no threshold and no parameter to tune. Stage four, the score: clusters, still split and wrongly merged against a truth of 304 entities. An amber band below says only stage two changes and only one field inside it, and that moving the world seed as well compares two different worlds. Below that, two panels show what the knob does inside a single operator transaction. The left panel, discipline high, shows one address feeding a transaction box and a note that no link is offered and the run learns nothing. The right panel, discipline low, shows two addresses feeding a transaction box and a note that one link is offered and union joins their two clusters. A closing band says 60 addresses collapse into one cluster only after 59 successful joins, so an operator does not have to be perfect, only sparse.">
+        <style>
+          .p5aH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .p5aL { font: 800 9px Inter, sans-serif; fill: #54655F; letter-spacing: .11em; }
+          .p5aT { font: 800 9.5px Inter, sans-serif; fill: #FFFFFF; letter-spacing: .05em; }
+          .p5aB { font: 400 10px Inter, sans-serif; fill: #13201E; }
+          .p5aM { font: 400 10px Inter, sans-serif; fill: #54655F; }
+          .p5aX { font: 700 9.5px "SF Mono", Menlo, monospace; fill: #1F5F5B; }
+          .p5aXa { font: 700 9.5px "SF Mono", Menlo, monospace; fill: #9C3D18; }
+          .p5aK { font: 800 11.5px Inter, sans-serif; fill: #9C3D18; }
+          .p5aKi { font: 800 11.5px Inter, sans-serif; fill: #1F5F5B; }
+          .p5aS { font: 700 9px Inter, sans-serif; fill: #123D3A; }
+          .p5aSa { font: 700 9px Inter, sans-serif; fill: #9C3D18; }
+          .p5aC { font: 700 10px Inter, sans-serif; fill: #1F5F5B; }
+          .p5aCa { font: 700 10px Inter, sans-serif; fill: #9C3D18; }
+        </style>
+        <defs>
+          <marker id="p5aArI" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1F5F5B"></path></marker>
+          <marker id="p5aArA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9C3D18"></path></marker>
+        </defs>
+
+        <text class="p5aH" x="14" y="20">Four stages run on every pass. Three of them are not allowed to move.</text>
+
+        <text class="p5aL" x="14" y="44">ONE PASS OF THE SWEEP</text>
+
+        <rect x="14" y="52" width="198" height="110" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="52" width="198" height="24" rx="10" fill="#123D3A"></rect>
+        <rect x="14" y="64" width="198" height="12" fill="#123D3A"></rect>
+        <text class="p5aT" x="28" y="69">1 · THE WORLD</text>
+        <text class="p5aB" x="28" y="96">300 people, 1 to 4 addresses</text>
+        <text class="p5aB" x="28" y="114">each, plus 4 operators running</text>
+        <text class="p5aB" x="28" y="132">60 addresses each on purpose.</text>
+        <text class="p5aX" x="28" y="152">seed: s, pinned</text>
+
+        <line x1="214" y1="107" x2="230" y2="107" stroke="#1F5F5B" stroke-width="1.8" marker-end="url(#p5aArI)"></line>
+
+        <rect x="232" y="52" width="198" height="110" rx="10" fill="#FFFFFF" stroke="#9C3D18"></rect>
+        <rect x="232" y="52" width="198" height="24" rx="10" fill="#9C3D18"></rect>
+        <rect x="232" y="64" width="198" height="12" fill="#9C3D18"></rect>
+        <text class="p5aT" x="246" y="69">2 · THE TRANSACTIONS</text>
+        <text class="p5aB" x="246" y="96">4,000 of them. Ordinary holders</text>
+        <text class="p5aB" x="246" y="114">co-spend a quarter of the time.</text>
+        <text class="p5aB" x="246" y="132">Operators avoid it, how hard?</text>
+        <text class="p5aXa" x="246" y="152">seed: s + 1, pinned</text>
+
+        <line x1="432" y1="107" x2="448" y2="107" stroke="#1F5F5B" stroke-width="1.8" marker-end="url(#p5aArI)"></line>
+
+        <rect x="450" y="52" width="198" height="110" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="450" y="52" width="198" height="24" rx="10" fill="#123D3A"></rect>
+        <rect x="450" y="64" width="198" height="12" fill="#123D3A"></rect>
+        <text class="p5aT" x="464" y="69">3 · THE CLUSTERING</text>
+        <text class="p5aB" x="464" y="96">Co-spend union find, exactly</text>
+        <text class="p5aB" x="464" y="114">as session 3 built it. No</text>
+        <text class="p5aB" x="464" y="132">threshold, nothing to tune.</text>
+        <text class="p5aX" x="464" y="152">no inputs of its own</text>
+
+        <line x1="650" y1="107" x2="666" y2="107" stroke="#1F5F5B" stroke-width="1.8" marker-end="url(#p5aArI)"></line>
+
+        <rect x="668" y="52" width="198" height="110" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="668" y="52" width="198" height="24" rx="10" fill="#123D3A"></rect>
+        <rect x="668" y="64" width="198" height="12" fill="#123D3A"></rect>
+        <text class="p5aT" x="682" y="69">4 · THE SCORE</text>
+        <text class="p5aB" x="682" y="96">Clusters, still split, wrongly</text>
+        <text class="p5aB" x="682" y="114">merged, read against a truth</text>
+        <text class="p5aB" x="682" y="132">of 304 entities.</text>
+        <text class="p5aX" x="682" y="152">bench only, never production</text>
+
+        <line x1="331" y1="164" x2="331" y2="180" stroke="#9C3D18" stroke-width="1.8" marker-end="url(#p5aArA)"></line>
+
+        <rect x="14" y="184" width="852" height="82" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p5aK" x="30" y="208">One field moves. Everything else is pinned, including both seeds.</text>
+        <text class="p5aM" x="30" y="228">Change the world seed alongside the discipline and the two passes describe two different worlds, so the swing you measure is</text>
+        <text class="p5aM" x="30" y="248">partly the sweep and partly the draw. That run looks identical in the console and answers a question nobody asked.</text>
+
+        <text class="p5aL" x="14" y="294">WHAT THE KNOB DOES INSIDE ONE OPERATOR TRANSACTION</text>
+
+        <rect x="14" y="302" width="418" height="130" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="302" width="418" height="24" rx="10" fill="#1F5F5B"></rect>
+        <rect x="14" y="314" width="418" height="12" fill="#1F5F5B"></rect>
+        <text class="p5aT" x="28" y="319">DISCIPLINE HIGH · ONE INPUT</text>
+        <rect x="32" y="344" width="72" height="26" rx="5" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="p5aS" x="46" y="361">s0-14</text>
+        <line x1="108" y1="357" x2="132" y2="357" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p5aArI)"></line>
+        <rect x="136" y="340" width="92" height="34" rx="6" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="p5aS" x="152" y="361">one spend</text>
+        <text class="p5aC" x="244" y="353">No link offered.</text>
+        <text class="p5aM" x="244" y="370">union is not called.</text>
+        <text class="p5aM" x="32" y="400">The address stays exactly where it started, alone, and the</text>
+        <text class="p5aM" x="32" y="418">run finishes no better informed than it began.</text>
+
+        <rect x="448" y="302" width="418" height="130" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="448" y="302" width="418" height="24" rx="10" fill="#9C3D18"></rect>
+        <rect x="448" y="314" width="418" height="12" fill="#9C3D18"></rect>
+        <text class="p5aT" x="462" y="319">DISCIPLINE LOW · TWO INPUTS</text>
+        <rect x="466" y="334" width="72" height="22" rx="5" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="p5aS" x="480" y="349">s0-14</text>
+        <rect x="466" y="360" width="72" height="22" rx="5" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="p5aS" x="480" y="375">s0-41</text>
+        <line x1="538" y1="345" x2="542" y2="345" stroke="#9C3D18" stroke-width="1.4"></line>
+        <line x1="538" y1="371" x2="542" y2="371" stroke="#9C3D18" stroke-width="1.4"></line>
+        <line x1="542" y1="345" x2="542" y2="371" stroke="#9C3D18" stroke-width="1.4"></line>
+        <line x1="542" y1="357" x2="566" y2="357" stroke="#9C3D18" stroke-width="1.6" marker-end="url(#p5aArA)"></line>
+        <rect x="570" y="340" width="92" height="34" rx="6" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p5aSa" x="586" y="361">one spend</text>
+        <text class="p5aCa" x="678" y="353">One link offered.</text>
+        <text class="p5aM" x="678" y="370">union joins the two.</text>
+        <text class="p5aM" x="466" y="400">One transaction, one join, and the operator's cluster count</text>
+        <text class="p5aM" x="466" y="418">falls by exactly one. That is the whole mechanism.</text>
+
+        <rect x="14" y="450" width="852" height="62" rx="10" fill="#EFF7F5" stroke="#1F5F5B"></rect>
+        <text class="p5aKi" x="30" y="474">60 addresses become one cluster only after 59 joins land, so an operator does not have to be perfect.</text>
+        <text class="p5aM" x="30" y="494">It has to be sparse, and sparse is the default behaviour of anybody sending one transaction at a time.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the two panels differ by one address in one input list. Every number tonight is the accumulation of that single difference across 4,000 transactions.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why the pinning is the hard part<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The sweep is four lines of loop and the pinning is the rest of the file. Bench A takes two seeds because it has two generators, and the convention is fixed: the world is built from <span class="mono">s</span> and the transactions from <span class="mono">s + 1</span>. Keep both and a pass at 50 percent discipline and a pass at 100 percent discipline describe the same 982 addresses held by the same 304 parties, differing only in which input lists the operators built.</p>
+        <p>Let the world seed drift and the address count moves too, because the number of addresses each person holds is drawn from that generator. You would then be comparing 982 addresses at one end against some other number at the other, and attributing the whole difference to operator behaviour. The result is not noisy, which would at least be visible. It is confidently wrong in a direction that depends on the draw.</p>
+        <p>The general discipline here is not specific to chains and it is not specific to this bench: a counterfactual is a claim about one variable, and every unpinned input is a second variable you have quietly agreed to blame the first one for.</p>
+      </div>
+    </details>
+
+    <div class="p5code">
+      <span class="p5cap">The whole sweep, with the pinning that makes it mean something</span>
+      <code>// Month A. The seed convention is part of the bench: world s, transactions s + 1.
+var s = 11;
+
+function pass(discipline) {
+  var world = W3.makeWorld({ people: 300, sybils: 4, sybilAddrs: 60, seed: s });
+  var txs   = W3.makeTransactions(world, {
+    transactions: 4000,
+    coSpendRate: 0.25,            // ordinary holders, pinned
+    sybilDiscipline: discipline,  // the only field that moves
+    seed: s + 1
+  });
+  var cl = W3.clusterByCoSpend(world, txs);
+  return W3.scoreClustering(world, cl);
+}
+
+var careless = pass(0.50);   // clustered 666
+var perfect  = pass(1.00);   // clustered 697
+
+// The number the afternoon was for:
+var swing = perfect.clustered - careless.clustered;   // 31
+var gap   = careless.trueEntities                     // 304 entities in this world
+          ? pass(0.97).stillSplit : null;             // 392 on the shipped setting</code>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Sweep the thing you would actually change<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>There is a second field in the same call, <span class="mono">sybilAddrs</span>, and sweeping it answers a different question: what happens if the operators run more addresses. That is a useful question and it is not this one, because it is not a lever your detection work can touch. An operator decides how many addresses to run and you do not get a vote.</p>
+        <p>Discipline is the field to sweep because it is the field a detection project is implicitly betting on. A heuristic that finds operator addresses is, in effect, a way of recovering links the operators declined to give you. Its best possible outcome is the careless end of the discipline sweep, where every link the operators could have leaked has already been leaked. So the careless end is not a scenario, it is a ceiling on the project.</p>
+        <p>That reframing is worth stating before the number appears, because it decides what the number means. The sweep is not a description of four hypothetical operators. It is a measurement of how much room a whole category of work has to move in.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the result</span>
+      <h2>31 clusters of room inside a gap of 392</h2>
+      <span class="tag demo">12 min live</span>
+    </div>
+    <p class="lede">Run both ends and month A reports 666 with the operators careless and 697 with the operators perfect. Put that swing on the same scale as the error it was supposed to explain and the picture stops being about adversaries. The gap between what the method reports and what is true is 392 clusters. Operator behaviour moves 31 of them.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 452" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A scale from zero to one thousand clusters with two spans measured on it. A pale bar runs from 304, the true entity count, to 696, the clustered figure on the shipped setting, and is labelled 392 clusters of error. Directly beneath its right-hand end, a narrow amber bracket spans 666 to 697 and is labelled 31, the whole swing of operator discipline. Below the scale, a magnified rule blows up the region from 660 to 700 so the two ends of the swing can be read: a dot at 666 labelled operators at 50 percent discipline, co-spending about as often as anybody else, and a dot at 697 labelled operators at 100 percent discipline, never co-spending once all month. A closing band says the bracket is the whole of what operator tradecraft controls, that a detection project cannot do better than its left end, and that the remaining 361 clusters are present whatever the four operators decide to do.">
+        <style>
+          .p5bH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .p5bL { font: 800 9px Inter, sans-serif; fill: #54655F; letter-spacing: .11em; }
+          .p5bAx { font: 400 9px Inter, sans-serif; fill: #54655F; }
+          .p5bV { font: 800 12px Inter, sans-serif; fill: #13201E; }
+          .p5bK { font: 800 11.5px Inter, sans-serif; fill: #9C3D18; }
+          .p5bKi { font: 800 11.5px Inter, sans-serif; fill: #1F5F5B; }
+          .p5bM { font: 400 10px Inter, sans-serif; fill: #54655F; }
+          .p5bB { font: 400 10.5px Inter, sans-serif; fill: #13201E; }
+          .p5bD { font: 800 12px Inter, sans-serif; fill: #9C3D18; }
+        </style>
+
+        <text class="p5bH" x="14" y="20">Both spans on one scale, because separately they both sound big</text>
+
+        <text class="p5bL" x="60" y="46">CLUSTERS, MONTH A</text>
+
+        <text class="p5bV" x="297" y="66" text-anchor="middle">304</text>
+        <text class="p5bAx" x="297" y="80" text-anchor="middle">the truth</text>
+        <text class="p5bV" x="603" y="66" text-anchor="middle">696</text>
+        <text class="p5bAx" x="603" y="80" text-anchor="middle">what the method reports</text>
+
+        <rect x="297" y="90" width="306" height="38" rx="5" fill="#EFF7F5" stroke="#8FBDB8"></rect>
+        <text class="p5bKi" x="450" y="114" text-anchor="middle">392 clusters of error</text>
+
+        <line x1="580" y1="140" x2="604" y2="140" stroke="#9C3D18" stroke-width="1.6"></line>
+        <line x1="580" y1="134" x2="580" y2="146" stroke="#9C3D18" stroke-width="1.6"></line>
+        <line x1="604" y1="134" x2="604" y2="146" stroke="#9C3D18" stroke-width="1.6"></line>
+        <text class="p5bD" x="592" y="164" text-anchor="middle">31</text>
+        <text class="p5bM" x="566" y="164" text-anchor="end">the whole swing of operator discipline</text>
+
+        <line x1="60" y1="188" x2="840" y2="188" stroke="#CFDEDA" stroke-width="1.4"></line>
+        <line x1="60" y1="188" x2="60" y2="195" stroke="#CFDEDA" stroke-width="1.4"></line>
+        <line x1="255" y1="188" x2="255" y2="195" stroke="#CFDEDA" stroke-width="1.4"></line>
+        <line x1="450" y1="188" x2="450" y2="195" stroke="#CFDEDA" stroke-width="1.4"></line>
+        <line x1="645" y1="188" x2="645" y2="195" stroke="#CFDEDA" stroke-width="1.4"></line>
+        <line x1="840" y1="188" x2="840" y2="195" stroke="#CFDEDA" stroke-width="1.4"></line>
+        <text class="p5bAx" x="60" y="210" text-anchor="middle">0</text>
+        <text class="p5bAx" x="255" y="210" text-anchor="middle">250</text>
+        <text class="p5bAx" x="450" y="210" text-anchor="middle">500</text>
+        <text class="p5bAx" x="645" y="210" text-anchor="middle">750</text>
+        <text class="p5bAx" x="840" y="210" text-anchor="middle">1,000</text>
+
+        <text class="p5bL" x="60" y="252">THE BRACKET, MAGNIFIED FROM 660 TO 700</text>
+
+        <text class="p5bV" x="177" y="280" text-anchor="middle">666</text>
+        <text class="p5bV" x="782" y="280" text-anchor="middle">697</text>
+        <line x1="60" y1="298" x2="840" y2="298" stroke="#9C3D18" stroke-width="1.6"></line>
+        <line x1="177" y1="290" x2="177" y2="306" stroke="#9C3D18" stroke-width="1.6"></line>
+        <line x1="782" y1="290" x2="782" y2="306" stroke="#9C3D18" stroke-width="1.6"></line>
+        <circle cx="177" cy="298" r="6" fill="#9C3D18"></circle>
+        <circle cx="782" cy="298" r="6" fill="#9C3D18"></circle>
+        <text class="p5bB" x="177" y="324" text-anchor="middle">operators at 50 percent discipline</text>
+        <text class="p5bM" x="177" y="340" text-anchor="middle">co-spending about as often as anybody else</text>
+        <text class="p5bB" x="782" y="324" text-anchor="middle">operators at 100 percent discipline</text>
+        <text class="p5bM" x="782" y="340" text-anchor="middle">never co-spending, not once, all month</text>
+
+        <rect x="14" y="358" width="852" height="80" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p5bK" x="30" y="382">The bracket is the whole of what operator tradecraft controls.</text>
+        <text class="p5bM" x="30" y="402">A detection project cannot do better than its left end, because the left end is the world where the operators already</text>
+        <text class="p5bM" x="30" y="422">leaked every link they had. The other 361 clusters are there whatever the four of them decide to do.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the bracket is drawn to the same scale as the bar above it, not exaggerated. That is genuinely how much of the error responds to the adversary.</figcaption>
+    </figure>
+
+    <div class="wk" id="p5-sweep">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The sweep running in this page, on whichever month you pick. Every row is a full re-run of the world, the transactions, the clustering and the score.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="p5-month">Month of Larkfield data, with the world seed pinned across every row</label>
+        <select class="sql-code" id="p5-month">
+          <option value="11">Month A</option>
+          <option value="101">Month B</option>
+          <option value="2024">Month C</option>
+          <option value="7">Month D</option>
+          <option value="55555">Month E</option>
+        </select>
+        <div id="p5-out"></div>
+        <p class="sql-note" id="p5-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="p5-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Read the columns that do not move<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The clusters column moves and it is the one everybody reads. Two columns beside it do not move at all, and they carry more of the lesson. The address count is identical on every row, which is the pinning working: same world, same 982 addresses, same 304 parties. If that column ever varies down a sweep, stop and fix the harness before reading anything else on the screen.</p>
+        <p>The wrongly merged column is 0 on every row at every discipline setting, which session 4 derived and which the sweep now confirms under a condition session 4 never tested. Making the operators careless does not create a single false fusion. It only hands the method links it did not previously have, and a link that exists is a link between two addresses one party genuinely controls.</p>
+        <p>So the sweep does not trade one error for another. There is no operating point here, no curve, and nothing to balance, which is a real structural difference from the scored linkage taught in <b>learn-entity-resolution-with-phoebe</b> and worth saying out loud to anyone arriving from that background expecting a threshold.</p>
+      </div>
+    </details>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Three sources, and they are not a partition<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Where does an over-count of 392 come from? Three things contribute and it is tempting to draw them as three slices of a pie. Resist that, because two of the three are counted in different units and the third has no count at all on this bench, so a pie chart would be inventing the one thing the run does not contain.</p>
+        <p>The first is operator tradecraft, and the sweep measures it directly: 31 clusters, end to end. The second is addresses that never appear as a spend input at all, which session 4 counted at 195 of 982 on month A. Those are not badly clustered, they are unclustered: <span class="mono">union</span> takes inputs as arguments and never sees them. The third is ordinary holders whose addresses simply never happened to be spent together in the month, which leaves no artefact you could count directly.</p>
+        <p>What can be said with the numbers in hand is the comparison the sweep was built for. The adversarial component is 31. The total is 392. Whatever the exact anatomy of the remaining 361, it is not operators hiding, because the sweep already drove them from perfect concealment to none and collected 31 clusters for it.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 424" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three rows listing the sources of the over-count, each with a badge saying whether a better heuristic on the same evidence can reach it. Row one, operator tradecraft: measured at 31 clusters end to end by the discipline sweep, badge reads partly, and the note says a detection project is bidding for this and nothing else. Row two, addresses never spent as an input: 195 of 982 on month A, badge reads no, and the note says union takes input lists as its arguments so these are never passed to it in either direction. Row three, holders who never happened to co-spend: no count on this bench, badge reads no, and the note says the trace was never made so no rule reading the same rows can recover it. A closing band says the three are not a partition and that saying so is part of reporting them, since 31 counts clusters, 195 counts addresses, and the third has no count at all, while the one comparison the run does support is 31 against 392.">
+        <style>
+          .p5cH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .p5cL { font: 800 9px Inter, sans-serif; fill: #54655F; letter-spacing: .11em; }
+          .p5cN { font: 800 11px Inter, sans-serif; fill: #13201E; }
+          .p5cM { font: 400 10px Inter, sans-serif; fill: #54655F; }
+          .p5cQ { font: 800 12px Inter, sans-serif; fill: #1F5F5B; }
+          .p5cQa { font: 800 12px Inter, sans-serif; fill: #9C3D18; }
+          .p5cQn { font: 800 11px Inter, sans-serif; fill: #54655F; }
+          .p5cBw { font: 800 10px Inter, sans-serif; fill: #FFFFFF; letter-spacing: .06em; }
+          .p5cK { font: 800 11.5px Inter, sans-serif; fill: #1F5F5B; }
+        </style>
+
+        <text class="p5cH" x="14" y="20">Three contributors, one of them reachable, and no honest way to add them up</text>
+
+        <text class="p5cL" x="34" y="46">WHAT IT IS</text>
+        <text class="p5cL" x="470" y="46">WHAT THE BENCH MEASURES</text>
+        <text class="p5cL" x="700" y="46">REACHABLE BY A BETTER RULE?</text>
+
+        <rect x="14" y="56" width="852" height="78" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <line x1="17" y1="68" x2="17" y2="122" stroke="#9C3D18" stroke-width="6" stroke-linecap="round"></line>
+        <text class="p5cN" x="34" y="82">Operator tradecraft</text>
+        <text class="p5cM" x="34" y="102">Four parties choosing how often to co-spend from</text>
+        <text class="p5cM" x="34" y="118">two of the 60 addresses each of them runs.</text>
+        <text class="p5cQa" x="470" y="90">31 clusters, end to end</text>
+        <text class="p5cM" x="470" y="110">the full 666 to 697 swing</text>
+        <rect x="700" y="76" width="96" height="26" rx="13" fill="#1F5F5B"></rect>
+        <text class="p5cBw" x="726" y="93">PARTLY</text>
+        <text class="p5cM" x="700" y="120">this is the whole bid</text>
+
+        <rect x="14" y="144" width="852" height="78" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <line x1="17" y1="156" x2="17" y2="210" stroke="#8FBDB8" stroke-width="6" stroke-linecap="round"></line>
+        <text class="p5cN" x="34" y="170">Addresses never spent as an input</text>
+        <text class="p5cM" x="34" y="190">Seen only receiving. union takes input lists as its</text>
+        <text class="p5cM" x="34" y="206">arguments, so it is never called on any of them.</text>
+        <text class="p5cQ" x="470" y="178">195 of 982 addresses</text>
+        <text class="p5cM" x="470" y="198">on month A, before any run</text>
+        <rect x="700" y="164" width="96" height="26" rx="13" fill="#9C3D18"></rect>
+        <text class="p5cBw" x="736" y="181">NO</text>
+        <text class="p5cM" x="700" y="208">no evidence to read</text>
+
+        <rect x="14" y="232" width="852" height="78" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <line x1="17" y1="244" x2="17" y2="298" stroke="#8FBDB8" stroke-width="6" stroke-linecap="round"></line>
+        <text class="p5cN" x="34" y="258">Holders who never happened to co-spend</text>
+        <text class="p5cM" x="34" y="278">Ordinary parties whose two or three addresses were</text>
+        <text class="p5cM" x="34" y="294">simply never spent together during the month.</text>
+        <text class="p5cQn" x="470" y="266">no count on this bench</text>
+        <text class="p5cM" x="470" y="286">it leaves no artefact to count</text>
+        <rect x="700" y="252" width="96" height="26" rx="13" fill="#9C3D18"></rect>
+        <text class="p5cBw" x="736" y="269">NO</text>
+        <text class="p5cM" x="700" y="296">the trace was never made</text>
+
+        <rect x="14" y="328" width="852" height="82" rx="10" fill="#EFF7F5" stroke="#1F5F5B"></rect>
+        <text class="p5cK" x="30" y="352">Three contributors, three different units, and no pie chart that would be honest.</text>
+        <text class="p5cM" x="30" y="372">31 counts clusters, 195 counts addresses, and the third row has no count at all, so any slice you draw is a number you made up.</text>
+        <text class="p5cM" x="30" y="392">The comparison the run does support is the one it was built for: 31 of the 392 responds to what the operators decide to do.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the middle column deliberately does not add up. A reviewer who asks why is asking the right question, and the answer is on the band.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What this does to a detection roadmap<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The practical output of the afternoon is a ceiling you can put in a planning document. Any heuristic that works on the same rows, however clever, is trying to recover links the operators withheld. The sweep says that all of those links together are worth 31 clusters on month A. A project that delivered every one of them perfectly would move the reported figure from 696 to 666 and leave the reader with a number still more than twice the truth.</p>
+        <p>That is not an argument for doing nothing about operators, and it is important not to let it become one. Knowing which 240 addresses are operator addresses has uses that have nothing to do with the headline count: it changes who you pay, it changes a fraud picture, it changes what a cohort means. Those are real and they justify real work.</p>
+        <p>What the sweep kills is one specific claim, and it is the claim the project was funded on: that better Sybil detection will fix the active-address figure. It will not, and the number that says so is 31.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>One camp says a figure like this should not be published externally at all. Their argument is specific to the adversarial setting rather than general squeamishness about error: publishing the number creates a target, the target is cheap to move, and the error is dominated by structure that no amount of care on your side will reduce. A bound does not rescue it, because a bound still gives the party who wants the figure higher a quantity to push on and a public statement of how you compute it. On this view the honest move is to report activity you can define without counting parties at all, and to keep the party count as an internal artefact with its limitations attached.</p>
+        <p>The other camp says non-publication buys nothing here, because the rows are public. Anyone who wants an active-address count can compute one from the same data, with a worse method, and will present it without a bound and without the 195 never-spent addresses named. Withholding yours does not remove the figure from circulation, it removes the careful version of it. On this view you publish, with the ceiling and the direction fused to it, precisely because you are the only party with an incentive to state the error honestly, and because a published method can be checked by the stranger who doubts it.</p>
+        <p>Both have watched the failure they are describing. Notice where they actually differ: not on the method, not on the 392, and not on whether the number is gameable, since both accept all three. They differ on whether a figure that will exist anyway is better with your name on it or without. That is a question about your position rather than about your pipeline, and it moves depending on whether anyone else is already publishing one.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Run the sweep, then break it on purpose</h2>
+      <span class="tag exercise">15 min hands on</span>
+    </div>
+    <p class="lede">Six steps with the live box open. The middle two are the ones worth the time: a sweep that is wrong in the way most sweeps are wrong, run deliberately so you can recognise the output next time it happens by accident.</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Reproduce both ends</h4>
+        <p>World seed 11, transaction seed 12, discipline at 0.50 and then at 1.00. You should read 666 and 697. If you read anything else, the seed convention is the first thing to check and it is almost always the whole of the problem.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Assert the pinning before you trust a row</h4>
+        <p>Write one assertion that the address count is identical across every pass of your sweep, and one that wrongly merged is 0 on every pass. Both should pass. Both are cheap. Neither is optional once somebody else can edit the harness.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Break it: move the world seed with the discipline</h4>
+        <p>Run the sweep again with the world seed incremented on every pass. Record the swing you get. Then notice that nothing errored, nothing looked odd, and the number you would have quoted came out of a comparison between different worlds.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Say what your broken sweep would have justified</h4>
+        <p>Take the swing from step 3 and write the sentence you would have put in the planning document. One line. This is the step people remember, because the sentence reads exactly as confidently as the correct one does.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Put the 31 against the 392 in your own words</h4>
+        <p>One sentence, no jargon, aimed at whoever funds the detection work. It has to survive being repeated by them to somebody else, so it has to carry both numbers and the direction. Test it by saying it out loud.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the ceiling into the project, not the appendix</h4>
+        <p>If detection work goes ahead, the best case belongs in the success criteria: the figure moves by at most this much. A project whose best outcome is written down in advance cannot quietly be judged later against an outcome it was never able to reach.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> Before funding work against an adversary, measure the adversary's room. Build the counterfactual where they behave as badly as they possibly could for their own purposes, and read what your metric does. If it barely moves, the adversary is not your largest error source and the work aimed at them is aimed at the smaller part of the problem, however satisfying that work is to scope. The measurement takes an afternoon and it is the cheapest thing in the plan.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">A colleague sweeps operator discipline and reports a swing of 140 clusters. You look at the harness and find the world seed incremented on each pass. What has been measured?</p>
+      <div class="qopt">A · The swing plus some noise, so 140 is roughly right and should be quoted with a caveat</div>
+      <div class="qopt">B · A comparison between different worlds with different address counts, where the discipline effect and the draw effect are added together and cannot be separated afterwards</div>
+      <div class="qopt">C · Nothing, since union find is deterministic and the result would be identical either way</div>
+      <q class="qwhy">The world generator decides how many addresses each person holds, so moving its seed changes the population as well as the behaviour. The run completes, the table looks normal, and the number attributes a difference of two causes entirely to one of them.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Operator discipline goes from 100 percent to 50 percent and the wrongly merged column stays at 0. Why is that the expected result rather than a surprise?</p>
+      <div class="qopt">A · Because at 50 percent the operators still avoid co-spending most of the time</div>
+      <div class="qopt">B · Because the score function only counts wrongly merged clusters among ordinary people</div>
+      <div class="qopt">C · Because carelessness only creates links, and a co-spend link is evidence that one party authorised both inputs, so a new link can never fuse two different parties</div>
+      <q class="qwhy">Lowering discipline hands the method more true links, never a false one. The sweep therefore has no error trade-off in it at all: there is no operating point to choose and no curve to plot, which is a genuine structural difference from score-based linkage.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">A detection project promises to identify operator addresses and thereby fix the active-address figure. What does the sweep say about the second half of that promise?</p>
+      <div class="qopt">A · The best any such project can achieve on the headline figure is the careless end of the sweep, which on month A is 666 against a reported 696 and a truth of 304, so the figure stays more than twice the truth</div>
+      <div class="qopt">B · Nothing, because the sweep varies a generator field rather than a real detection method</div>
+      <div class="qopt">C · The promise is achievable, since identifying all 240 operator addresses collapses them to 4 entities</div>
+      <q class="qwhy">A heuristic on the same rows can at best recover the links the operators withheld, which is exactly what the careless end of the sweep already contains. Option C describes an outcome no rule reading co-spends can produce, because 240 addresses only collapse when the evidence to join them exists.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 6</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty minutes. One sweep on something you own, and one number about your loader that session 6 will use.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Sweep an adversary in your own estate</h4>
+        <p>Pick a metric somebody outside your team benefits from moving. Write down the most extreme version of their behaviour that is still rational for them, estimate what your metric reads under it, and compare that to your metric's known error. Bring both numbers, even if one is a rough order of magnitude.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Bring a guess about your warehouse</h4>
+        <p>Session 6 measures what happens when an upstream withdraws history a loader has already written. Before then, write down one number: what percentage of the rows in a table you own would be wrong tomorrow if your upstream retracted its last three batches, and say how you would find out.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">A counterfactual sweep, built and pinned</span><span class="note">Four stages, one field moving, both seeds held, and an assertion that proves the pinning held.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The seed convention as part of the method</span><span class="note">World seed s, transaction seed s + 1. Letting the world move is the failure that produces a confident wrong number.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">666 to 697, measured</span><span class="note">The whole swing of operator discipline from 50 percent to 100 percent on month A.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">31 against 392</span><span class="note">The adversarial share of the error placed on the same scale as the error, drawn to scale.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Three contributors that are not a partition</span><span class="note">Clusters, addresses and an uncounted third, with why adding them up would be invention.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">No error trade-off in this sweep</span><span class="note">Wrongly merged stays 0 at every discipline setting, so there is no operating point to choose.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The ceiling on a detection roadmap</span><span class="note">What better Sybil work can achieve on the headline figure, written into the success criteria rather than discovered later.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Whether to publish the metric at all</span><span class="note">Both positions stated and left standing, on the axis of a figure that will exist whether or not you produce it.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">A warehouse holding rows the chain withdrew</span><span class="note">Raised in the homework. Session 6 measures the damage on Bench B.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Training on data an adversary can write to</span><span class="note">Named tonight as the standing property. Session 8 is the modelling consequence.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Probabilistic record linkage and agreement weights</span><span class="note">There is no threshold and no curve here. Score-based linkage is learn-entity-resolution-with-phoebe.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Hashes, blocks, consensus and chain mechanics</span><span class="note">The prerequisite is learn-blockchain-with-phoebe and it is assumed rather than repeated.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Named networks, and any real network statistic</span><span class="note">Every figure here comes from the generator in w3-live.js and describes nothing outside it.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Anything to do with price, markets or holdings</span><span class="note">Out of scope by design, and nothing here is advice of any kind.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The one sentence.</strong> Measure the adversary's room before you fund work against them. On month A it is 31 clusters out of 392.</div>
+      <div class="cheat-item"><strong>The sweep.</strong> Pin the world, pin both seeds, move one field, re-run all four stages. Everything else is harness.</div>
+      <div class="cheat-item"><strong>The result.</strong> 666 at 50 percent discipline, 697 at 100 percent. The swing is the ceiling on any heuristic reading the same rows.</div>
+      <div class="cheat-item"><strong>The pinning test.</strong> Address count identical on every pass. If it drifts, the sweep is comparing worlds, not settings.</div>
+      <div class="cheat-item"><strong>No trade-off.</strong> Wrongly merged is 0 at every setting. Carelessness only ever adds true links.</div>
+      <div class="cheat-item"><strong>The other two contributors.</strong> 195 of 982 never spent as an input, and holders who never happened to co-spend. Neither is reachable by a better rule.</div>
+      <div class="cheat-item"><strong>Do not draw the pie.</strong> 31 counts clusters, 195 counts addresses, the third counts nothing. Any slice is invented.</div>
+      <div class="cheat-item"><strong>The open question.</strong> Your loader wrote rows the chain has since replaced. How many, and would you know? Session 6.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 5 of 10 · learn-web3-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p4-measuring-the-clustering.html">← Practitioner session 4 · Measuring the clustering</a>
+        <a href="p6-reorgs-hit-your-warehouse.html">Practitioner session 6 · Reorgs hit your warehouse →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/w3-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof W3 === "undefined") return;
+  var sel = document.getElementById("p5-month");
+  var out = document.getElementById("p5-out");
+  var verdict = document.getElementById("p5-verdict");
+  var self = document.getElementById("p5-self");
+
+  var DISC = [0.50, 0.60, 0.70, 0.80, 0.90, 0.97, 1.00];
+
+  function comma(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+
+  function pass(s, discipline) {
+    var world = W3.makeWorld({ people: 300, sybils: 4, sybilAddrs: 60, seed: s });
+    var txs = W3.makeTransactions(world, {
+      transactions: 4000, coSpendRate: 0.25, sybilDiscipline: discipline, seed: s + 1
+    });
+    var cl = W3.clusterByCoSpend(world, txs);
+    var sc = W3.scoreClustering(world, cl);
+    return {
+      discipline: discipline,
+      addresses: sc.addresses,
+      merges: cl.links,
+      clustered: sc.clustered,
+      truth: sc.trueEntities,
+      split: sc.stillSplit,
+      mixed: sc.mixedClusters
+    };
+  }
+
+  function render() {
+    var s = Number(sel.value);
+    var rows = DISC.map(function (d) { return pass(s, d); });
+
+    var html = '<table class="sql-table"><thead><tr>'
+      + "<th>Operator discipline</th><th>Addresses</th><th>Merges</th>"
+      + "<th>Clusters</th><th>Truth</th><th>Still split</th><th>Wrongly merged</th>"
+      + "</tr></thead><tbody>";
+
+    rows.forEach(function (r) {
+      html += "<tr><td>" + Math.round(r.discipline * 100) + "%</td>"
+        + "<td>" + comma(r.addresses) + "</td>"
+        + "<td>" + comma(r.merges) + "</td>"
+        + '<td><b class="p5-ok">' + comma(r.clustered) + "</b></td>"
+        + "<td>" + comma(r.truth) + "</td>"
+        + '<td><b class="p5-amb">' + comma(r.split) + "</b></td>"
+        + "<td>" + comma(r.mixed) + "</td></tr>";
+    });
+    html += "</tbody></table>";
+    out.innerHTML = html;
+
+    var lo = rows[0], hi = rows[rows.length - 1];
+    var shipped = rows[5];
+    var swing = hi.clustered - lo.clustered;
+    var pinned = rows.every(function (r) { return r.addresses === lo.addresses; });
+    var noFusion = rows.every(function (r) { return r.mixed === 0; });
+
+    verdict.textContent = "Careless operators give " + comma(lo.clustered)
+      + " clusters and perfectly careful ones give " + comma(hi.clustered)
+      + ", a swing of " + swing + ". On the shipped setting of 97 percent the figure is "
+      + comma(shipped.clustered) + " against a truth of " + comma(shipped.truth)
+      + ", so the error is " + comma(shipped.split) + " and operator behaviour owns " + swing
+      + " of it. The address count is " + comma(lo.addresses)
+      + " on every row, which is the pinning holding.";
+
+    var t = W3.selfTest();
+    self.textContent = (t.ok && pinned && noFusion)
+      ? "Self test passes, the address count is identical on every pass, and wrongly merged is 0 at every discipline setting. Nothing here describes a real network."
+      : "A check failed in this browser, so nothing in the table above should be believed.";
+  }
+
+  sel.addEventListener("change", render);
+  render();
+})();
+</script>
+<style>
+  #p5-sweep .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 16rem; }
+  #p5-sweep table.sql-table { margin: .6rem 0 .2rem; font-size: .82rem; }
+  #p5-sweep .p5-amb { color: var(--amber); }
+  #p5-sweep .p5-ok { color: var(--indigo); }
+  .p5code {
+    background: var(--indigo-50);
+    border: 1px solid var(--hairline);
+    border-left: 4px solid var(--indigo);
+    border-radius: 12px;
+    padding: 1rem 1.15rem 1.1rem;
+    margin: 1rem 0 1.4rem;
+    overflow-x: auto;
+  }
+  .p5code .p5cap {
+    display: block;
+    font-family: Inter, -apple-system, sans-serif;
+    font-size: .68rem;
+    font-weight: 800;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--indigo);
+    margin-bottom: 1rem;
+  }
+  .p5code code {
+    display: block;
+    white-space: pre;
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: .8rem;
+    line-height: 1.75;
+    color: var(--ink);
+  }
+</style>
+</body>
+</html>

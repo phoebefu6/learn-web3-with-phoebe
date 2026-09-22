@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 4 of 6. Immutability from the data team's side, where it is mostly a cost. A wrong record can only be annotated, a restatement has no mechanism, and erasure is structurally unavailable. So the design question is what deliberately stays off.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="You cannot take it back - learn web3 with phoebe">
+<meta property="og:description" content="Leader session 4 of 6. Three consequences of an append-only record, each with its real bite, and the boundary decision that is the only one you get to make.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-web3-with-phoebe/courses/a4-you-cannot-take-it-back.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="You cannot take it back - learn web3 with phoebe">
+<meta name="twitter:description" content="The read path carries the correction logic forever, and every reader who does not apply it gets the original answer with no warning.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 4 · You cannot take it back - learn web3 with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-web3-with-phoebe</a> / Leader session 4 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Web3 with Phoebe · Leader session 4 of 6</div>
+    <h1>You cannot <span class="accent">take it back</span></h1>
+    <p class="sub">Immutability is the property most often sold as the benefit, and from where a data team sits it is mostly a bill. Three things stop being available at once: correcting a wrong record, restating a period you have already published, and removing personal data on request. Each has a workaround and every workaround puts the cost somewhere else. Tonight is the three of them with their real bite, and then the one decision that is genuinely yours, which is what deliberately never goes on at all.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Leader track</span>
+      <span class="chip audience">Anyone who has ever restated a number</span>
+      <span class="chip audience">Anyone sitting in a design review</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-17 · Three things you cannot do</span>
+      <span class="a3" style="flex:3">17-30 · What stays off</span>
+      <span class="a4" style="flex:3">30-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The homework question nobody could answer</h2>
+    </div>
+    <p class="lede">Session 3 ended by asking you to find a published figure you would now withdraw, and then to work out how you would issue the correction. On a normal warehouse that second half takes a minute to answer and the answer is boring. Here it is the session. Larkfield's team reached the same point in their second month, with a reward issued against the wrong address and a figure already in a board pack, and discovered that every correction move they knew depended on being able to change something.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The three capabilities an append-only record removes, drawn as mechanisms so you can see what is left in each case rather than just what is gone. The read path as the place the cost actually lands, and why it never gets lighter. The boundary decision that is the only real lever, set at design time and not revisitable afterwards. And the disagreement about putting anything to do with a person on a permanent record, argued from both sides and left open, because it is open.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why this is a cost and not a scandal<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>It would be easy to spend forty five minutes being appalled, and it would be a waste of the time. An append-only record is doing exactly what it was chosen to do, and session 5 makes the case for it properly. The useful posture tonight is the one a finance function takes with a fixed cost: name it, size it, put it in the right budget line, and stop being surprised by it every quarter.</p>
+        <p>What makes it awkward is that the cost is invisible at the moment of the decision and visible every month afterwards. Nobody experiences the loss of a correction path on the day the design is signed off. They experience it eighteen months later, in a read path that has accumulated a dozen rules nobody can safely remove, maintained by people who were not in the room.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Larkfield's wrong record was not a bug in anything. A reward was issued against an address that a user had supplied incorrectly, the mechanism did precisely what it was told, and the row is correct as a record of what happened. It is only wrong as a statement about who was rewarded, which is the sense every downstream report reads it in.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words that keep coming back<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Append only.</strong> New records can be added, existing ones cannot be altered. Session 1 named it; tonight it has consequences.</li>
+          <li><strong>Annotation.</strong> A later record that says something about an earlier one. The only correction shape available, and it is not a correction.</li>
+          <li><strong>Supersede.</strong> The relationship an annotation asserts. It has meaning only if the reader applies it, and nothing makes them.</li>
+          <li><strong>Read path.</strong> Everything between the stored rows and the answer. This is where every correction ends up living, permanently.</li>
+          <li><strong>Restatement.</strong> Reissuing a published period on a corrected basis. Standard practice elsewhere, and it has no mechanism here.</li>
+          <li><strong>Erasure.</strong> Removing personal data on request. What any regime obliges is not settled here; the obligations live in <b>learn-gdpr-with-phoebe</b>.</li>
+          <li><strong>Opaque reference.</strong> An identifier that means nothing without a separate table, kept somewhere you can still destroy.</li>
+          <li><strong>The boundary.</strong> The line between what goes on the record and what stays off it. Part 2, and the only decision here that is really yours.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the three consequences</span>
+      <h2>Correct, restate, erase: three verbs that stop working</h2>
+      <span class="tag concept">14 min live</span>
+    </div>
+    <p class="lede">Each of the three is worth seeing as a before and after rather than as a rule, because in every case something is still possible and it is not the same thing. The gap between what you can still do and what you used to do is where the cost sits, and in all three cases it lands on a reader rather than on the writer who caused it.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 454" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three panels, each drawn twice, once normally and once on a permanent record. Panel one, correct: normally an UPDATE arrow rewrites row 41 in place and the table still has one row; on the ledger row 41 stays and is still wrong, a second row is appended below it as the fix, and a note says the read path must apply this forever. Panel two, restate: normally the published quarter is replaced by a restated quarter; on the ledger the arrow to a replacement is crossed out in amber and there is no mechanism, only a note beside the original. Panel three, erase: normally the record goes into a bin and is removed; on the ledger the path to removal is crossed out, no removal exists, and only the off-chain key can be destroyed. A closing band says all three have workarounds and every workaround moves the cost onto the read path or onto a boundary drawn at design time.">
+        <style>
+          .a4aH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .a4aT { font: 800 10px Inter, sans-serif; fill: #FFFFFF; }
+          .a4aL { font: 800 9px Inter, sans-serif; fill: #54655F; letter-spacing: .12em; }
+          .a4aB { font: 400 11px Inter, sans-serif; fill: #13201E; }
+          .a4aS { font: 400 8.5px Inter, sans-serif; fill: #54655F; }
+          .a4aSd { font: 400 9px Inter, sans-serif; fill: #13201E; }
+          .a4aSb { font: 700 9px Inter, sans-serif; fill: #1F5F5B; }
+          .a4aSa { font: 700 9px Inter, sans-serif; fill: #9C3D18; }
+          .a4aK { font: 800 11.5px Inter, sans-serif; fill: #9C3D18; }
+          .a4aM { font: 400 11px Inter, sans-serif; fill: #54655F; }
+        </style>
+        <defs>
+          <marker id="a4aArI" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#123D3A"></path></marker>
+        </defs>
+
+        <text class="a4aH" x="14" y="20">Three verbs, each drawn as it normally works and as it works here.</text>
+
+        <!-- panel 1 -->
+        <rect x="14" y="50" width="276" height="280" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="50" width="276" height="24" rx="10" fill="#123D3A"></rect>
+        <rect x="14" y="62" width="276" height="12" fill="#123D3A"></rect>
+        <text class="a4aT" x="28" y="67">1 · CORRECT</text>
+        <text class="a4aL" x="34" y="94">NORMALLY</text>
+        <rect x="34" y="100" width="136" height="24" rx="4" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a4aSd" x="42" y="116">row 41, wrong value</text>
+        <text class="a4aSb" x="194" y="106">UPDATE</text>
+        <line x1="266" y1="118" x2="176" y2="118" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#a4aArI)"></line>
+        <text class="a4aS" x="34" y="144">the table still has exactly one row</text>
+        <text class="a4aL" x="34" y="174">ON THE LEDGER</text>
+        <rect x="34" y="182" width="136" height="24" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a4aS" x="42" y="198">row 41, still wrong</text>
+        <line x1="102" y1="210" x2="102" y2="220" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#a4aArI)"></line>
+        <rect x="34" y="224" width="136" height="24" rx="4" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a4aSd" x="42" y="240">row 118, the fix</text>
+        <text class="a4aSa" x="180" y="196">the read path</text>
+        <text class="a4aSa" x="180" y="210">must apply this,</text>
+        <text class="a4aSa" x="180" y="224">every time, forever</text>
+        <text class="a4aB" x="34" y="282">Annotate, never correct.</text>
+        <text class="a4aB" x="34" y="299">The overlay never expires.</text>
+
+        <!-- panel 2 -->
+        <rect x="302" y="50" width="276" height="280" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="302" y="50" width="276" height="24" rx="10" fill="#123D3A"></rect>
+        <rect x="302" y="62" width="276" height="12" fill="#123D3A"></rect>
+        <text class="a4aT" x="316" y="67">2 · RESTATE</text>
+        <text class="a4aL" x="322" y="94">NORMALLY</text>
+        <rect x="322" y="100" width="104" height="24" rx="4" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a4aSd" x="330" y="116">Q3 as published</text>
+        <line x1="430" y1="112" x2="452" y2="112" stroke="#123D3A" stroke-width="1.6" marker-end="url(#a4aArI)"></line>
+        <rect x="458" y="100" width="100" height="24" rx="4" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a4aSd" x="466" y="116">Q3 restated</text>
+        <text class="a4aS" x="322" y="144">the earlier version is replaced outright</text>
+        <text class="a4aL" x="322" y="174">ON THE LEDGER</text>
+        <rect x="322" y="182" width="104" height="24" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a4aS" x="330" y="198">Q3 as published</text>
+        <line x1="430" y1="194" x2="446" y2="194" stroke="#CFDEDA" stroke-width="1.6"></line>
+        <line x1="450" y1="188" x2="464" y2="200" stroke="#9C3D18" stroke-width="2"></line>
+        <line x1="450" y1="200" x2="464" y2="188" stroke="#9C3D18" stroke-width="2"></line>
+        <rect x="472" y="182" width="90" height="24" rx="4" fill="#FFFFFF" stroke="#9C3D18" stroke-width="1.4" stroke-dasharray="4 3"></rect>
+        <text class="a4aSa" x="480" y="198">no mechanism</text>
+        <text class="a4aSa" x="322" y="228">a note beside the original is all there is,</text>
+        <text class="a4aSa" x="322" y="242">and a reader may never see it</text>
+        <text class="a4aB" x="322" y="282">No restatement path.</text>
+        <text class="a4aB" x="322" y="299">The old figure keeps circulating.</text>
+
+        <!-- panel 3 -->
+        <rect x="590" y="50" width="276" height="280" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="590" y="50" width="276" height="24" rx="10" fill="#123D3A"></rect>
+        <rect x="590" y="62" width="276" height="12" fill="#123D3A"></rect>
+        <text class="a4aT" x="604" y="67">3 · ERASE</text>
+        <text class="a4aL" x="610" y="94">NORMALLY</text>
+        <rect x="610" y="100" width="104" height="24" rx="4" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a4aSd" x="618" y="116">the record</text>
+        <line x1="718" y1="112" x2="742" y2="112" stroke="#123D3A" stroke-width="1.6" marker-end="url(#a4aArI)"></line>
+        <rect x="752" y="98" width="40" height="30" rx="3" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <line x1="752" y1="106" x2="792" y2="106" stroke="#8FBDB8" stroke-width="1.6"></line>
+        <text class="a4aS" x="610" y="144">the record is removed and stays removed</text>
+        <text class="a4aL" x="610" y="174">ON THE LEDGER</text>
+        <rect x="610" y="182" width="104" height="24" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a4aS" x="618" y="198">the record</text>
+        <line x1="718" y1="194" x2="734" y2="194" stroke="#CFDEDA" stroke-width="1.6"></line>
+        <line x1="738" y1="188" x2="752" y2="200" stroke="#9C3D18" stroke-width="2"></line>
+        <line x1="738" y1="200" x2="752" y2="188" stroke="#9C3D18" stroke-width="2"></line>
+        <text class="a4aSa" x="760" y="198">none exists</text>
+        <rect x="610" y="224" width="152" height="24" rx="4" fill="#FFFFFF" stroke="#9C3D18" stroke-width="1.4" stroke-dasharray="4 3"></rect>
+        <text class="a4aSa" x="618" y="240">the key held off the ledger</text>
+        <text class="a4aS" x="610" y="266">destroying that is the only lever there is</text>
+        <text class="a4aB" x="610" y="292">Removal is structurally</text>
+        <text class="a4aB" x="610" y="309">unavailable, not merely hard.</text>
+
+        <rect x="14" y="350" width="852" height="88" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="a4aK" x="30" y="376">All three have workarounds, and every workaround moves the cost onto the read path or onto a boundary drawn at design time.</text>
+        <text class="a4aM" x="30" y="398">None of them moves it back to where the mistake was made. The person who chose the design has moved on and the read path has not,</text>
+        <text class="a4aM" x="30" y="416">which is why this arrives as a standing maintenance load on a data team rather than as a one-off incident with an owner.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - in all three panels something is still possible on the bottom row. In none of them is it the same thing as the top row, and the difference is paid by whoever reads next.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>A correction is a second row, and the reader has to know<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The mechanical part is simple enough that it hides the problem. A wrong record stays exactly where it is and a new record is appended saying what should have been recorded. The pair of them is now the truth, and neither one alone is.</p>
+        <p>Everything difficult follows from that last clause. A query written against the raw rows returns the wrong answer, and it returns it confidently, with no error, no null and no flag. The correctness of every figure now depends on a piece of logic sitting in the read path, and that logic has to be present in every read path: the warehouse view, the notebook somebody wrote in a hurry, the export a partner pulls, the query an auditor runs themselves because the data is public and they can.</p>
+        <p>That last one is the part people miss. When the rows are readable by outsiders, you do not control who reads them or how, so you cannot guarantee that your correction logic is applied. You can publish it, and publishing it is the right move, and it is still a request rather than a control.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The read path only ever gets heavier<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A correction in a normal warehouse has a lifespan. The row is fixed, the incident is closed, and in three years nothing in the codebase remembers it happened. That is the property being given up, and it is worth naming precisely because nobody misses it until it is gone.</p>
+        <p>Here every correction is a permanent addition to the read path, and the reason it is permanent is not laziness. The wrong row is still there, still readable, and will still be read by somebody in three years, so the rule that supersedes it cannot be retired while the row exists, which is always. A read path with twelve supersede rules in it is not a badly maintained read path. It is a correctly maintained one, after twelve mistakes.</p>
+        <p>What a leader should take from this is a budget line rather than a lament. The maintenance cost of the reporting layer grows with the count of historical errors and never shrinks, so the thing worth managing down is the error rate at the point of writing, and the thing worth resourcing is the read path itself.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 406" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An append-only ledger drawn as a strip of sixteen small blocks. Three of them are amber and labelled 41, 402 and 909, the wrong rows. Three later blocks are dark and labelled 118, 655 and 1,140, the fixes, each with a curved arrow running back to the wrong row it supersedes. Below, the read path is drawn as a stack of three rules that only grows, with a note that nothing ever leaves it. To the right, two readers: one who applies the overlay and gets the corrected answer, and one who queries the rows directly and gets the original wrong answer with no error and no warning, permanently. A closing band says a wrong row that is still readable keeps its rule alive, so the reporting layer grows with the count of historical errors and never shrinks.">
+        <style>
+          .a4bH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .a4bL { font: 800 9px Inter, sans-serif; fill: #54655F; letter-spacing: .12em; }
+          .a4bW { font: 800 8.5px Inter, sans-serif; fill: #FFFFFF; }
+          .a4bS { font: 400 8.5px Inter, sans-serif; fill: #54655F; }
+          .a4bR { font: 400 9.5px Inter, sans-serif; fill: #13201E; }
+          .a4bHd { font: 800 9.5px Inter, sans-serif; fill: #1F5F5B; letter-spacing: .06em; }
+          .a4bHa { font: 800 9.5px Inter, sans-serif; fill: #9C3D18; letter-spacing: .06em; }
+          .a4bB { font: 400 10px Inter, sans-serif; fill: #13201E; }
+          .a4bK { font: 800 11.5px Inter, sans-serif; fill: #9C3D18; }
+          .a4bM { font: 400 11px Inter, sans-serif; fill: #54655F; }
+        </style>
+        <defs>
+          <marker id="a4bArA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9C3D18"></path></marker>
+          <marker id="a4bArI" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#123D3A"></path></marker>
+        </defs>
+
+        <text class="a4bH" x="14" y="20">Nothing was edited. Three mistakes, three fixes, and a read path that can never put any of them down.</text>
+        <text class="a4bL" x="14" y="44">THE LEDGER, APPENDED ONLY</text>
+
+        <rect x="20" y="54" width="34" height="30" rx="3" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <rect x="62" y="54" width="34" height="30" rx="3" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <rect x="104" y="54" width="34" height="30" rx="3" fill="#9C3D18"></rect>
+        <text class="a4bW" x="112" y="73">41</text>
+        <rect x="146" y="54" width="34" height="30" rx="3" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <rect x="188" y="54" width="34" height="30" rx="3" fill="#1F5F5B"></rect>
+        <text class="a4bW" x="194" y="73">118</text>
+        <rect x="230" y="54" width="34" height="30" rx="3" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <rect x="272" y="54" width="34" height="30" rx="3" fill="#9C3D18"></rect>
+        <text class="a4bW" x="278" y="73">402</text>
+        <rect x="314" y="54" width="34" height="30" rx="3" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <rect x="356" y="54" width="34" height="30" rx="3" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <rect x="398" y="54" width="34" height="30" rx="3" fill="#1F5F5B"></rect>
+        <text class="a4bW" x="404" y="73">655</text>
+        <rect x="440" y="54" width="34" height="30" rx="3" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <rect x="482" y="54" width="34" height="30" rx="3" fill="#9C3D18"></rect>
+        <text class="a4bW" x="488" y="73">909</text>
+        <rect x="524" y="54" width="34" height="30" rx="3" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <rect x="566" y="54" width="34" height="30" rx="3" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <rect x="608" y="54" width="34" height="30" rx="3" fill="#1F5F5B"></rect>
+        <text class="a4bW" x="612" y="73">1,140</text>
+        <rect x="650" y="54" width="34" height="30" rx="3" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+
+        <path d="M 205 86 C 205 112, 121 112, 121 88" fill="none" stroke="#9C3D18" stroke-width="1.4" marker-end="url(#a4bArA)"></path>
+        <path d="M 415 86 C 415 112, 289 112, 289 88" fill="none" stroke="#9C3D18" stroke-width="1.4" marker-end="url(#a4bArA)"></path>
+        <path d="M 625 86 C 625 112, 499 112, 499 88" fill="none" stroke="#9C3D18" stroke-width="1.4" marker-end="url(#a4bArA)"></path>
+        <text class="a4bS" x="163" y="130" text-anchor="middle">supersedes</text>
+        <text class="a4bS" x="352" y="130" text-anchor="middle">supersedes</text>
+        <text class="a4bS" x="562" y="130" text-anchor="middle">supersedes</text>
+
+        <text class="a4bL" x="14" y="162">THE READ PATH CARRIES ALL OF IT</text>
+        <rect x="14" y="170" width="400" height="24" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a4bR" x="24" y="186">month 3 · treat row 41 as superseded by row 118</text>
+        <rect x="14" y="200" width="400" height="24" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a4bR" x="24" y="216">month 7 · treat row 402 as superseded by row 655</text>
+        <rect x="14" y="230" width="400" height="24" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a4bR" x="24" y="246">month 11 · treat row 909 as superseded by row 1,140</text>
+        <text class="a4bS" x="14" y="276">the stack only grows, because the wrong rows are still there and still readable</text>
+
+        <rect x="446" y="164" width="420" height="52" rx="8" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a4bHd" x="460" y="184">READER WHO APPLIES THE OVERLAY</text>
+        <text class="a4bB" x="460" y="203">gets the corrected answer</text>
+        <rect x="446" y="226" width="420" height="66" rx="8" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="a4bHa" x="460" y="246">READER WHO QUERIES THE ROWS</text>
+        <text class="a4bB" x="460" y="265">gets the original wrong answer, with no error, no null</text>
+        <text class="a4bB" x="460" y="281">and no warning, on every run from now on</text>
+        <line x1="420" y1="182" x2="440" y2="182" stroke="#123D3A" stroke-width="1.4" marker-end="url(#a4bArI)"></line>
+        <line x1="420" y1="242" x2="440" y2="252" stroke="#9C3D18" stroke-width="1.4" marker-end="url(#a4bArA)"></line>
+
+        <rect x="14" y="310" width="852" height="80" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="a4bK" x="30" y="336">A rule can only be retired when the row it corrects is gone, and the row is never gone.</text>
+        <text class="a4bM" x="30" y="358">So the reporting layer grows with the count of historical errors and never shrinks. That is a budget line, not a lapse in</text>
+        <text class="a4bM" x="30" y="376">discipline, and the only variable you control is how many rows you get wrong in the first place.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the lower reader is not doing anything wrong. They are querying a public dataset in the obvious way, and there is no signal anywhere that tells them not to.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Restatement, and why "we reissued the numbers" is not available<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Restatement is the move a reporting function reaches for when a published period turns out to have been computed on a wrong basis. The period is recomputed, the new version is issued, the old version is withdrawn, and there is an established etiquette for saying so. It works because the published figures were an assertion by one party who can withdraw them.</p>
+        <p>Here the inputs were not asserted by you and cannot be withdrawn by you. You can recompute and reissue your own derived figure, and you should, but the rows the old figure was computed from are still sitting there, still public, and still produce the old figure for anyone who runs the obvious query. A restatement in this setting is a claim competing with a computation, and the computation is the one a sceptical reader will run.</p>
+        <p>There is a version of this that works and it is unglamorous: publish the derivation, version it, and make the superseding relationship part of what you publish rather than part of what you announce. Then the sceptical reader running their own query is running yours. It does not remove the old answer from the world, because nothing can, and it does give the new one somewhere to stand.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the boundary</span>
+      <h2>The only decision that is really yours: what stays off</h2>
+      <span class="tag concept">13 min live</span>
+    </div>
+    <p class="lede">Nothing in part 1 is negotiable once a record exists, which makes the interesting question the one asked before anything is written. What goes on is permanent, so the design conversation worth having is not about what to put on the record. It is about what deliberately never goes near it, decided once, by people who will not be maintaining the read path.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 446" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two zones separated by a dashed amber boundary. The left zone, on the ledger and permanent, holds three items: the fact that the event happened, an opaque reference to the party, and what a third party needs to recompute the result; a note says everything here is a decision that cannot be revisited, so the list is kept as short as the product allows. The right zone, off the ledger and correctable, holds four items: who the party actually is, the map from reference to person, the correction registry and the superseding rows, and anything that might have to be removed later; a note says this side keeps every verb from part one. A band says the only thing that should cross the line is an opaque reference. Below, two position panels state the disagreement: position one, nothing about a person ever touches it, with its cost; position two, an opaque reference is not a person, with its cost.">
+        <style>
+          .a4cH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .a4cT { font: 800 10px Inter, sans-serif; fill: #FFFFFF; }
+          .a4cI { font: 400 9.5px Inter, sans-serif; fill: #13201E; }
+          .a4cS { font: 400 8.5px Inter, sans-serif; fill: #54655F; }
+          .a4cK { font: 800 11.5px Inter, sans-serif; fill: #9C3D18; }
+          .a4cM { font: 400 11px Inter, sans-serif; fill: #54655F; }
+          .a4cB { font: 400 10px Inter, sans-serif; fill: #13201E; }
+          .a4cC { font: 700 9.5px Inter, sans-serif; fill: #9C3D18; }
+        </style>
+
+        <text class="a4cH" x="14" y="20">The boundary is drawn once, before anything is written, and it is the whole of the design decision.</text>
+
+        <rect x="14" y="36" width="406" height="196" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="36" width="406" height="24" rx="10" fill="#1F5F5B"></rect>
+        <rect x="14" y="48" width="406" height="12" fill="#1F5F5B"></rect>
+        <text class="a4cT" x="28" y="53">ON THE LEDGER · PERMANENT</text>
+        <rect x="34" y="76" width="366" height="24" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a4cI" x="44" y="92">the fact that the event happened</text>
+        <rect x="34" y="106" width="366" height="24" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a4cI" x="44" y="122">an opaque reference to the party</text>
+        <rect x="34" y="136" width="366" height="24" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a4cI" x="44" y="152">what a stranger needs in order to recompute the result</text>
+        <text class="a4cS" x="34" y="182">every item here is a decision that cannot be revisited later,</text>
+        <text class="a4cS" x="34" y="200">so the list is kept as short as the product will allow</text>
+
+        <line x1="430" y1="36" x2="430" y2="232" stroke="#9C3D18" stroke-width="1.6" stroke-dasharray="5 4"></line>
+
+        <rect x="440" y="36" width="426" height="196" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="440" y="36" width="426" height="24" rx="10" fill="#123D3A"></rect>
+        <rect x="440" y="48" width="426" height="12" fill="#123D3A"></rect>
+        <text class="a4cT" x="454" y="53">OFF THE LEDGER · STILL CORRECTABLE</text>
+        <rect x="460" y="76" width="386" height="24" rx="4" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a4cI" x="470" y="92">who the party actually is</text>
+        <rect x="460" y="106" width="386" height="24" rx="4" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a4cI" x="470" y="122">the map from an opaque reference back to a person</text>
+        <rect x="460" y="136" width="386" height="24" rx="4" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a4cI" x="470" y="152">the correction registry and every superseding rule</text>
+        <rect x="460" y="166" width="386" height="24" rx="4" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a4cI" x="470" y="182">anything you might one day have to remove</text>
+        <text class="a4cS" x="460" y="210">this side keeps all three verbs from the panels above</text>
+
+        <rect x="14" y="246" width="852" height="52" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="a4cK" x="30" y="270">The only thing that should cross the line is an opaque reference.</text>
+        <text class="a4cM" x="30" y="288">Everything on the right can be corrected, restated or destroyed. Nothing on the left can be, at any price or with any effort.</text>
+
+        <rect x="14" y="314" width="418" height="118" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="314" width="418" height="22" rx="10" fill="#123D3A"></rect>
+        <rect x="14" y="325" width="418" height="11" fill="#123D3A"></rect>
+        <text class="a4cT" x="28" y="330">POSITION 1 · NOTHING ABOUT A PERSON GOES ON</text>
+        <text class="a4cB" x="28" y="358">A reference that can be linked back to somebody is data</text>
+        <text class="a4cB" x="28" y="374">about them, and a permanent record of it is a promise you</text>
+        <text class="a4cB" x="28" y="390">cannot keep. Keep the ledger for events, nothing else.</text>
+        <text class="a4cC" x="28" y="414">Its cost: much of the shared verifiability goes with it.</text>
+
+        <rect x="448" y="314" width="418" height="118" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="448" y="314" width="418" height="22" rx="10" fill="#9C3D18"></rect>
+        <rect x="448" y="325" width="418" height="11" fill="#9C3D18"></rect>
+        <text class="a4cT" x="462" y="330">POSITION 2 · A REFERENCE IS NOT A PERSON</text>
+        <text class="a4cB" x="462" y="358">A reference is meaningless without a table you still hold</text>
+        <text class="a4cB" x="462" y="374">and can destroy, so destroying it is a real remedy and the</text>
+        <text class="a4cB" x="462" y="390">first position gives up the design for a definition.</text>
+        <text class="a4cC" x="462" y="414">Its cost: the remedy depends on nobody else linking it first.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the two positions below are not a beginner and an expert view. They are two defensible readings of the same boundary, and they lead to different products.</figcaption>
+    </figure>
+
+    <div class="wk" id="a4-retract">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The warehouse loader, running in this page. The one correction you do have is on your side of the boundary, and this is what it buys.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="a4-seed">Which run of Larkfield's loader</label>
+        <select class="sql-code" id="a4-seed">
+          <option value="5">Run A</option>
+          <option value="42">Run B</option>
+          <option value="777">Run C</option>
+          <option value="20260922">Run D</option>
+        </select>
+        <label class="sql-label" for="a4-retract-on">Does your loader remove rows whose source blocks were replaced?</label>
+        <select class="sql-code" id="a4-retract-on">
+          <option value="0">No, it appends and never removes</option>
+          <option value="1">Yes, it retracts them</option>
+        </select>
+        <div id="a4-out"></div>
+        <p class="sql-note" id="a4-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="a4-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Your side of the boundary still has a delete<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Switch the loader to retract and the wrong rows go to zero. That is worth pausing on, because it is the clearest demonstration of what the boundary actually buys. The warehouse is yours, so inside it the verbs from part 1 all still work: you can correct, you can restate, you can remove. The record upstream has none of them.</p>
+        <p>So the boundary is not a compliance diagram or a governance artefact. It is the line between the part of your estate where a mistake is recoverable and the part where it is not, and every item you move across it to the permanent side is a capability you are giving up for that item, forever, in exchange for something. Part of the job in a design review is making sure somebody says out loud what the something is.</p>
+        <p>Two honest notes about this box. The upstream event causing rows to be replaced is a chain reorganisation, which is taught properly on the practitioner track and returns in session 6 as a scoping question. And holding rows back until they settle is a separate defence from retracting them, with a different cost; conflating the two is a known trap and session 6 keeps them apart.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Erasure is unavailable, which is not the same as difficult<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Most hard things in a data estate are hard in a way that yields to effort. A field is scattered across nine systems, so you find the nine, you write the deletes, you prove it. Expensive, tedious, done. The reason this one is different in kind is that no amount of effort produces a mechanism, because there is nothing to call and nobody to ask. The record does not have an owner who could remove it if they wanted to.</p>
+        <p>What obligations attach to any of this belongs in <b>learn-gdpr-with-phoebe</b> and is not settled here. What belongs here is the design consequence, which holds regardless of which regime you are under: if a capability might be required of you later and is structurally unavailable on the permanent side, the only place to provide it is on the other side of the boundary, and the only time to arrange that is before the first record is written.</p>
+        <p>In practice that means the lever people reach for is destroying the link rather than the record: keep the map from an opaque reference to a person in a store you control, and destroy the map. Whether that is a remedy or the appearance of one is the argument below, and it is a real argument.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>One camp holds that nothing capable of being linked to a person belongs on a permanent public record, in any form, including an opaque reference. Their argument is that an opaque reference is only opaque against the linking ability available today. The record lasts indefinitely, linking ability improves, and session 2 and session 3 already showed what structure alone gives you without any external table at all. On this view, promising that a reference cannot be resolved is a promise about the future that nobody is able to make, and the design that avoids making it is the only one that stays honest.</p>
+        <p>The other camp holds that this collapses a real distinction and, taken seriously, forbids most of what the arrangement is for. A reference with no table behind it is not information about a person in any usable sense, and holding the table somewhere destructible gives you a genuine remedy with a genuine effect: destroy it and the linkage is gone from your side permanently. They also point out that the first position is not free. Move everything identity-shaped off and what stays on the record is too thin for a third party to check anything, which throws away the one advantage session 1 credited on the plus side and session 5 argues for at full strength.</p>
+        <p>Both camps have shipped systems and both have been right in different projects. The genuinely unresolved part is empirical and about the future: how resolvable a reference becomes over the life of a permanent record, which nobody knows. Notice that the two positions fail differently rather than one failing worse. The first fails quietly, by building something too thin to be worth the machinery, and that failure is survivable. The second fails loudly and late, when a reference that was opaque at design time stops being opaque and the record is still there. Which failure you would rather explain is a legitimate way to choose, and it is not the same answer for every product.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Draw the boundary for something you already run</h2>
+      <span class="tag build">15 min hands on</span>
+    </div>
+    <p class="lede">No code. Six steps on a dataset your team owns and on the live box above, said out loud in the room. The aim is to leave with one boundary drawn on paper and one honest sentence about what it costs on each side.</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Count your last twelve corrections</h4>
+        <p>Pull the actual number of times a row was changed rather than added in the last year. Then imagine every one of them still sitting in the read path as a rule. That is the maintenance load you would have signed up for.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Pick one and rewrite it as an annotation</h4>
+        <p>Take a real correction and express it the only way available here: the wrong record stays, a new record supersedes it, the read path applies the relationship. Write the rule in one line and say who would have to know about it.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Find the reader who would miss it</h4>
+        <p>Name a real person or system that queries your rows in a way you do not control. An export, a partner feed, a notebook, an auditor. That reader is the one who gets the old answer, and naming them is more useful than any policy about it.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Toggle the loader and read both rows</h4>
+        <p>Set the live box to append only and then to retract. Write down both figures. Then say in one sentence why the second one is available to you at all, in terms of which side of the boundary the warehouse is on.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Draw the two columns</h4>
+        <p>For a product you are actually being asked about, list what would go on the permanent side and what would stay off. Be specific about the reference that crosses. Then look at the left column and ask whether a stranger could check anything at all with only that.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Say which of the two positions you hold, and its cost</h4>
+        <p>Pick one of the two panels and defend it for thirty seconds, then state its failure mode without being prompted. Anyone who can only do the first half has a preference rather than a position. Keep the answer for session 6.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> In any design review where something permanent is being proposed, ask what would happen if this particular record turned out to be wrong, and make somebody describe the sequence of events out loud. The answer is either a mechanism or an embarrassed silence, and you learn which in about ten seconds. The silence is the signal that the boundary has not been drawn yet.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Larkfield appends a record that supersedes an earlier wrong one. What has actually changed for a downstream consumer who was already reading those rows?</p>
+      <div class="qopt">A · The wrong value is no longer returned, since the newer record takes precedence automatically</div>
+      <div class="qopt">B · Nothing, unless that consumer's read path applies the superseding relationship, and there is no error or flag if it does not</div>
+      <div class="qopt">C · The consumer receives a warning the next time the affected rows are queried</div>
+      <q class="qwhy">An annotation asserts a relationship. Nothing enforces it. A query written against the raw rows keeps returning the original value, confidently and silently, and when the rows are public you do not control who is running such a query.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Why does the correction logic in the read path never get retired, even years later?</p>
+      <div class="qopt">A · Because teams are reluctant to remove code that somebody else wrote</div>
+      <div class="qopt">B · Because the tooling has no way to express that a rule is no longer needed</div>
+      <div class="qopt">C · Because a rule can only be retired once the wrong row is gone, and the wrong row is never gone</div>
+      <q class="qwhy">The retirement condition simply never arrives. That makes the reporting layer grow with the count of historical errors and never shrink, which is a budget line to plan for rather than a failure of discipline to correct.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Two people in a design review disagree about whether an opaque reference to a customer may go on the permanent record. What is the honest description of that disagreement?</p>
+      <div class="qopt">A · It is unresolved and turns on how resolvable a reference becomes over the life of a permanent record, which nobody knows; the two positions fail differently rather than one being wrong</div>
+      <div class="qopt">B · It is settled, and the reference is safe because it carries no name</div>
+      <div class="qopt">C · It is settled, and no reference of any kind may ever be written</div>
+      <q class="qwhy">One side says a reference is opaque only against today's linking ability and the record outlives that. The other says a reference with no table behind it is not usable information and destroying the table is a real remedy. Both have shipped systems, and the disagreement is about the future rather than about the present.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 5</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty minutes, on the boundary you drew in step 5 and on one thing that is genuinely better here.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Write the design review question down</h4>
+        <p>One sentence you will actually ask next time something permanent is proposed, plus the follow-up for when the answer is vague. Put it somewhere you will see it before the meeting rather than after.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Bring one thing this arrangement does better</h4>
+        <p>Four sessions in, the ledger has cost Larkfield a great deal and given it one thing back. Write down what you think that one thing is, in a sentence, before session 5 argues the credit side at full strength.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Correct becomes annotate</span><span class="note">The wrong record stays, a second record supersedes it, and the relationship holds only if a reader applies it.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The read path carries it forever</span><span class="note">A rule retires when its row is gone, so it never retires. The reporting layer grows with the error count.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Restatement has no mechanism</span><span class="note">Your derived figure can be reissued; the rows it came from cannot be withdrawn and still answer the obvious query.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Erasure is structurally unavailable</span><span class="note">Not hard, unavailable: there is nothing to call and nobody to ask. Obligations themselves live in learn-gdpr-with-phoebe.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The boundary as the real decision</span><span class="note">What goes on, what stays off, and the fact that only an opaque reference should ever cross.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The disagreement, left open</span><span class="note">Nothing person-shaped on the record at all, against a reference being meaningless without a destructible table.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">What a shared ledger genuinely does better</span><span class="note">Asked tonight in the homework. Session 5 makes the case at full strength and then draws its boundary.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Holding rows back against retracting them</span><span class="note">Named tonight as two separate defences. Session 6 keeps them apart as a scoping question.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">What any law or regulation requires</span><span class="note">Not stated here in any form. The obligations live in learn-gdpr-with-phoebe.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Chain mechanics and how a record becomes permanent</span><span class="note">Assumed from learn-blockchain-with-phoebe rather than repeated.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Anything about price, markets or holdings</span><span class="note">Out of scope by design, and nothing here is advice of any kind.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The one sentence.</strong> What you put on is a decision you cannot revisit, so the design question is what deliberately stays off.</div>
+      <div class="cheat-item"><strong>Correct.</strong> Becomes annotate. The wrong row stays readable and the fix is a second row beside it.</div>
+      <div class="cheat-item"><strong>The silent failure.</strong> A raw query returns the old value with no error, no null and no warning.</div>
+      <div class="cheat-item"><strong>Restate.</strong> No mechanism. You can reissue your derivation; you cannot withdraw the rows it came from.</div>
+      <div class="cheat-item"><strong>Erase.</strong> Structurally unavailable, not difficult. The obligations themselves live in learn-gdpr-with-phoebe.</div>
+      <div class="cheat-item"><strong>The read path.</strong> Grows with the count of historical errors and never shrinks. Budget for it.</div>
+      <div class="cheat-item"><strong>The boundary.</strong> Only an opaque reference crosses. Everything correctable stays on your side of the line.</div>
+      <div class="cheat-item"><strong>The open argument.</strong> Nothing person-shaped on at all, against a reference with a destructible table. Unresolved, and they fail differently.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Leader session 4 of 6 · learn-web3-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="a3-numbers-people-are-paid-to-move.html">← Leader session 3 · Numbers people are paid to move</a>
+        <a href="a5-what-actually-gets-better.html">Leader session 5 · What actually gets better →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/w3-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof W3 === "undefined") return;
+  var sel = document.getElementById("a4-seed");
+  var ret = document.getElementById("a4-retract-on");
+  var out = document.getElementById("a4-out");
+  var verdict = document.getElementById("a4-verdict");
+  var self = document.getElementById("a4-self");
+
+  function comma(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+
+  function render() {
+    var s = Number(sel.value);
+    var r = ret.value === "1";
+    var run = W3.runPipeline({ seed: s, finalityLag: 0, retract: r });
+    var pct = (run.wrongRowShare * 100).toFixed(2);
+
+    var html = '<table class="sql-table"><thead><tr><th>What the loader ended up with</th><th>Value</th><th>Recoverable?</th></tr></thead><tbody>';
+    html += "<tr><td>Rows written across the run</td><td>" + comma(run.rowsWritten) + "</td><td>yours, on your side of the line</td></tr>";
+    html += "<tr><td>Rows removed after their source was replaced</td><td>" + comma(run.correctedRows) + "</td><td>" + (r ? "removed cleanly, because you own the table" : "the loader never removes anything") + "</td></tr>";
+    html += '<tr><td>Rows left describing history the source no longer has</td><td><b class="a4-bad">' + comma(run.orphanedRows) + "</b></td><td>" + (run.orphanedRows === 0 ? "none left" : "wrong, and nothing errors") + "</td></tr>";
+    html += "<tr><td>Share of the warehouse that is wrong</td><td>" + pct + "%</td><td>invisible to every check the loader runs</td></tr>";
+    html += "</tbody></table>";
+    out.innerHTML = html;
+
+    verdict.textContent = r
+      ? "Your loader removed " + comma(run.correctedRows) + " rows and the warehouse is clean. You could do that because the warehouse is on your side of the boundary. Nothing equivalent exists for the record upstream, which is the whole of tonight."
+      : "An append-only loader leaves " + comma(run.orphanedRows) + " rows, " + pct
+        + " percent of the warehouse, describing history the source no longer has. No job failed and no check fired.";
+  }
+
+  var t = W3.selfTest();
+  self.textContent = t.ok
+    ? "The generator's five properties pass in this browser, so these are the numbers any correct run gives. Nothing here describes a real network."
+    : "The generator's self test did not pass in this browser, so nothing above should be believed.";
+
+  sel.addEventListener("change", render);
+  ret.addEventListener("change", render);
+  render();
+})();
+</script>
+<style>
+  #a4-retract .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 22rem; }
+  #a4-retract table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+  #a4-retract .a4-bad { color: var(--amber); }
+</style>
+</body>
+</html>

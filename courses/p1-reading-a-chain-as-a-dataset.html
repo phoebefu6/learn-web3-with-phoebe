@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 1 of 10. What the rows are, what the columns are, what the grain is, and what a schema means when it is defined by contracts you do not control and there is no upstream owner to ask.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Reading a chain as a dataset - learn web3 with phoebe">
+<meta property="og:description" content="Practitioner session 1 of 10. The natural grain is the transaction, the natural key is an address, and neither means what your instincts say it means.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-web3-with-phoebe/courses/p1-reading-a-chain-as-a-dataset.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Reading a chain as a dataset - learn web3 with phoebe">
+<meta name="twitter:description" content="No SLA, no contract negotiation, no backfill request. Also no gatekeeper. The same absence produces all four.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 1 · Reading a chain as a dataset - learn web3 with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-web3-with-phoebe</a> / Practitioner session 1 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Web3 with Phoebe · Practitioner session 1 of 10</div>
+    <h1>Reading a chain as a <span class="accent">dataset</span></h1>
+    <p class="sub">Put the ledger down for a moment and start where you always start: what is a row, what are the columns, and what is the grain. The answers are unusual in a specific and learnable way. The natural grain is the transaction, the natural key is an address, the schema belongs to code somebody else deployed, and there is no upstream team to raise a ticket with. Tonight is those four facts, measured on Larkfield's generated month, plus the honest admission that the raw form barely supports analysis at all.</p>
+    <div class="chip-row">
+      <span class="chip level">🔧 Practitioner track</span>
+      <span class="chip audience">Data engineers who would have to build this</span>
+      <span class="chip audience">Analysts who query what it produces</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-17 · Rows, columns, grain</span>
+      <span class="a3" style="flex:3">17-30 · A schema you do not own</span>
+      <span class="a4" style="flex:4">30-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Larkfield hands you a connection string and walks away</h2>
+    </div>
+    <p class="lede">Larkfield ships a product that issues rewards on a public ledger, and somebody has decided the data team should be able to report on it. How the ledger is built, agreed and kept tamper evident is settled and is not tonight's subject; that belongs to <b>learn-blockchain-with-phoebe</b>, which is the prerequisite here. Tonight starts at the point an engineer usually starts, with a source that nobody has profiled yet, and the first honest hour spent working out what is actually in it.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A correct answer to the three questions you ask of any new source, for this one: the row, the columns, the grain. The reason the natural key looks exactly like a customer id and behaves exactly unlike one. A clear-eyed comparison against a normal ingestion, with the losses and the gains kept apart rather than blended. And a measured look at the raw form on Larkfield's month, which will make the case for session 2 better than any argument could.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The three questions, before anything else<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every engineer has the same opening move on an unfamiliar source and it is not reading the documentation. It is: show me one row, tell me what the columns mean, and tell me what one row is one of. Grain first, because every aggregation you will ever write is wrong if the grain is wrong, and a wrong grain does not raise an error. It quietly doubles a count.</p>
+        <p>The move works here too, which is the useful news. What changes is the answers. One row is a transaction. The columns are thin and one of them is opaque until you decode it. The grain has two defensible readings rather than one, and which of them you pick determines whether a whole category of analysis is available to you later. None of that requires new engineering instincts. It requires the ordinary instincts applied to a source that will punish skipping the step.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Larkfield's first analyst skipped the grain question because the source looked simple. They wrote a count over a table that had been exploded to one row per transaction input, reported it as transactions, and were about eleven percent high. Nothing errored, nothing looked odd, and the number was wrong for two months. That is the specific failure the grain question exists to prevent, and it is not a chain problem. It is the oldest problem there is, arriving through a new door.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words that keep coming back<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Address.</strong> The only identifier a row carries. Persistent, and not a person. Part 1 tonight, taken apart in session 3.</li>
+          <li><strong>Entity.</strong> The real party behind one or more addresses. Never present in the data.</li>
+          <li><strong>Transaction.</strong> One record. It names input addresses, output addresses and a payload, and it sits at a known position in a known block.</li>
+          <li><strong>Payload.</strong> The part of the record that is meaningless until something decodes it against the definition the deploying code used. Session 2.</li>
+          <li><strong>Grain.</strong> What one row is one of. Here there are two answers, one per transaction and one per transaction input, and both are used.</li>
+          <li><strong>Co-spend.</strong> A single transaction spending from two addresses at once. Visible only at the input grain. Session 3.</li>
+          <li><strong>Retraction.</strong> The upstream withdrawing history you already loaded and reported. Sessions 6 and 7.</li>
+          <li><strong>Idempotency, late-arriving data, append-only loads.</strong> General pipeline craft, and it all applies. It lives in <b>learn-data-engineering-with-phoebe</b> and is not repeated here.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where the ten sessions go<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Two sessions on getting the data into a usable shape, three on counting things that resist being counted, two on the upstream taking history back, and three on what all of that does to a model, a bench and a review.</p>
+        <ul>
+          <li><strong>1 and 2.</strong> The dataset as it arrives, then the pipeline that turns it into tables anybody can query.</li>
+          <li><strong>3, 4 and 5.</strong> The co-spend heuristic and union-find, how to measure what it got right, and what happens when some of the parties are being paid to be hard to count.</li>
+          <li><strong>6 and 7.</strong> A chain reorganisation landing in a warehouse that already published, and the two separate defences against it.</li>
+          <li><strong>8, 9 and 10.</strong> Training on data where your features and your model are both visible to the people generating the rows, a bench that fooled its own author, and the whole Larkfield estate driven live.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the shape of the data</span>
+      <h2>One row, thin columns, and a grain with two answers</h2>
+      <span class="tag concept">14 min live</span>
+    </div>
+    <p class="lede">Start with the record itself, because everything downstream is a consequence of its shape. A transaction names some input addresses, some output addresses and a payload, and it sits at a position in a block. That is close to all of it. The interesting part is not what is there; it is that the one relationship the record does state is the one relationship everybody ignores, and the column that looks most like a key is the one that is not.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 534" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A data engineer's three questions answered for a chain. The first band shows what one row is: two input address chips labelled p12-0 and p12-3 feeding arrows into a box marked one transaction written into one block, which produces an output chip labelled s2-14. Beside it a note lists the columns the row carries: block height, position in block, input addresses, output addresses and a payload that is opaque until something decodes it. A caption says two addresses authorised one spend, so one party controls both, and that is the only relationship any row here states. The second band shows the same month at two grains. On the left, one row per transaction, with a table whose input column holds an array such as p12-0 and p12-3, and a note that the co-spend sits inside an array cell. On the right, one row per transaction input, where the same transaction id appears on two rows, one per input address, and a note that this is the join the clustering needs. A closing band says the natural key is the address, that it is persistent and passes every schema check, and that it is not one row per party, which is measured in session 3.">
+        <style>
+          .p1aH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .p1aT { font: 800 9.5px Inter, sans-serif; fill: #FFFFFF; letter-spacing: .08em; }
+          .p1aL { font: 800 9px Inter, sans-serif; fill: #54655F; letter-spacing: .11em; }
+          .p1aB { font: 400 11px Inter, sans-serif; fill: #13201E; }
+          .p1aM { font: 400 10px Inter, sans-serif; fill: #54655F; }
+          .p1aC { font: 800 10px Inter, sans-serif; fill: #1F5F5B; }
+          .p1aN { font: 800 11px Inter, sans-serif; fill: #13201E; }
+          .p1aS { font: 400 9.5px Inter, sans-serif; fill: #54655F; }
+          .p1aX { font: 700 10px "SF Mono", Menlo, monospace; fill: #13201E; }
+          .p1aY { font: 700 10px "SF Mono", Menlo, monospace; fill: #9C3D18; }
+          .p1aK { font: 800 11.5px Inter, sans-serif; fill: #9C3D18; }
+        </style>
+        <defs>
+          <marker id="p1aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1F5F5B"></path></marker>
+        </defs>
+
+        <text class="p1aH" x="14" y="20">Show me one row, tell me the columns, tell me what one row is one of</text>
+
+        <!-- BAND A -->
+        <rect x="14" y="34" width="852" height="150" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="34" width="852" height="26" rx="10" fill="#1F5F5B"></rect>
+        <rect x="14" y="47" width="852" height="13" fill="#1F5F5B"></rect>
+        <text class="p1aT" x="30" y="52">QUESTION 1 · WHAT IS ONE ROW</text>
+
+        <text class="p1aL" x="30" y="76">INPUTS</text>
+        <rect x="30" y="82" width="78" height="26" rx="6" fill="#C7E0DC" stroke="#1F5F5B"></rect>
+        <text class="p1aX" x="42" y="99">p12-0</text>
+        <rect x="30" y="122" width="78" height="26" rx="6" fill="#C7E0DC" stroke="#1F5F5B"></rect>
+        <text class="p1aX" x="42" y="139">p12-3</text>
+        <line x1="112" y1="95" x2="164" y2="107" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p1aAr)"></line>
+        <line x1="112" y1="135" x2="164" y2="123" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p1aAr)"></line>
+
+        <rect x="170" y="90" width="140" height="50" rx="8" fill="#EFF7F5" stroke="#1F5F5B"></rect>
+        <text class="p1aC" x="182" y="110">ONE TRANSACTION</text>
+        <text class="p1aS" x="182" y="128">written into one block</text>
+        <line x1="314" y1="115" x2="340" y2="115" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p1aAr)"></line>
+
+        <text class="p1aL" x="346" y="76">OUTPUT</text>
+        <rect x="346" y="102" width="78" height="26" rx="6" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="p1aX" x="358" y="119">s2-14</text>
+
+        <text class="p1aL" x="486" y="76">THE COLUMNS THE ROW CARRIES</text>
+        <text class="p1aB" x="486" y="98">block height, position in the block,</text>
+        <text class="p1aB" x="486" y="116">input addresses, output addresses,</text>
+        <text class="p1aB" x="486" y="134">and a payload that means nothing</text>
+        <text class="p1aB" x="486" y="152">until something decodes it.</text>
+
+        <text class="p1aM" x="30" y="172">Two addresses authorised one spend, so one party controls both. That is the only relationship any row here states.</text>
+
+        <!-- BAND B -->
+        <rect x="14" y="198" width="852" height="196" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="198" width="852" height="26" rx="10" fill="#123D3A"></rect>
+        <rect x="14" y="211" width="852" height="13" fill="#123D3A"></rect>
+        <text class="p1aT" x="30" y="216">QUESTION 2 · WHAT IS THE GRAIN, AND WHY THERE ARE TWO ANSWERS</text>
+
+        <text class="p1aN" x="30" y="248">Grain: one row per transaction</text>
+        <rect x="30" y="258" width="390" height="22" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="p1aL" x="42" y="273">TX</text>
+        <text class="p1aL" x="96" y="273">INPUT ADDRESSES</text>
+        <text class="p1aL" x="300" y="273">OUTPUT</text>
+        <rect x="30" y="280" width="390" height="22" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <text class="p1aX" x="42" y="295">t1</text>
+        <text class="p1aY" x="96" y="295">[p12-0, p12-3]</text>
+        <text class="p1aX" x="300" y="295">s2-14</text>
+        <rect x="30" y="302" width="390" height="22" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <text class="p1aX" x="42" y="317">t2</text>
+        <text class="p1aX" x="96" y="317">[p44-1]</text>
+        <text class="p1aX" x="300" y="317">p7-0</text>
+        <rect x="30" y="324" width="390" height="22" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <text class="p1aX" x="42" y="339">t3</text>
+        <text class="p1aY" x="96" y="339">[p88-0, p88-2]</text>
+        <text class="p1aX" x="300" y="339">s0-31</text>
+        <text class="p1aM" x="30" y="366">The co-spend is real but it is trapped inside an array cell.</text>
+        <text class="p1aM" x="30" y="382">Counting rows here counts transactions, which is usually what you want.</text>
+
+        <text class="p1aN" x="450" y="248">Grain: one row per transaction input</text>
+        <rect x="450" y="258" width="390" height="22" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="p1aL" x="462" y="273">TX</text>
+        <text class="p1aL" x="528" y="273">INPUT ADDRESS</text>
+        <text class="p1aL" x="700" y="273">ROLE</text>
+        <rect x="450" y="280" width="390" height="22" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <text class="p1aY" x="462" y="295">t1</text>
+        <text class="p1aX" x="528" y="295">p12-0</text>
+        <text class="p1aS" x="700" y="295">input 1</text>
+        <rect x="450" y="302" width="390" height="22" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <text class="p1aY" x="462" y="317">t1</text>
+        <text class="p1aX" x="528" y="317">p12-3</text>
+        <text class="p1aS" x="700" y="317">input 2</text>
+        <rect x="450" y="324" width="390" height="22" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <text class="p1aX" x="462" y="339">t2</text>
+        <text class="p1aX" x="528" y="339">p44-1</text>
+        <text class="p1aS" x="700" y="339">input 1</text>
+        <text class="p1aM" x="450" y="366">Two rows now share a transaction id, which is the join session 3 needs.</text>
+        <text class="p1aM" x="450" y="382">Counting rows here counts inputs, and reporting that as transactions is high.</text>
+
+        <!-- CLOSING -->
+        <rect x="14" y="414" width="852" height="96" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p1aK" x="30" y="438">Question 3, the key: every row names an address, and an address passes for a key in every mechanical sense.</text>
+        <text class="p1aM" x="30" y="460">It is stable, it is unique, it never goes null, and it will satisfy any constraint you put on it. It simply is not one value per party. One</text>
+        <text class="p1aM" x="30" y="478">person routinely holds several and one party can hold sixty on purpose, and no external table exists that would tell them apart.</text>
+        <text class="p1aM" x="30" y="496">Session 3 runs the standard method for closing that gap and session 4 measures how far it gets.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the grain choice is not cosmetic. One of the two makes the co-spend queryable and the other buries it in an array.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What one row is, and the relationship it does state<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The record is thinner than most sources you will have ingested. There is no event name you did not have to derive, no user column, no timestamp you can trust to mean what a product timestamp means, and no free-text field to profile. In exchange there is total completeness: nothing was sampled, nothing was dropped by a collector, and no agent failed to fire. That combination is rare and it changes where the risk sits. The risk is not missing rows. It is misreading the rows you have.</p>
+        <p>The one relationship a record does state is the one worth noticing on day one. When a transaction draws on two input addresses, whoever built that transaction had to be able to authorise both. That is a fact about control, stated by the structure of the record rather than inferred from behaviour, and it is the only such fact in the whole dataset. Most teams skate past it because it looks like plumbing. It is the entire basis of every entity count anyone will ever ask you for.</p>
+        <p>Everything else you might want about a party - who they are, where they are, what they bought, whether they came back - is not thin, it is absent. There is no column with nulls in it. There is no column.</p>
+      </div>
+    </details>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The grain question has two correct answers<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>One row per transaction is the natural grain and it is what most people mean when they say a chain is a list of transactions. It is the right grain for counting activity, for time series, for anything where the unit of interest is an event. It has one property worth writing on a wall: the input addresses are a collection inside a single row, so the co-spend relationship exists in your table but is not joinable.</p>
+        <p>One row per transaction input is the exploded grain. The same transaction id now appears on several rows, one per input address, and suddenly the co-spend is a self join rather than an array operation. That is the shape session 3 needs. It is also the shape that produces a wrong transaction count the first time somebody writes <span class="mono">count(*)</span> against it, because the row count is now the input count.</p>
+        <p>Keep both. Neither is a compromise and neither replaces the other. The failure is not choosing wrongly, it is choosing silently, so that six months later nobody in the room can say which grain the table downstream of them is at. Write it into the table name if you have to.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The key that behaves like a key and is not one<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>An address is the most key-like thing in the dataset. It is stable over time, it is unique as a string, it never arrives null, it joins cleanly, and every profiling tool you point at it will report a well behaved high-cardinality identifier. A uniqueness test on it passes. A referential integrity test on it passes. Nothing you can automate will tell you anything is wrong.</p>
+        <p>What is wrong is the cardinality of the thing behind it. On Larkfield's generated month there are about 1,000 addresses and 304 real parties, and no column, table, vendor or request will move you from the first number to the second. That is a 3.2 times error sitting inside a column that passes every check you own, which is a genuinely unusual failure mode and the reason it survives so long in real reporting.</p>
+        <p>Sessions 3, 4 and 5 are the response to this. Tonight the only obligation is to stop reading the column as an identity and start reading it as what it is: a handle on a spending capability, one party may hold many.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Profiling a source with no owner to correct you<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Standard profiling still works and you should still do it: cardinality per column, null rates, value distributions, the widest and narrowest records, the tails. Point <b>ydata-profiling</b> or whatever you normally reach for at a month of it and read the report the way you always would. The craft does not change.</p>
+        <p>What changes is the follow-up. Normally a surprise in a profile becomes a question to the owning team, and the answer is either "yes that is a bug" or "no, here is the business reason". Here the surprise is the answer. If the widest transaction has two inputs and you expected more, that is simply what the source does, and there is nobody to confirm it and nobody to change it. Your profile is not a draft to be validated. It is the specification, and you wrote it by looking.</p>
+        <p>The practical consequence is to profile more often and to keep the profiles. A distributional shift here is not a data quality incident that somebody will explain to you; it is the only warning you will get that the thing producing the rows has changed behaviour.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the schema and the ingestion</span>
+      <h2>A schema you do not own, and nobody to raise a ticket with</h2>
+      <span class="tag concept">13 min live</span>
+    </div>
+    <p class="lede">Now the part that feels strangest to an engineer who has spent a career negotiating with upstreams. There is no upstream to negotiate with. Not an unresponsive one, not a slow one, not one behind three layers of ticketing. There is nobody. Four things you normally rely on are missing, and it is worth being precise about which of the four is a loss, because two of them are not.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 534" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The same four-part ingestion drawn twice. The upper row, a pipeline you negotiated: a source system owned by a team with a name, feeding a contract and service level agreement box with agreed columns and agreed lateness, feeding your loader which decodes nothing because the data is already typed, feeding a warehouse. A return path runs from the warehouse back to the source system, labelled you can ask: fix a row, explain a change, send the backfill. The lower row, the same four parts on a public ledger: the ledger with no owner and nobody to email, then a dashed box marked no contract because the schema is whatever a deployed contract chose, then your indexer which has to decode the payload itself, then the warehouse. The return path is faded and struck through with an amber cross, and two notes say there is nothing to ask and nobody to ask it of, and equally no request to make because there is no gatekeeper and no scope to be granted. A closing band says two of the four absences are a loss and two are a gain, and they are the same missing thing.">
+        <style>
+          .p1bH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .p1bT { font: 800 9.5px Inter, sans-serif; fill: #FFFFFF; letter-spacing: .07em; }
+          .p1bL { font: 800 10px Inter, sans-serif; fill: #54655F; letter-spacing: .12em; }
+          .p1bB { font: 400 10.5px Inter, sans-serif; fill: #13201E; }
+          .p1bS { font: 400 9.5px Inter, sans-serif; fill: #54655F; }
+          .p1bC { font: 800 10px Inter, sans-serif; fill: #1F5F5B; }
+          .p1bA { font: 800 10px Inter, sans-serif; fill: #9C3D18; }
+          .p1bM { font: 400 10px Inter, sans-serif; fill: #54655F; }
+          .p1bK { font: 800 11.5px Inter, sans-serif; fill: #1F5F5B; }
+        </style>
+        <defs>
+          <marker id="p1bArI" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1F5F5B"></path></marker>
+          <marker id="p1bArF" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#CFDEDA"></path></marker>
+        </defs>
+
+        <text class="p1bH" x="14" y="20">The same four parts, drawn twice. Only the upstream owner was removed.</text>
+        <text class="p1bL" x="14" y="44">A PIPELINE YOU NEGOTIATED</text>
+
+        <rect x="14" y="56" width="170" height="76" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="56" width="170" height="24" rx="10" fill="#1F5F5B"></rect>
+        <rect x="14" y="68" width="170" height="12" fill="#1F5F5B"></rect>
+        <text class="p1bT" x="26" y="73">SOURCE SYSTEM</text>
+        <text class="p1bB" x="26" y="100">Owned by a team</text>
+        <text class="p1bB" x="26" y="118">with a name.</text>
+        <line x1="188" y1="94" x2="212" y2="94" stroke="#1F5F5B" stroke-width="1.8" marker-end="url(#p1bArI)"></line>
+
+        <rect x="218" y="56" width="150" height="76" rx="10" fill="#EFF7F5" stroke="#1F5F5B"></rect>
+        <text class="p1bC" x="230" y="80">CONTRACT + SLA</text>
+        <text class="p1bS" x="230" y="102">Agreed columns,</text>
+        <text class="p1bS" x="230" y="120">agreed lateness.</text>
+        <line x1="372" y1="94" x2="396" y2="94" stroke="#1F5F5B" stroke-width="1.8" marker-end="url(#p1bArI)"></line>
+
+        <rect x="402" y="56" width="150" height="76" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="402" y="56" width="150" height="24" rx="10" fill="#1F5F5B"></rect>
+        <rect x="402" y="68" width="150" height="12" fill="#1F5F5B"></rect>
+        <text class="p1bT" x="414" y="73">YOUR LOADER</text>
+        <text class="p1bB" x="414" y="100">Decodes nothing.</text>
+        <text class="p1bB" x="414" y="118">It arrives typed.</text>
+        <line x1="556" y1="94" x2="580" y2="94" stroke="#1F5F5B" stroke-width="1.8" marker-end="url(#p1bArI)"></line>
+
+        <rect x="586" y="56" width="150" height="76" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="586" y="56" width="150" height="24" rx="10" fill="#1F5F5B"></rect>
+        <rect x="586" y="68" width="150" height="12" fill="#1F5F5B"></rect>
+        <text class="p1bT" x="598" y="73">WAREHOUSE</text>
+        <text class="p1bB" x="598" y="100">Reported from,</text>
+        <text class="p1bB" x="598" y="118">and restated.</text>
+
+        <path d="M 661 132 L 661 162 L 99 162 L 99 136" fill="none" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p1bArI)"></path>
+        <text class="p1bC" x="240" y="184">You can ask.</text>
+        <text class="p1bM" x="310" y="184">Fix a row, explain a change, send me the backfill, widen my access.</text>
+
+        <text class="p1bL" x="14" y="230">THE SAME FOUR PARTS, ON A PUBLIC LEDGER</text>
+
+        <rect x="14" y="242" width="170" height="76" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="242" width="170" height="24" rx="10" fill="#9C3D18"></rect>
+        <rect x="14" y="254" width="170" height="12" fill="#9C3D18"></rect>
+        <text class="p1bT" x="26" y="259">THE LEDGER</text>
+        <text class="p1bB" x="26" y="286">No owner, and no</text>
+        <text class="p1bB" x="26" y="304">one to email.</text>
+        <line x1="188" y1="280" x2="212" y2="280" stroke="#1F5F5B" stroke-width="1.8" marker-end="url(#p1bArI)"></line>
+
+        <rect x="218" y="242" width="150" height="76" rx="10" fill="#FFFFFF" stroke="#9C3D18" stroke-width="1.5" stroke-dasharray="5 4"></rect>
+        <text class="p1bA" x="230" y="266">NO CONTRACT</text>
+        <text class="p1bS" x="230" y="288">The schema is</text>
+        <text class="p1bS" x="230" y="306">whatever was deployed.</text>
+        <line x1="372" y1="280" x2="396" y2="280" stroke="#1F5F5B" stroke-width="1.8" marker-end="url(#p1bArI)"></line>
+
+        <rect x="402" y="242" width="150" height="76" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="402" y="242" width="150" height="24" rx="10" fill="#1F5F5B"></rect>
+        <rect x="402" y="254" width="150" height="12" fill="#1F5F5B"></rect>
+        <text class="p1bT" x="414" y="259">YOUR INDEXER</text>
+        <text class="p1bB" x="414" y="286">Decodes it itself.</text>
+        <text class="p1bB" x="414" y="304">That is session 2.</text>
+        <line x1="556" y1="280" x2="580" y2="280" stroke="#1F5F5B" stroke-width="1.8" marker-end="url(#p1bArI)"></line>
+
+        <rect x="586" y="242" width="150" height="76" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="586" y="242" width="150" height="24" rx="10" fill="#1F5F5B"></rect>
+        <rect x="586" y="254" width="150" height="12" fill="#1F5F5B"></rect>
+        <text class="p1bT" x="598" y="259">WAREHOUSE</text>
+        <text class="p1bB" x="598" y="286">Reported from,</text>
+        <text class="p1bB" x="598" y="304">and not restated.</text>
+
+        <path d="M 661 318 L 661 348 L 99 348 L 99 322" fill="none" stroke="#CFDEDA" stroke-width="1.6" marker-end="url(#p1bArF)"></path>
+        <line x1="366" y1="338" x2="394" y2="358" stroke="#9C3D18" stroke-width="2.4"></line>
+        <line x1="394" y1="338" x2="366" y2="358" stroke="#9C3D18" stroke-width="2.4"></line>
+        <text class="p1bA" x="30" y="382">Nothing to ask, and nobody to ask it of.</text>
+        <text class="p1bM" x="270" y="382">No SLA, no lateness guarantee, no change notice, no backfill request.</text>
+        <text class="p1bC" x="30" y="402">And no request to make.</text>
+        <text class="p1bM" x="180" y="402">No gatekeeper, no grant, no review, and no scope that anyone can narrow later.</text>
+
+        <rect x="14" y="422" width="852" height="92" rx="10" fill="#EFF7F5" stroke="#1F5F5B"></rect>
+        <text class="p1bK" x="30" y="446">Two of these absences are a loss and two are a gain, and every one of them is the same missing thing.</text>
+        <text class="p1bM" x="30" y="468">The owner who would have promised you a schema is the owner who would have decided whether you were allowed to read it. You cannot</text>
+        <text class="p1bM" x="30" y="486">delete the second without deleting the first. Anyone selling you the gain without the cost is selling half a mechanism.</text>
+        <text class="p1bM" x="30" y="504">What replaces the contract is your own decode, held as code, versioned by you. Session 2 is entirely about that step.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the struck return path is the whole session in one mark. Every recovery habit an engineer has runs along that line.</figcaption>
+    </figure>
+
+    <div class="wk" id="p1-shape">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">Larkfield's month, profiled in this page by the same generator every session uses. Change the month and watch which quantities are stable.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="p1-seed">Which month of Larkfield data to profile</label>
+        <select class="sql-code" id="p1-seed">
+          <option value="11">Month A</option>
+          <option value="101">Month B</option>
+          <option value="2024">Month C</option>
+          <option value="7">Month D</option>
+          <option value="55555">Month E</option>
+        </select>
+        <div id="p1-out"></div>
+        <p class="sql-note" id="p1-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="p1-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>No SLA, and no gatekeeper either<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Take the four absences one at a time and price them honestly, because a session that only lists the costs will be dismissed by anyone who has actually enjoyed working on this data, and they are not wrong to enjoy it.</p>
+        <p><strong>No SLA is a real loss.</strong> Nothing promises you that rows arrive within a window, that the shape stays constant, or that anything at all continues. Your alerting cannot be a breach notification because there is no promise to breach. It has to be a distributional check you wrote against a baseline you measured.</p>
+        <p><strong>No contract negotiation is a real loss and a small saving.</strong> You never spend six weeks agreeing a payload with another team. You also never get to ask for a field, and the field you need is frequently not there.</p>
+        <p><strong>No backfill request is a gain wearing the clothes of a loss.</strong> You cannot ask anyone for history, and you do not need to. The whole history is sitting there and you can re-read it whenever you like, as many times as you like, without anybody's sprint capacity. Re-deriving five years of a metric after finding a bug is a week of compute rather than a quarter of politics. Almost nothing in a normal warehouse works this way.</p>
+        <p><strong>No gatekeeper is the biggest gain and the one that gets understated.</strong> There is no access request, no approval, no scoped credential, no quarterly review, and no possibility of your access being narrowed because a team reorganised. The dependency that most often kills an analysis is the one that does not exist here.</p>
+      </div>
+    </details>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The schema is code somebody else deployed<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The payload in a transaction is bytes. What those bytes mean is decided by the definition that the deploying code published, and different deployments publish different definitions for what a business would call the same event. You do not get a schema registry handed to you; you get a decision to make about how to interpret each family of records, and that decision is yours, which means it is also your bug when it is wrong.</p>
+        <p>Then it moves. A new version is deployed with a different definition, and your decode keeps running against the old one. Nothing fails. The rows still parse, or they stop matching and silently fall out of your filter, and either way the first symptom is a metric bending in a direction nobody ordered. There was no deprecation notice because there is no relationship in which a notice could be sent.</p>
+        <p>This is the single most important operational fact in the whole track and it is why the next session is about the indexer rather than about the chain. The decode is not a technical detail sitting under the pipeline. The decode is the pipeline's opinion about what happened, and it is where every disagreement between two teams' numbers turns out to live.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 366" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The distance between what the rows give you and what was asked. On the left, a panel listing what the rows give you: about 1,000 addresses, 4,000 transaction records, input and output addresses, a block position on each, and a payload nothing has decoded. In the middle, a dashed amber panel listing what you can actually run against that: count star runs, count distinct address runs, group by user has no such column, group by country has no such column, and join to a plan table has nothing to join to. On the right, a panel listing what was actually asked: how many people used it, did they come back, which country are they in, and which reward worked. A closing band says the two queries that run answer a question nobody asked, that the distance between the panels is not a gap in the source but the normal condition of raw data, and that the difference is that here nobody else has closed any of it.">
+        <style>
+          .p1cH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .p1cT { font: 800 9.5px Inter, sans-serif; fill: #FFFFFF; letter-spacing: .07em; }
+          .p1cA { font: 800 9.5px Inter, sans-serif; fill: #9C3D18; letter-spacing: .07em; }
+          .p1cB { font: 400 10.5px Inter, sans-serif; fill: #13201E; }
+          .p1cQ { font: 700 10.5px "SF Mono", Menlo, monospace; fill: #13201E; }
+          .p1cV { font: 800 9.5px Inter, sans-serif; fill: #1F5F5B; }
+          .p1cN { font: 800 9.5px Inter, sans-serif; fill: #9C3D18; }
+          .p1cM { font: 400 10px Inter, sans-serif; fill: #54655F; }
+          .p1cK { font: 800 11.5px Inter, sans-serif; fill: #9C3D18; }
+        </style>
+        <defs>
+          <marker id="p1cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1F5F5B"></path></marker>
+        </defs>
+
+        <text class="p1cH" x="14" y="20">Everything the rows hold, everything they support, and everything that was asked</text>
+
+        <rect x="14" y="36" width="250" height="212" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="36" width="250" height="24" rx="10" fill="#123D3A"></rect>
+        <rect x="14" y="48" width="250" height="12" fill="#123D3A"></rect>
+        <text class="p1cT" x="28" y="53">WHAT THE ROWS GIVE YOU</text>
+        <text class="p1cB" x="28" y="86">About 1,000 addresses.</text>
+        <text class="p1cB" x="28" y="110">4,000 transaction records.</text>
+        <text class="p1cB" x="28" y="134">Input and output addresses.</text>
+        <text class="p1cB" x="28" y="158">A block position on each.</text>
+        <text class="p1cB" x="28" y="182">A payload nothing decoded.</text>
+        <text class="p1cM" x="28" y="216">Complete. Nothing sampled,</text>
+        <text class="p1cM" x="28" y="234">nothing dropped by a collector.</text>
+
+        <line x1="268" y1="142" x2="278" y2="142" stroke="#1F5F5B" stroke-width="1.8" marker-end="url(#p1cAr)"></line>
+
+        <rect x="282" y="36" width="316" height="212" rx="10" fill="#FDF3EE" stroke="#9C3D18" stroke-width="1.5" stroke-dasharray="6 4"></rect>
+        <text class="p1cA" x="296" y="60">WHAT YOU CAN ACTUALLY RUN</text>
+        <text class="p1cQ" x="296" y="94">count(*)</text>
+        <text class="p1cV" x="500" y="94">RUNS</text>
+        <text class="p1cQ" x="296" y="128">count(distinct address)</text>
+        <text class="p1cV" x="500" y="128">RUNS</text>
+        <text class="p1cQ" x="296" y="162">group by user</text>
+        <text class="p1cN" x="500" y="162">NO COLUMN</text>
+        <text class="p1cQ" x="296" y="196">group by country</text>
+        <text class="p1cN" x="500" y="196">NO COLUMN</text>
+        <text class="p1cQ" x="296" y="230">join to plan</text>
+        <text class="p1cN" x="500" y="230">NO TABLE</text>
+
+        <line x1="602" y1="142" x2="612" y2="142" stroke="#1F5F5B" stroke-width="1.8" marker-end="url(#p1cAr)"></line>
+
+        <rect x="616" y="36" width="250" height="212" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="616" y="36" width="250" height="24" rx="10" fill="#123D3A"></rect>
+        <rect x="616" y="48" width="250" height="12" fill="#123D3A"></rect>
+        <text class="p1cT" x="630" y="53">WHAT WAS ACTUALLY ASKED</text>
+        <text class="p1cB" x="630" y="86">How many people used it?</text>
+        <text class="p1cB" x="630" y="110">Did any of them come back?</text>
+        <text class="p1cB" x="630" y="134">Which country are they in?</text>
+        <text class="p1cB" x="630" y="158">Which reward actually worked?</text>
+        <text class="p1cM" x="630" y="192">Not one of these is answerable</text>
+        <text class="p1cM" x="630" y="210">from the panel on the left, and</text>
+        <text class="p1cM" x="630" y="228">two of them never will be.</text>
+
+        <rect x="14" y="266" width="852" height="80" rx="10" fill="#EFF7F5" stroke="#1F5F5B"></rect>
+        <text class="p1cK" x="30" y="290">The two queries that run answer a question nobody asked.</text>
+        <text class="p1cM" x="30" y="312">This distance is not a defect in the source. It is the normal condition of raw data anywhere, and closing it is what a pipeline is for.</text>
+        <text class="p1cM" x="30" y="330">The difference here is that no producing team has closed the first two thirds of it already, so the whole distance is yours to cross.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber column is the honest inventory. Two queries run, three cannot be written, and two of those three never will be.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why the raw form is close to useless<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Look back at the live box. The counts are correct, they were computed rather than asserted, and almost none of them answers a question anybody would ask. You can say how many transactions happened and how many addresses appear. You cannot say how many people, which activity was a reward and which was something else, whether anybody came back, or what any of it means in the product's own vocabulary.</p>
+        <p>That is not a criticism of the source and it is not a gap to be complained about. It is the normal condition of raw data everywhere. The difference is the size of the distance and who is expected to close it. On a normal source the producing team has already done the first two thirds of that work before you see a row. Here nobody has done any of it, and the whole of it is yours.</p>
+        <p>Which is the honest case for session 2, so it may as well be said plainly: the thing you are going to build is not a connector. It is an interpretation layer, it will be most of the work, and the numbers it produces will be your numbers rather than the chain's.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>One camp says land the raw records first and keep them forever. Their argument is that your decode is an interpretation and interpretations are wrong, so the only reproducible artefact is the undecoded record, byte for byte, exactly as it was read. Keep that and you can re-derive any table from any point with a corrected decoder, and prove to an auditor that the derivation, not the data, was what changed. Throw it away and every historical figure is hostage to a decoder version you no longer have.</p>
+        <p>The other camp says that is a comforting story that does not survive contact with a real restatement. The raw bytes are only meaningful against the definitions in force at the time they were written, so preserving them without also preserving a complete, versioned map of those definitions preserves nothing but the illusion of reproducibility. And the cost is not theoretical: raw records are large, they are queried by nobody, and the reprocessing run that was supposed to justify them is quietly never scheduled. Better, on this view, to store the decoded rows plus the decoder version that produced them, and to treat a decode change as a schema migration with a proper backfill.</p>
+        <p>Both camps have shipped this. They are not really arguing about storage, they are arguing about which artefact carries the meaning: the bytes or the interpretation. Notice that the second camp's position depends on actually versioning the decoders, which most teams claim to do and few do. Ask the person in front of you which of the two they hold, and then ask them where their decoder versions are stored. The gap between those two answers is the real risk.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Answer the three questions on a source you own</h2>
+      <span class="tag build">15 min hands on</span>
+    </div>
+    <p class="lede">No code tonight. Six steps on a pipeline your own team runs, said out loud in the room. The aim is to find out how much of your current practice is standing on an upstream owner, because that is the part that will not survive the move.</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>State the grain of a table you own</h4>
+        <p>Pick a table your team publishes. Say out loud what one row is one of, without looking at the code. If two people in the room give different answers, you have found tonight's most useful result and it has nothing to do with chains.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Find your exploded twin</h4>
+        <p>Every warehouse has a pair of tables at two grains where one is the other exploded. Name yours. Then say how a new joiner would know which is which, and whether the answer is anything other than asking someone.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Name your upstream owner out loud</h4>
+        <p>Who do you message when a row is wrong? Write the name of an actual person. Then delete the name and say what your last three data incidents would have looked like without them.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Count your ticket-shaped dependencies</h4>
+        <p>How many things in your last month needed somebody else to agree: a backfill, a new field, wider access, a schema explanation. Mark which of those would be unnecessary on a source that is fully readable by everyone, and which would simply be impossible.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Look for a key that is not one entity</h4>
+        <p>Device id, cookie, account, email, phone, session. Find one your reporting treats as a person. Say what its real cardinality per person is, and whether anything in your test suite would notice if it doubled.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the profile you would keep</h4>
+        <p>For the Larkfield month in the live box, write down the three quantities you would baseline and alert on if nobody was ever going to tell you the source had changed. Bring them to session 2 and check them against the pipeline you would build.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When a source has no owner, your profile stops being a draft and becomes the specification. So keep it, date it, and diff it. The question is never "is this value surprising", because there is nobody to be surprised at. The question is "is this value different from the one I measured last month, and did anything in my code change to explain it".</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">An engineer builds one table at the transaction-input grain and reports a monthly transaction count from it. What happens?</p>
+      <div class="qopt">A · The count is correct, because every input belongs to exactly one transaction</div>
+      <div class="qopt">B · The count is high, because a transaction with two inputs contributes two rows, and nothing errors or looks unusual</div>
+      <div class="qopt">C · The count is low, because the exploded grain drops single-input transactions</div>
+      <q class="qwhy">The exploded grain has one row per input, so any transaction that spends from more than one address is counted more than once. There is no error, no null and no failed test. This is the ordinary grain mistake, and it is worth rehearsing precisely because the source looks too simple for it to happen.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">A team runs a full profiling suite over the address column. Uniqueness passes, nulls are zero, cardinality is high and stable. What has the suite established?</p>
+      <div class="qopt">A · That the address column is safe to use as a person identifier</div>
+      <div class="qopt">B · That the address column is a foreign key into some party table that has not been located yet</div>
+      <div class="qopt">C · That the column is well formed, which says nothing about how many parties are behind it, and no automated check available to the team can say anything about that</div>
+      <q class="qwhy">Every mechanical property of a key holds. The property that fails is the one no profiler measures: values per real party. On Larkfield's month that is about 1,000 addresses against 304 parties, a 3.2 times error living inside a column that passes every test you own.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Which of the four missing pieces of a normal ingestion is best described as a gain rather than a loss?</p>
+      <div class="qopt">A · The backfill request, since the entire history is readable at any time without anyone's agreement, so re-deriving a metric is compute rather than negotiation</div>
+      <div class="qopt">B · The SLA, since removing a promise removes the risk of breaching it</div>
+      <div class="qopt">C · The schema contract, since an unowned schema cannot drift</div>
+      <q class="qwhy">No SLA and no contract are straightforward losses. The absent gatekeeper and the absent backfill queue are gains, and they come from exactly the same missing upstream owner as the losses do. An unowned schema drifts more easily than an owned one, not less, because nothing is obliged to announce the change.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 2</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty minutes, on a pipeline you run and on the profile you wrote in step 6.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Trace one field back to its decision</h4>
+        <p>Pick one column in a table you publish and find who decided what it means. Not who populates it, who decided. Write down how you would answer the same question if that person did not exist and never had.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Bring three baselines and one decode question</h4>
+        <p>Your three quantities from step 6, and one thing in the Larkfield rows you would have to interpret rather than read. Session 2 builds the interpretation layer and puts a number on how much two teams can disagree while both being right.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">What one row is</span><span class="note">A transaction: input addresses, output addresses, a position in a block, and a payload nothing has decoded yet.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The grain, and its two correct answers</span><span class="note">One row per transaction, one row per transaction input, and which analysis each one makes possible.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The key that is not a key</span><span class="note">An address passes every mechanical test for an identifier and is not one value per party.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">A schema you do not own</span><span class="note">Defined by deployed code, changeable without notice, and interpreted by your decode rather than handed to you.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Ingestion without an upstream owner</span><span class="note">No SLA and no contract, and equally no backfill queue and no gatekeeper. The same absence produces all four.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The raw form profiled honestly</span><span class="note">Computed counts for a Larkfield month, and the list of business questions none of them answers.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Decode, normalise, enrich, aggregate</span><span class="note">Named tonight as the work the raw form forces on you. Session 2 builds it and says where two teams diverge.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Getting from addresses to parties</span><span class="note">Set up tonight as the gap the key leaves. Session 3 runs the co-spend heuristic and union-find in code.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">An upstream that retracts history</span><span class="note">Named tonight in the vocabulary. Sessions 6 and 7 measure it and design against it.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Hashes, blocks, consensus and chain mechanics</span><span class="note">The prerequisite is learn-blockchain-with-phoebe and it is assumed rather than repeated.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Idempotency, late-arriving data and append-only loads</span><span class="note">General pipeline craft, and it lives in learn-data-engineering-with-phoebe.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Probabilistic record linkage</span><span class="note">Fellegi-Sunter, blocking and string comparison live in learn-entity-resolution-with-phoebe.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Anything to do with price, markets or holdings</span><span class="note">Out of scope by design, and nothing here is advice of any kind.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The row.</strong> A transaction: input addresses, output addresses, a block position, and a payload that means nothing yet.</div>
+      <div class="cheat-item"><strong>The grain.</strong> Two answers. Per transaction for activity, per transaction input for anything about common control.</div>
+      <div class="cheat-item"><strong>The key.</strong> An address passes every uniqueness and null test you own, and is not one value per party.</div>
+      <div class="cheat-item"><strong>The one stated relationship.</strong> Two addresses in one transaction means one party could authorise both. Nothing else in the data says anything about who.</div>
+      <div class="cheat-item"><strong>The schema.</strong> Owned by deployed code, changed without notice, and interpreted by your decode. Your decode, your bug.</div>
+      <div class="cheat-item"><strong>The four absences.</strong> No SLA, no contract, no backfill queue, no gatekeeper. Two losses, two gains, one missing owner.</div>
+      <div class="cheat-item"><strong>The profile is the spec.</strong> Nobody will validate your reading of the source. Measure it, date it, diff it.</div>
+      <div class="cheat-item"><strong>The honest admission.</strong> Raw, this answers almost nothing a business asks. The interpretation layer is the job, and it is session 2.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 1 of 10 · learn-web3-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="../index.html">← All sessions</a>
+        <a href="p2-the-indexer-is-the-product.html">Practitioner session 2 · The indexer is the product →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/w3-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof W3 === "undefined") return;
+  var sel = document.getElementById("p1-seed");
+  var out = document.getElementById("p1-out");
+  var verdict = document.getElementById("p1-verdict");
+  var self = document.getElementById("p1-self");
+
+  function comma(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+
+  function render() {
+    var s = Number(sel.value);
+    var world = W3.makeWorld({ seed: s });
+    var txs = W3.makeTransactions(world, { seed: s + 1 });
+
+    var inputRows = 0, widest = 0, multi = 0, i;
+    var spent = {}, spentCount = 0;
+    for (i = 0; i < txs.length; i++) {
+      var t = txs[i];
+      inputRows += t.length;
+      if (t.length > widest) widest = t.length;
+      if (t.length > 1) multi++;
+      for (var j = 0; j < t.length; j++) {
+        if (!spent[t[j]]) { spent[t[j]] = true; spentCount++; }
+      }
+    }
+
+    var html = '<table class="sql-table"><thead><tr><th>Quantity</th><th>Value</th><th>What it is, and what it is not</th></tr></thead><tbody>';
+    html += "<tr><td>Transaction records in the month</td><td>" + comma(txs.length) + "</td><td>rows at the transaction grain</td></tr>";
+    html += "<tr><td>Rows at the transaction-input grain</td><td>" + comma(inputRows) + "</td><td>the same month, exploded; not a transaction count</td></tr>";
+    html += "<tr><td>Widest transaction, by input count</td><td>" + comma(widest) + "</td><td>measured, not assumed; there is no contract to consult</td></tr>";
+    html += "<tr><td>Transactions with more than one input</td><td>" + comma(multi) + "</td><td>the only rows carrying evidence of common control</td></tr>";
+    html += "<tr><td>Addresses appearing in the month</td><td>" + comma(world.addresses.length) + "</td><td>the natural key, and not one value per party</td></tr>";
+    html += "<tr><td>Addresses that ever spent</td><td>" + comma(spentCount) + "</td><td>a different population, and a different metric</td></tr>";
+    html += '<tr><td>People behind those addresses</td><td><b class="p1-gap">no such column</b></td><td>nothing to join, and nobody to ask for one</td></tr>';
+    html += "</tbody></table>";
+    out.innerHTML = html;
+
+    verdict.textContent = "Two defensible counts of the same month differ by " + comma(inputRows - txs.length)
+      + " rows, purely because of grain, and neither query errors. A third number, " + comma(spentCount)
+      + " addresses that ever spent, is an equally honest answer to a question that sounds identical. Session 2 is where those choices get written down.";
+  }
+
+  var t = W3.selfTest();
+  self.textContent = t.ok
+    ? "The generator's five properties pass in this browser, so these counts are the counts any correct run gives. Nothing here describes a real network."
+    : "The generator's self test did not pass in this browser, so nothing above should be believed.";
+
+  sel.addEventListener("change", render);
+  render();
+})();
+</script>
+<style>
+  #p1-shape .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 14rem; }
+  #p1-shape table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+  #p1-shape .p1-gap { color: var(--amber); }
+</style>
+</body>
+</html>

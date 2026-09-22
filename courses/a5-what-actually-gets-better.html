@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 5 of 6. Four things a shared append-only ledger genuinely does better for a data team: recomputable provenance, a shared history with no keeper, integrity the reader can check, and an audit trail nobody can revise. Then the honest boundary.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="What actually gets better - learn web3 with phoebe">
+<meta property="og:description" content="Leader session 5 of 6. The credit side argued at full strength, and then the boundary: every one of the four is about shared state between parties who do not trust each other.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-web3-with-phoebe/courses/a5-what-actually-gets-better.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="What actually gets better - learn web3 with phoebe">
+<meta name="twitter:description" content="Inside one organisation with a keeper everybody accepts, a database with an audit log does all four more cheaply and can correct a row as well.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 5 · What actually gets better - learn web3 with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-web3-with-phoebe</a> / Leader session 5 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Web3 with Phoebe · Leader session 5 of 6</div>
+    <h1>What actually <span class="accent">gets better</span></h1>
+    <p class="sub">Four sessions of costs earns the credit side a fair hearing, and it deserves one on the merits rather than as a courtesy. There are four things a shared append-only ledger does for a data team that a warehouse cannot do at any price, and each of them is worth having. There is also a boundary around all four, and it is sharper than the enthusiasts admit and narrower than the sceptics think. Tonight is both, at full strength, in that order.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Leader track</span>
+      <span class="chip audience">Anyone who has decided this is all cost</span>
+      <span class="chip audience">Anyone about to approve a consortium project</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · The four</span>
+      <span class="a3" style="flex:3">18-30 · The boundary</span>
+      <span class="a4" style="flex:3">30-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The sentence you wrote down, and the four it was probably one of</h2>
+    </div>
+    <p class="lede">Session 4 asked you to write, in a sentence, the one thing this arrangement does better. Most answers land on some version of trust, which is the right instinct and too vague to do any work. Tonight splits it into four separate properties that are usually blurred together, because they have different costs, they fail in different circumstances, and a project can easily need one of them and none of the other three.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Four genuine advantages stated in terms a data team can act on, with the mechanism drawn for each rather than asserted. The boundary that applies to all four at once, which is that every one of them is about shared state between parties who do not trust each other. A four cell picture of when the machinery is worth its cost and when a database with an audit log wins on every dimension including honesty. And the argument that actually decides most real projects, which is about the parties rather than the technology, left open because it is open.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why "trust" is too coarse to plan with<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Trust gets used to mean at least four different things in the same meeting, and the ambiguity is expensive because the four have different remedies. Knowing where a figure came from is not the same as knowing that a record has not been altered. Being able to check something yourself is not the same as several parties sharing one version of a history. A project can have a hard requirement for exactly one of these and no interest in the rest.</p>
+        <p>Splitting them up also makes it possible to be honest about the cheaper option. For three of the four there is a conventional answer that works well when one condition holds, and naming the condition is more useful than arguing about the technology. That condition turns out to be the same one every time, which is part 2.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Larkfield's partner asked for a ledger and meant one specific thing: they wanted to recompute the reward figures themselves rather than receive them in a monthly file. That is one of the four. The other three were in the proposal because they came in the same box, and two of them were never going to be used.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words that keep coming back<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Provenance.</strong> Where a figure came from and what produced it. The strong version is a derivation a stranger can run, not a document describing one.</li>
+          <li><strong>Recompute.</strong> To arrive at the figure yourself from the same inputs. The difference between this and reading a report is the whole of the first advantage.</li>
+          <li><strong>Shared history.</strong> One sequence of events that several parties read as authoritative, without any of them maintaining it.</li>
+          <li><strong>The keeper.</strong> Whoever holds the copy that counts. In most arrangements there is one, and agreeing who it is can be the hardest part of the deal.</li>
+          <li><strong>Integrity.</strong> Evidence that a record has not been altered since it was written. Checkable by the reader here, asserted by the publisher elsewhere.</li>
+          <li><strong>Audit trail.</strong> A record of what happened and when. The property that matters is whether the party being audited can revise it.</li>
+          <li><strong>Distrusting parties.</strong> Parties whose interests differ enough that none of them will accept another's copy. The condition all four advantages depend on.</li>
+          <li><strong>Trust minimising.</strong> Machinery that reduces how much any party has to take on faith. It is not free and part 2 says what it costs.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the four advantages</span>
+      <h2>Four things a warehouse cannot do, at any price</h2>
+      <span class="tag concept">15 min live</span>
+    </div>
+    <p class="lede">Each of these is a genuine capability and none of them is a matter of degree. In every case the conventional arrangement can get close and then stops at the same place, which is the point where somebody outside has to take somebody inside at their word. That gap is not a quality problem and it does not close with more effort or better tooling.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 552" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Four panels, each split down the middle into how it usually works and how it works on a shared ledger. Panel one, provenance: usually a publisher produces a figure and the reader has to take it; on a shared ledger the rows produce the figure and the reader runs the derivation themselves. Panel two, shared history: usually two parties both connect to a keeper who holds the copy that counts; on a shared ledger three parties connect to one history that none of them owns. Panel three, integrity: usually the publisher stamps we checked it and the reader receives the stamp; on a shared ledger the reader checks the rows without asking anyone. Panel four, the audit trail: usually the keeper of the log has an arrow back into the log and can revise it; on a shared ledger the trail has no such arrow and no party can revise it. A closing band says all four are about shared state between parties who do not trust each other, and that inside one organisation with an accepted keeper a database with an audit log does all of them more cheaply and can correct a row as well.">
+        <style>
+          .a5aH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .a5aT { font: 800 10px Inter, sans-serif; fill: #FFFFFF; }
+          .a5aL { font: 800 8.5px Inter, sans-serif; fill: #54655F; letter-spacing: .12em; }
+          .a5aB { font: 400 11px Inter, sans-serif; fill: #13201E; }
+          .a5aS { font: 400 8.5px Inter, sans-serif; fill: #54655F; }
+          .a5aSd { font: 400 9px Inter, sans-serif; fill: #13201E; }
+          .a5aSw { font: 700 9px Inter, sans-serif; fill: #FFFFFF; }
+          .a5aSb { font: 700 8.5px Inter, sans-serif; fill: #1F5F5B; }
+          .a5aSa { font: 700 8.5px Inter, sans-serif; fill: #9C3D18; }
+          .a5aK { font: 800 11.5px Inter, sans-serif; fill: #9C3D18; }
+          .a5aM { font: 400 11px Inter, sans-serif; fill: #54655F; }
+        </style>
+        <defs>
+          <marker id="a5aArI" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#123D3A"></path></marker>
+          <marker id="a5aArA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9C3D18"></path></marker>
+        </defs>
+
+        <text class="a5aH" x="14" y="20">Four capabilities, each drawn on both sides of the same line.</text>
+
+        <!-- P1 -->
+        <rect x="14" y="44" width="418" height="186" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="44" width="418" height="24" rx="10" fill="#1F5F5B"></rect>
+        <rect x="14" y="56" width="418" height="12" fill="#1F5F5B"></rect>
+        <text class="a5aT" x="28" y="61">1 · PROVENANCE YOU CAN RECOMPUTE</text>
+        <line x1="223" y1="80" x2="223" y2="168" stroke="#DCE9E6" stroke-width="1.2"></line>
+        <text class="a5aL" x="28" y="92">USUALLY</text>
+        <rect x="28" y="100" width="76" height="28" rx="4" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a5aSd" x="38" y="118">publisher</text>
+        <line x1="108" y1="114" x2="130" y2="114" stroke="#123D3A" stroke-width="1.4" marker-end="url(#a5aArI)"></line>
+        <rect x="136" y="100" width="72" height="28" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a5aSd" x="146" y="118">the figure</text>
+        <text class="a5aSa" x="28" y="150">the reader has to take it</text>
+        <text class="a5aL" x="240" y="92">ON A SHARED LEDGER</text>
+        <rect x="240" y="100" width="66" height="28" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a5aSd" x="252" y="118">the rows</text>
+        <line x1="310" y1="114" x2="330" y2="114" stroke="#123D3A" stroke-width="1.4" marker-end="url(#a5aArI)"></line>
+        <rect x="336" y="100" width="82" height="28" rx="4" fill="#1F5F5B"></rect>
+        <text class="a5aSw" x="346" y="118">the reader</text>
+        <text class="a5aSb" x="240" y="150">runs the derivation themselves</text>
+        <text class="a5aB" x="28" y="180">A derivation a stranger can run beats a document</text>
+        <text class="a5aB" x="28" y="197">describing one, and no warehouse offers it.</text>
+
+        <!-- P2 -->
+        <rect x="448" y="44" width="418" height="186" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="448" y="44" width="418" height="24" rx="10" fill="#1F5F5B"></rect>
+        <rect x="448" y="56" width="418" height="12" fill="#1F5F5B"></rect>
+        <text class="a5aT" x="462" y="61">2 · A HISTORY WITH NO KEEPER</text>
+        <line x1="657" y1="80" x2="657" y2="168" stroke="#DCE9E6" stroke-width="1.2"></line>
+        <text class="a5aL" x="462" y="92">USUALLY</text>
+        <rect x="462" y="100" width="56" height="22" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a5aSd" x="472" y="115">party A</text>
+        <rect x="462" y="128" width="56" height="22" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a5aSd" x="472" y="143">party B</text>
+        <line x1="522" y1="111" x2="558" y2="120" stroke="#123D3A" stroke-width="1.4" marker-end="url(#a5aArI)"></line>
+        <line x1="522" y1="139" x2="558" y2="130" stroke="#123D3A" stroke-width="1.4" marker-end="url(#a5aArI)"></line>
+        <rect x="564" y="111" width="78" height="28" rx="4" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a5aSd" x="574" y="129">the keeper</text>
+        <text class="a5aSa" x="462" y="164">somebody has to own the copy that counts</text>
+        <text class="a5aL" x="674" y="92">ON A SHARED LEDGER</text>
+        <rect x="726" y="108" width="82" height="34" rx="4" fill="#1F5F5B"></rect>
+        <text class="a5aSw" x="736" y="129">one history</text>
+        <circle cx="690" cy="102" r="9" fill="#54655F"></circle>
+        <circle cx="690" cy="148" r="9" fill="#54655F"></circle>
+        <circle cx="838" cy="125" r="9" fill="#54655F"></circle>
+        <line x1="700" y1="106" x2="722" y2="114" stroke="#123D3A" stroke-width="1.4"></line>
+        <line x1="700" y1="144" x2="722" y2="136" stroke="#123D3A" stroke-width="1.4"></line>
+        <line x1="828" y1="125" x2="812" y2="125" stroke="#123D3A" stroke-width="1.4"></line>
+        <text class="a5aSb" x="674" y="164">nobody owns it, so nobody has to be agreed on</text>
+        <text class="a5aB" x="462" y="192">Agreeing who keeps the record is often the hardest</text>
+        <text class="a5aB" x="462" y="209">clause in the deal. Here there is no such clause.</text>
+
+        <!-- P3 -->
+        <rect x="14" y="246" width="418" height="186" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="246" width="418" height="24" rx="10" fill="#1F5F5B"></rect>
+        <rect x="14" y="258" width="418" height="12" fill="#1F5F5B"></rect>
+        <text class="a5aT" x="28" y="263">3 · INTEGRITY THE READER CHECKS</text>
+        <line x1="223" y1="282" x2="223" y2="370" stroke="#DCE9E6" stroke-width="1.2"></line>
+        <text class="a5aL" x="28" y="294">USUALLY</text>
+        <rect x="28" y="302" width="108" height="28" rx="4" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a5aSd" x="38" y="320">we checked it</text>
+        <line x1="140" y1="316" x2="164" y2="316" stroke="#123D3A" stroke-width="1.4" marker-end="url(#a5aArI)"></line>
+        <circle cx="186" cy="316" r="11" fill="#54655F"></circle>
+        <text class="a5aSa" x="28" y="352">an assertion, with nothing behind it to test</text>
+        <text class="a5aL" x="240" y="294">ON A SHARED LEDGER</text>
+        <rect x="240" y="302" width="88" height="28" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a5aSd" x="252" y="320">the rows</text>
+        <line x1="332" y1="316" x2="356" y2="316" stroke="#123D3A" stroke-width="1.4" marker-end="url(#a5aArI)"></line>
+        <circle cx="378" cy="316" r="11" fill="#1F5F5B"></circle>
+        <path d="M 396 316 L 402 322 L 414 306" fill="none" stroke="#1F5F5B" stroke-width="2.2"></path>
+        <text class="a5aSb" x="240" y="352">the reader verifies it without asking anyone</text>
+        <text class="a5aB" x="28" y="384">Checkable by whoever doubts it, rather than promised</text>
+        <text class="a5aB" x="28" y="401">by whoever would be embarrassed by the answer.</text>
+
+        <!-- P4 -->
+        <rect x="448" y="246" width="418" height="186" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="448" y="246" width="418" height="24" rx="10" fill="#1F5F5B"></rect>
+        <rect x="448" y="258" width="418" height="12" fill="#1F5F5B"></rect>
+        <text class="a5aT" x="462" y="263">4 · A TRAIL NOBODY CAN REVISE</text>
+        <line x1="657" y1="282" x2="657" y2="370" stroke="#DCE9E6" stroke-width="1.2"></line>
+        <text class="a5aL" x="462" y="294">USUALLY</text>
+        <rect x="462" y="300" width="130" height="42" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <line x1="472" y1="312" x2="582" y2="312" stroke="#8FBDB8" stroke-width="3" stroke-linecap="round"></line>
+        <line x1="472" y1="321" x2="582" y2="321" stroke="#8FBDB8" stroke-width="3" stroke-linecap="round"></line>
+        <line x1="472" y1="330" x2="582" y2="330" stroke="#8FBDB8" stroke-width="3" stroke-linecap="round"></line>
+        <circle cx="624" cy="321" r="10" fill="#9C3D18"></circle>
+        <line x1="612" y1="321" x2="598" y2="321" stroke="#9C3D18" stroke-width="1.6" marker-end="url(#a5aArA)"></line>
+        <text class="a5aSa" x="462" y="364">whoever keeps the log can revise the log</text>
+        <text class="a5aL" x="674" y="294">ON A SHARED LEDGER</text>
+        <rect x="674" y="300" width="130" height="42" rx="4" fill="#EFF7F5" stroke="#1F5F5B"></rect>
+        <line x1="684" y1="312" x2="794" y2="312" stroke="#1F5F5B" stroke-width="3" stroke-linecap="round"></line>
+        <line x1="684" y1="321" x2="794" y2="321" stroke="#1F5F5B" stroke-width="3" stroke-linecap="round"></line>
+        <line x1="684" y1="330" x2="794" y2="330" stroke="#1F5F5B" stroke-width="3" stroke-linecap="round"></line>
+        <circle cx="836" cy="321" r="10" fill="#54655F"></circle>
+        <line x1="824" y1="321" x2="812" y2="321" stroke="#CFDEDA" stroke-width="1.6"></line>
+        <line x1="814" y1="314" x2="826" y2="328" stroke="#9C3D18" stroke-width="2"></line>
+        <line x1="814" y1="328" x2="826" y2="314" stroke="#9C3D18" stroke-width="2"></line>
+        <text class="a5aSb" x="674" y="364">no party can revise it, including you</text>
+        <text class="a5aB" x="462" y="390">The property that matters is whether the party being</text>
+        <text class="a5aB" x="462" y="407">audited can quietly edit the evidence. Here, no.</text>
+
+        <rect x="14" y="452" width="852" height="88" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="a5aK" x="30" y="478">All four are about shared state between parties who do not trust each other. That is the boundary, and it is a hard one.</text>
+        <text class="a5aM" x="30" y="500">Inside one organisation with a keeper everybody accepts, a database with an audit log delivers every one of these more cheaply,</text>
+        <text class="a5aM" x="30" y="518">and it can also correct a row. What the machinery buys is tolerance of distrust, and sessions 1 to 4 are what it costs.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - on the left of every divider somebody outside has to take somebody inside at their word. That gap does not close with better tooling, which is why these four are capabilities rather than quality levels.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Provenance a third party recomputes<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every serious data function already does provenance. Lineage is captured, transformations are documented, a figure can be traced back through the pipeline to its inputs. That work is real and it is valuable, and it produces something with a hard limit: an account of the derivation, offered by the party whose figure it is.</p>
+        <p>The strong version is different in kind rather than in quality. When the inputs are readable by anyone and the derivation is published, a doubter does not read your account of how the figure was produced. They produce it. If they get your number, the question is settled without your involvement; if they do not, you have a discrepancy with two candidate causes, both of which are findable.</p>
+        <p>Notice what that removes. It removes the escalation, it removes the audit engagement, it removes the meeting in which two teams compare two numbers neither can inspect, and it removes the situation where the party with the better relationship wins the argument. Those are not small operational costs, and a warehouse cannot remove them at any budget, because the bottleneck is not data quality. It is that the other party has to be granted access and then has to believe the grant was complete.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>A shared history, with nobody holding the pen<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>This is the advantage that sounds most abstract and is most often the actual reason a project exists. When several parties need one version of a sequence of events, somebody normally maintains it, and that somebody has to be agreed. Negotiating who keeps the record can take longer than building anything, because the keeper gets to resolve every ambiguity, sees everybody's data, and cannot be removed without unwinding the arrangement.</p>
+        <p>The usual alternative is worse rather than better: every party keeps its own copy, the copies disagree at the edges, and a reconciliation function exists permanently to argue about the differences. Most people reading this have staffed one. The cost is continuous and it is mostly paid in senior time.</p>
+        <p>A shared append-only history removes the role rather than assigning it well. There is no keeper to appoint, no keeper to audit, and no keeper to renegotiate when one party is acquired by another. That is a structural answer to a political problem, which is rare enough to be worth a lot when the problem is genuinely political.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Integrity checked rather than asserted, and a trail nobody can revise<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The third and fourth run together and are usually confused with each other. Integrity is about whether a record you are reading now is the record that was written. An audit trail is about whether the sequence of what happened can be reconstructed later. A conventional system can do both to a high standard, and in both cases the assurance ultimately rests on the party operating the system.</p>
+        <p>The honest way to put the difference is this: a well run audit log is excellent evidence against accident and mediocre evidence against the log's own operator. That is not a criticism of anyone's controls. It is a structural fact about who holds the write access, and every auditor knows it, which is why audit is built on sampling and corroboration rather than on reading the log.</p>
+        <p>Here the operator cannot revise it either, and neither can you, which is exactly the property sessions 1 to 4 spent so long complaining about. That is the trade in its clearest form. The thing that makes correction impossible is the same thing that makes quiet revision impossible, and you do not get to buy one without the other.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What a warehouse gets close to, and where it stops<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>It is worth being precise about the near misses, because a good engineer will offer each of them and each is a reasonable answer under the right condition. For provenance, a conventional system can publish its transformations and grant read access to its inputs, which gets a long way. It stops at completeness: the outside party can recompute from what they were given and cannot establish that what they were given was everything.</p>
+        <p>For a shared history, a conventional system can appoint a neutral keeper, and a well chosen one works for years. It stops when the neutrality is challenged, which tends to happen at exactly the moment the record matters most, and there is no way to settle the challenge from inside the arrangement.</p>
+        <p>For integrity and the audit trail, a conventional system can sign records, write to storage that resists modification, and ship the log to a third party. Each of these raises the cost of quiet revision substantially. All of them are configured, operated and can be reconfigured by the same party whose behaviour is in question. That is the stopping point in all four cases and it is always the same one: somewhere in the chain, an outsider is relying on an insider's good faith. Part 2 is about whether that reliance is actually a problem in your situation, because very often it is not.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the boundary</span>
+      <h2>The boundary: shared state, distrusting parties, and nothing else</h2>
+      <span class="tag concept">12 min live</span>
+    </div>
+    <p class="lede">The four advantages have one condition in common and it is not a technical one. Every single one of them is about state that several parties share, where no party will accept another's copy. Take away either half of that and the case collapses quickly, in a direction that is uncomfortable for anyone who has already chosen.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 418" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A two by two grid. The columns are parties mostly trust each other and parties do not trust each other. The rows are state is shared between parties and state is inside one organisation. The top left cell is marked the contested cell and says a database with an agreed keeper and an audit log does all four more cheaply and can still correct a row. The top right cell is marked where it earns its cost and says no party can be the keeper because agreeing on one is the thing that cannot be done. Both bottom cells are marked not a candidate: inside one organisation with trust a plain database applies, and inside one organisation without trust it is an access control and separation of duties problem. A closing band says only one of the four cells is a case for the machinery, that this cell is not small, and that most proposals actually sit in the top left.">
+        <style>
+          .a5bH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .a5bC { font: 800 9.5px Inter, sans-serif; fill: #13201E; letter-spacing: .08em; }
+          .a5bR { font: 800 9px Inter, sans-serif; fill: #54655F; letter-spacing: .1em; }
+          .a5bTg { font: 800 9px Inter, sans-serif; fill: #9C3D18; letter-spacing: .08em; }
+          .a5bTi { font: 800 9px Inter, sans-serif; fill: #1F5F5B; letter-spacing: .08em; }
+          .a5bTn { font: 800 9px Inter, sans-serif; fill: #54655F; letter-spacing: .08em; }
+          .a5bB { font: 400 10px Inter, sans-serif; fill: #13201E; }
+          .a5bK { font: 800 11.5px Inter, sans-serif; fill: #9C3D18; }
+          .a5bM { font: 400 11px Inter, sans-serif; fill: #54655F; }
+        </style>
+
+        <text class="a5bH" x="14" y="20">Two questions decide it, and neither of them is about technology.</text>
+
+        <text class="a5bC" x="374" y="58" text-anchor="middle">PARTIES MOSTLY TRUST EACH OTHER</text>
+        <text class="a5bC" x="702" y="58" text-anchor="middle">PARTIES DO NOT TRUST EACH OTHER</text>
+
+        <rect x="210" y="70" width="328" height="112" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="a5bTg" x="226" y="94">THE CONTESTED CELL</text>
+        <text class="a5bB" x="226" y="118">A database with an agreed keeper and an audit</text>
+        <text class="a5bB" x="226" y="134">log does all four more cheaply, and it can still</text>
+        <text class="a5bB" x="226" y="150">correct a row. Whether the machinery is worth</text>
+        <text class="a5bB" x="226" y="166">paying for here is the argument below.</text>
+
+        <rect x="538" y="70" width="328" height="112" fill="#EFF7F5" stroke="#1F5F5B"></rect>
+        <text class="a5bTi" x="554" y="94">WHERE IT EARNS ITS COST</text>
+        <text class="a5bB" x="554" y="118">No party can be the keeper, because agreeing</text>
+        <text class="a5bB" x="554" y="134">on one is the thing that cannot be done. A</text>
+        <text class="a5bB" x="554" y="150">history nobody owns is the only shape left, and</text>
+        <text class="a5bB" x="554" y="166">the four properties come with it.</text>
+
+        <rect x="210" y="182" width="328" height="112" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <text class="a5bTn" x="226" y="206">NOT A CANDIDATE</text>
+        <text class="a5bB" x="226" y="230">A database. None of the costs in sessions 1 to 4</text>
+        <text class="a5bB" x="226" y="246">buys anything here, because there is nobody</text>
+        <text class="a5bB" x="226" y="262">outside who has to be convinced of anything.</text>
+
+        <rect x="538" y="182" width="328" height="112" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <text class="a5bTn" x="554" y="206">NOT A CANDIDATE EITHER</text>
+        <text class="a5bB" x="554" y="230">Distrust inside one organisation is an access</text>
+        <text class="a5bB" x="554" y="246">control and separation of duties problem, and</text>
+        <text class="a5bB" x="554" y="262">that has its own well understood answers.</text>
+
+        <text class="a5bR" x="14" y="118">STATE IS SHARED</text>
+        <text class="a5bR" x="14" y="134">BETWEEN PARTIES</text>
+        <text class="a5bR" x="14" y="230">STATE IS INSIDE</text>
+        <text class="a5bR" x="14" y="246">ONE ORGANISATION</text>
+
+        <rect x="14" y="314" width="852" height="88" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="a5bK" x="30" y="340">One cell of the four is a case for the machinery, and it is the one with no keeper anybody would accept.</text>
+        <text class="a5bM" x="30" y="362">That is not a small cell. Settlement between competitors, shared registries, consortium reporting and multi-party supply records</text>
+        <text class="a5bM" x="30" y="380">all sit in it. It is also not most proposals, and most proposals sit in the top left, which is why the argument below decides things.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber cell is not the wrong answer. It is the cell where two reasonable people look at the same facts and choose differently, and where most real decisions are actually made.</figcaption>
+    </figure>
+
+    <div class="wk" id="a5-recompute">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The first advantage, in this page. Larkfield publishes a figure; you recompute it from the same generator rather than taking it.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="a5-seed">Month of Larkfield data</label>
+        <select class="sql-code" id="a5-seed">
+          <option value="11">Month A</option>
+          <option value="101">Month B</option>
+          <option value="2024">Month C</option>
+          <option value="7">Month D</option>
+          <option value="55555">Month E</option>
+        </select>
+        <label class="sql-label" for="a5-claim">What Larkfield published this month</label>
+        <select class="sql-code" id="a5-claim">
+          <option value="ok">The clustered ceiling, with its method stated</option>
+          <option value="inflated">The raw address count, described as users</option>
+        </select>
+        <div id="a5-out"></div>
+        <p class="sql-note" id="a5-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="a5-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>You just did the thing that cannot be bought<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Switch the published figure to the inflated version and read the last row. You did not escalate, you did not request access, you did not ask anyone to confirm anything, and you did not have to be trusted by Larkfield in order to do it. You ran the derivation and compared. That is the whole of the first advantage and it fits in one interaction.</p>
+        <p>Notice also what it did not do. Catching the discrepancy does not tell you who was at fault, whether it was a definitional difference or a mistake, or what the right figure is. It tells you that two numbers do not agree and that both of them can be produced by anybody. What follows is still a conversation, and it is a conversation between two parties who can both see the evidence, which is a substantially different conversation from the one that happens when only one of them can.</p>
+        <p>The honest caveat is the one from part 1 and it applies here too. This works because the inputs and the method are both available. If Larkfield published the figure and kept the method to itself, as session 3's second camp would have it do, you would be back to taking the number. The advantage is not a property of the ledger alone; it is a property of the ledger plus a published derivation, and the second half is a choice somebody makes every time.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Inside one building, a database wins on every count<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>This is the part that gets left out of the enthusiastic version and it needs saying plainly. Where the state lives inside one organisation, and there is a keeper everybody accepts, a relational database with a well designed audit log gives you provenance, a single history, integrity checking and a trail. It gives them faster, cheaper, with tooling everybody already knows and staff you can already hire.</p>
+        <p>It also gives you something the ledger cannot: the ability to fix a row. Everything in session 4 is a cost you would simply not be paying. No annotation-only correction path, no read path accumulating rules forever, no restatement with nothing to restate, no structurally unavailable erasure.</p>
+        <p>So the comparison is not close in that setting, and a data leader who chooses the ledger there has usually done so for a reason that is not about the four advantages. Being able to say that out loud, with the four advantages in hand rather than as a general scepticism, is what makes the objection land with people who have already fallen in love with the idea.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The live argument is about the contested cell: shared state between parties who mostly do trust each other, which is where a large share of real proposals actually sit. One camp says the machinery is not worth paying for there, and their case is concrete. Trust that exists is cheap to use and expensive to replace with mathematics. You would be buying the four advantages and paying for them in the three costs of sessions 1 to 4, permanently, to solve a problem the parties are currently solving by picking up the phone. They point at the long record of consortium projects that were technically finished and never used, where the quieter option kept winning because it was quicker for everyone involved.</p>
+        <p>The other camp says trust is a snapshot and the arrangement outlives it. Parties who trust each other today are one acquisition, one change of management or one bad quarter away from not doing so, and the machinery is much harder to retrofit than to start with, because the history you would want to have been keeping is the history you did not keep. They also make a sharper point about the phrase "accepted keeper": in most arrangements the keeper is the largest party, and the smaller ones accept it because the alternative is not being in the arrangement. Calling that trust flatters it. On this view, adopting the machinery while relations are good is buying an option on their deterioration, at a price you can only pay in advance.</p>
+        <p>Both camps are staffed by people who have run these programmes and both can name projects that vindicate them. The disagreement is not resolvable from the outside, because it turns on a forecast about a specific set of relationships over a specific horizon, which is exactly the thing nobody has data on. What can be said is which way each side fails. The first fails by being caught without a shared record on the day the relationship changes, which is recoverable and slow and humiliating. The second fails by carrying sessions 1 to 4 as a permanent cost for a risk that never materialises, which is survivable and quiet and never shows up as a failure at all. Leaders systematically under-count the second because nothing ever goes wrong, and that asymmetry is worth naming before you choose.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Put a real project in one of the four cells</h2>
+      <span class="tag build">15 min hands on</span>
+    </div>
+    <p class="lede">No code. Six steps on a project you are actually being asked about, said out loud in the room. The aim is to leave with one project in one cell, and with the specific advantage it needs named rather than all four assumed.</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Name the four without notes</h4>
+        <p>Recomputable provenance, a history with no keeper, integrity the reader checks, a trail nobody can revise. If you can only get three, the one you lost is usually the second, which is the one that most often turns out to be the real requirement.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Pick a live proposal and find its cell</h4>
+        <p>Two questions only: is the state shared between parties, and would any of them accept another's copy. Put it in a cell out loud. Nobody gets to say it is between cells at this stage.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Name which of the four it actually needs</h4>
+        <p>Often exactly one. Write down which, and then write what happens if the other three are absent. If the honest answer is nothing, you have just narrowed the project considerably.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Catch the discrepancy in the live box</h4>
+        <p>Switch the published figure to the inflated version and watch the comparison row. Then say in one sentence what you would have had to do to reach the same conclusion if the inputs had been private.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Argue the cheaper option properly</h4>
+        <p>For your project, make the case for a database with an agreed keeper and an audit log. Say who the keeper would be and why the others would accept them. If you cannot name a keeper the others would accept, you have found your answer.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Say which way you would rather fail</h4>
+        <p>Caught without a shared record when relations change, or carrying four sessions of cost for a risk that never arrives. Pick one and say why. Keep the answer, because session 6 turns all of this into questions you ask before agreeing to build.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When somebody proposes this machinery, ask which of the four advantages the project needs and then ask who the keeper would be if it did not use it. The second question does more work than the first. If a keeper can be named and the others would accept them, you are in the contested cell and the decision is about a forecast rather than about technology. If nobody can be named, you are in the cell where the cost is worth paying and the conversation can move on.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">A conventional warehouse publishes its transformations and grants an outside party read access to its inputs. Which part of the first advantage does that still not deliver?</p>
+      <div class="qopt">A · None, since the outside party can now recompute the figure</div>
+      <div class="qopt">B · Completeness: the outside party can recompute from what they were given and cannot establish that what they were given was everything</div>
+      <div class="qopt">C · Speed, since recomputing from granted access is slower than reading a report</div>
+      <q class="qwhy">That arrangement gets a long way and stops at the same place all four do. Somewhere in the chain an outsider is relying on an insider's good faith, here about the completeness of the grant, and no amount of tooling closes that.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">A team wants the machinery for a dataset that lives entirely inside one organisation, with an audit requirement. What is the strongest honest response?</p>
+      <div class="qopt">A · It is a reasonable fit, since audit trails are one of the four advantages</div>
+      <div class="qopt">B · It depends on the volume and the retention period</div>
+      <div class="qopt">C · A database with a well designed audit log delivers all four advantages more cheaply here, and it can also correct a row, so none of the costs from sessions 1 to 4 would be buying anything</div>
+      <q class="qwhy">All four advantages are about shared state between distrusting parties. With one organisation and an accepted keeper, both halves of the condition are absent, so the comparison is not close and the ability to fix a row is a decisive extra.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Two experienced leaders disagree about a shared project between parties who currently get on well. What is the honest description of that disagreement?</p>
+      <div class="qopt">A · It turns on a forecast about those specific relationships over a specific horizon, which nobody has data on, and the two sides fail in different ways rather than one being wrong</div>
+      <div class="qopt">B · It is settled: existing trust always means the cheaper option wins</div>
+      <div class="qopt">C · It is settled: the machinery should always be adopted because trust can change</div>
+      <q class="qwhy">One side pays permanently for a risk that may never arrive, and that failure is quiet and never gets recorded as a failure. The other is caught without a shared record on the day the relationship changes, and that failure is loud. Choosing which you would rather explain is a legitimate method, and the asymmetry in how visible they are is worth naming out loud.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 6</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty minutes, on the project you placed in step 2 and on everything five sessions have handed you.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Write the two-question test down</h4>
+        <p>Is the state shared, and would any party accept another's copy. Then apply it to two more things your organisation is considering and write which cell each lands in. Bring any that land in the top left.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Draft the questions you would ask</h4>
+        <p>From sessions 1 to 5, write the questions you would want answered before agreeing to build on this. Aim for six and do not polish them. Session 6 builds its own list and the interesting part is what you have that it does not.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Provenance a stranger recomputes</span><span class="note">A derivation somebody else can run, rather than an account of one offered by the party whose figure it is.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">A shared history with no keeper</span><span class="note">The role is removed rather than assigned well, which is a structural answer to a political problem.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Integrity the reader checks</span><span class="note">Checkable by whoever doubts it, instead of asserted by whoever would be embarrassed by the answer.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">A trail nobody can revise</span><span class="note">Including you, which is the same property session 4 spent the whole evening complaining about.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The boundary around all four</span><span class="note">Shared state, distrusting parties. Remove either half and a database with an audit log wins on every dimension.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The four cell test</span><span class="note">Is the state shared, and would any party accept another's copy. Two questions, neither of them technical.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The argument about the contested cell</span><span class="note">Shared state and existing trust, argued both ways and left open, with each side's failure mode named.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Turning all of this into scoping questions</span><span class="note">Started tonight in the homework. Session 6 builds the list and pairs each question with what would change your mind.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">How the integrity guarantee is constructed</span><span class="note">Hashes, blocks and consensus are assumed from learn-blockchain-with-phoebe rather than repeated.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">What any law or regulation requires</span><span class="note">Not stated here in any form. The obligations live in learn-gdpr-with-phoebe.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Anything about price, markets or holdings</span><span class="note">Out of scope by design, and nothing here is advice of any kind.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The one sentence.</strong> Four genuine advantages, and all four are about shared state between parties who do not trust each other.</div>
+      <div class="cheat-item"><strong>Advantage 1.</strong> Provenance a third party recomputes instead of trusting. Removes the escalation, not just the doubt.</div>
+      <div class="cheat-item"><strong>Advantage 2.</strong> A shared history with no keeper to appoint, audit or renegotiate. A structural answer to a political problem.</div>
+      <div class="cheat-item"><strong>Advantage 3.</strong> Integrity the reader checks, rather than the publisher asserts.</div>
+      <div class="cheat-item"><strong>Advantage 4.</strong> A trail nobody can quietly revise, including you. The same property that makes correction impossible.</div>
+      <div class="cheat-item"><strong>The boundary.</strong> One organisation, accepted keeper: a database with an audit log does all four more cheaply and fixes rows too.</div>
+      <div class="cheat-item"><strong>The two questions.</strong> Is the state shared, and would any party accept another's copy. Neither is technical.</div>
+      <div class="cheat-item"><strong>The open argument.</strong> Shared state plus existing trust. One side pays forever for a risk that may not come, the other is caught without a record when it does.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Leader session 5 of 6 · learn-web3-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="a4-you-cannot-take-it-back.html">← Leader session 4 · You cannot take it back</a>
+        <a href="a6-scoping-a-project-on-this.html">Leader session 6 · Scoping a project on this →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/w3-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof W3 === "undefined") return;
+  var sel = document.getElementById("a5-seed");
+  var claim = document.getElementById("a5-claim");
+  var out = document.getElementById("a5-out");
+  var verdict = document.getElementById("a5-verdict");
+  var self = document.getElementById("a5-self");
+
+  function comma(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+
+  function render() {
+    var s = Number(sel.value);
+    var world = W3.makeWorld({ seed: s });
+    var txs = W3.makeTransactions(world, { seed: s + 1 });
+    var cl = W3.clusterByCoSpend(world, txs);
+    var sc = W3.scoreClustering(world, cl);
+
+    var inflated = claim.value === "inflated";
+    var published = inflated ? sc.addresses : sc.clustered;
+    var gap = published - sc.clustered;
+
+    var html = '<table class="sql-table"><thead><tr><th>Step</th><th>Value</th><th>Who produced it</th></tr></thead><tbody>';
+    html += "<tr><td>What Larkfield published</td><td>" + comma(published) + "</td><td>" + (inflated ? "Larkfield, described as users" : "Larkfield, with the method stated") + "</td></tr>";
+    html += "<tr><td>Rows you can read yourself</td><td>" + comma(sc.addresses) + " addresses</td><td>nobody granted you this</td></tr>";
+    html += "<tr><td>Figure you get running the same method</td><td>" + comma(sc.clustered) + "</td><td>you, in this page, just now</td></tr>";
+    html += '<tr><td>Difference</td><td><b class="a5-gap">' + comma(gap) + "</b></td><td>" + (gap === 0 ? "the published figure reproduces" : "the published figure does not reproduce") + "</td></tr>";
+    html += "</tbody></table>";
+    out.innerHTML = html;
+
+    verdict.textContent = gap === 0
+      ? "You reproduced Larkfield's figure from the same inputs without asking Larkfield for anything. That is the first advantage, and no private warehouse offers it at any budget."
+      : "You caught a difference of " + comma(gap)
+        + " without an escalation, an access request or an audit engagement. It does not tell you who is at fault, and it does tell both parties that the numbers disagree, which is a very different conversation.";
+  }
+
+  var t = W3.selfTest();
+  self.textContent = t.ok
+    ? "The generator's five properties pass in this browser, so these are the numbers any correct run gives. Nothing here describes a real network."
+    : "The generator's self test did not pass in this browser, so nothing above should be believed.";
+
+  sel.addEventListener("change", render);
+  claim.addEventListener("change", render);
+  render();
+})();
+</script>
+<style>
+  #a5-recompute .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 24rem; }
+  #a5-recompute table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+  #a5-recompute .a5-gap { color: var(--amber); }
+</style>
+</body>
+</html>

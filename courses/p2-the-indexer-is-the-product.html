@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 2 of 10. Raw chain records to queryable tables is the actual work. Decode, normalise, enrich, aggregate, and three properties a normal pipeline never has to handle.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="The indexer is the product - learn web3 with phoebe">
+<meta property="og:description" content="Practitioner session 2 of 10. The decode is where the domain knowledge lives, which is why two teams indexing the same rows get different numbers without either being wrong.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-web3-with-phoebe/courses/p2-the-indexer-is-the-product.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The indexer is the product - learn web3 with phoebe">
+<meta name="twitter:description" content="A normal pipeline with three abnormal properties: the source retracts, the schema is someone else's, and one business event has many expressions.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 2 · The indexer is the product - learn web3 with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-web3-with-phoebe</a> / Practitioner session 2 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Web3 with Phoebe · Practitioner session 2 of 10</div>
+    <h1>The indexer is <span class="accent">the product</span></h1>
+    <p class="sub">Session 1 ended on an honest admission: raw, the rows answer almost nothing anybody asks. Closing that distance is a pipeline, and most of it is a pipeline you have built a hundred times before. Four stages, decode, normalise, enrich, aggregate, and only the first one is strange. Tonight is the shape of that pipeline, the three properties it has that no ordinary ingestion has to survive, and a measured demonstration of why two competent teams reading the same rows will publish different numbers and both be right.</p>
+    <div class="chip-row">
+      <span class="chip level">🔧 Practitioner track</span>
+      <span class="chip audience">Data engineers who would have to build this</span>
+      <span class="chip audience">Anyone reconciling two teams' figures</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-17 · The four stages</span>
+      <span class="a3" style="flex:3">17-30 · Three abnormal properties</span>
+      <span class="a4" style="flex:4">30-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Larkfield calls it a connector, and it is not a connector</h2>
+    </div>
+    <p class="lede">The work between a raw record and a table somebody can query has a name in most organisations and the name is usually wrong. It gets scoped as a connector, estimated as a fortnight, and assigned to whoever is free. What it actually is, is the layer that decides what happened, and every figure Larkfield ever reports is downstream of it. Tonight is that layer taken seriously: its four stages, the one stage that carries all the judgement, and the three ways it differs from every pipeline on the team's existing roadmap.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The four stages named in order, with a clear view of which one is ordinary engineering and which one is your organisation's opinion written as code. The three abnormal properties stated precisely enough to put in a design document. And a measured result from Larkfield's month: four defensible definitions of the same metric, four different numbers, and a spread you can read off the page.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why this is the session data engineers recognise fastest<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Most of what follows is not new. Reading an immutable upstream, writing idempotent loads, handling records that arrive out of order, keeping a table restatable, testing a transformation: all of that is ordinary craft, all of it applies here unchanged, and it lives in <b>learn-data-engineering-with-phoebe</b> rather than being repeated tonight. If you already build pipelines you are most of the way there, which is worth saying because the surrounding conversation tends to imply otherwise.</p>
+        <p>What is left after subtracting the ordinary craft is small, and it is the whole of the difficulty. One stage with no equivalent in a normal pipeline, and three properties of the upstream that break specific habits. Tonight is that residue, stated as precisely as possible so it can be designed for rather than discovered.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Larkfield scoped its indexer as a two week connector and shipped it in nine. Seven of those weeks were not engineering. They were a series of arguments about what counted as a reward: whether a reward that was issued and never collected had happened, whether a reward moved between two of the company's own addresses was one, and whether a batch that credited forty addresses at once was one event or forty. Each argument was settled in a meeting and then written into the decoder. That is the shape of the work, and no estimate that calls it a connector will ever be right.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words that keep coming back<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Indexer.</strong> The layer that turns raw chain records into tables somebody can query. Four stages, and the subject of tonight.</li>
+          <li><strong>Decode.</strong> Turning a payload into a named event with typed fields, against the definition the deploying code published. The only stage with no ordinary equivalent.</li>
+          <li><strong>Normalise.</strong> Folding several record shapes into the one table your team agreed on.</li>
+          <li><strong>Enrich.</strong> Attaching what you know that the chain does not, from your own systems, clearly marked as yours.</li>
+          <li><strong>Aggregate.</strong> Counts, cohorts, time series, and the figure somebody puts in a pack.</li>
+          <li><strong>Retraction.</strong> The upstream withdrawing blocks whose rows you already loaded and reported. Measured in session 6.</li>
+          <li><strong>Definition drift.</strong> A new contract deployed with a different shape, silently making your decode wrong.</li>
+          <li><strong>Idempotency, late-arriving data, restatement.</strong> General pipeline craft, applied here unchanged. It lives in <b>learn-data-engineering-with-phoebe</b>.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the pipeline</span>
+      <h2>Decode, normalise, enrich, aggregate</h2>
+      <span class="tag concept">14 min live</span>
+    </div>
+    <p class="lede">Four stages in a fixed order, and three of them will be familiar to the point of boredom. The fourth, which is the first, is where the entire character of the thing lives. Draw the four out and the reason an indexer takes nine weeks rather than two becomes visible immediately: only one stage is engineering work, and the other three depend on it having been right.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 530" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The four stages of an indexer and a close look at the first. Along the top, four boxes in order: decode, which turns bytes into a named event with typed fields; normalise, which folds many record shapes into one agreed table; enrich, which attaches what you know that the chain does not; and aggregate, which produces counts, cohorts and the figure somebody reports. Under each box a note says what a mistake there costs: wrong in decode and every number downstream is wrong, wrong in normalise and two things that are one event stay two, wrong in enrich and you have invented an attribute, wrong in aggregate and it is the ordinary kind of bug. Below, a band zooms in on the decode stage. One payload of identical bytes feeds into a dashed amber box headed four judgements, not four parses: which published definition do these bytes match, what is this event called in our own vocabulary, does a failed attempt count as an event at all, and is a reward moved between two of our own addresses still a reward. Two output chips follow, team A's table holding reward_issued and team B's table holding transfer, with a note that the bytes are the same and the tables differ. A closing band says the decode is not a parsing step with a domain expert nearby, it is the domain knowledge written down as code.">
+        <style>
+          .p2aH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .p2aT { font: 800 9.5px Inter, sans-serif; fill: #FFFFFF; letter-spacing: .07em; }
+          .p2aB { font: 400 10.5px Inter, sans-serif; fill: #13201E; }
+          .p2aM { font: 400 10px Inter, sans-serif; fill: #54655F; }
+          .p2aC { font: 800 10px Inter, sans-serif; fill: #1F5F5B; }
+          .p2aA { font: 800 9.5px Inter, sans-serif; fill: #9C3D18; letter-spacing: .07em; }
+          .p2aS { font: 400 9.5px Inter, sans-serif; fill: #54655F; }
+          .p2aX { font: 700 11px "SF Mono", Menlo, monospace; fill: #9C3D18; }
+          .p2aK { font: 800 11.5px Inter, sans-serif; fill: #9C3D18; }
+        </style>
+        <defs>
+          <marker id="p2aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1F5F5B"></path></marker>
+        </defs>
+
+        <text class="p2aH" x="14" y="20">Four stages in order, and only the first one is unfamiliar</text>
+
+        <rect x="14" y="36" width="196" height="90" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="36" width="196" height="24" rx="10" fill="#9C3D18"></rect>
+        <rect x="14" y="48" width="196" height="12" fill="#9C3D18"></rect>
+        <text class="p2aT" x="28" y="53">1 · DECODE</text>
+        <text class="p2aB" x="28" y="80">Bytes into a named event</text>
+        <text class="p2aB" x="28" y="98">with typed fields, against</text>
+        <text class="p2aB" x="28" y="116">a definition you chose.</text>
+        <text class="p2aM" x="28" y="146">Wrong here and every</text>
+        <text class="p2aM" x="28" y="162">number downstream is wrong.</text>
+        <line x1="214" y1="81" x2="230" y2="81" stroke="#1F5F5B" stroke-width="1.8" marker-end="url(#p2aAr)"></line>
+
+        <rect x="234" y="36" width="196" height="90" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="234" y="36" width="196" height="24" rx="10" fill="#1F5F5B"></rect>
+        <rect x="234" y="48" width="196" height="12" fill="#1F5F5B"></rect>
+        <text class="p2aT" x="248" y="53">2 · NORMALISE</text>
+        <text class="p2aB" x="248" y="80">Several record shapes</text>
+        <text class="p2aB" x="248" y="98">folded into the one table</text>
+        <text class="p2aB" x="248" y="116">your team agreed on.</text>
+        <text class="p2aM" x="248" y="146">Wrong here and two things</text>
+        <text class="p2aM" x="248" y="162">that are one event stay two.</text>
+        <line x1="434" y1="81" x2="450" y2="81" stroke="#1F5F5B" stroke-width="1.8" marker-end="url(#p2aAr)"></line>
+
+        <rect x="454" y="36" width="196" height="90" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="454" y="36" width="196" height="24" rx="10" fill="#1F5F5B"></rect>
+        <rect x="454" y="48" width="196" height="12" fill="#1F5F5B"></rect>
+        <text class="p2aT" x="468" y="53">3 · ENRICH</text>
+        <text class="p2aB" x="468" y="80">What you know that the</text>
+        <text class="p2aB" x="468" y="98">chain does not, marked</text>
+        <text class="p2aB" x="468" y="116">clearly as yours.</text>
+        <text class="p2aM" x="468" y="146">Wrong here and you have</text>
+        <text class="p2aM" x="468" y="162">invented an attribute.</text>
+        <line x1="654" y1="81" x2="670" y2="81" stroke="#1F5F5B" stroke-width="1.8" marker-end="url(#p2aAr)"></line>
+
+        <rect x="674" y="36" width="192" height="90" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="674" y="36" width="192" height="24" rx="10" fill="#1F5F5B"></rect>
+        <rect x="674" y="48" width="192" height="12" fill="#1F5F5B"></rect>
+        <text class="p2aT" x="688" y="53">4 · AGGREGATE</text>
+        <text class="p2aB" x="688" y="80">Counts, cohorts, series,</text>
+        <text class="p2aB" x="688" y="98">and the figure somebody</text>
+        <text class="p2aB" x="688" y="116">puts in a pack.</text>
+        <text class="p2aM" x="688" y="146">Wrong here and it is the</text>
+        <text class="p2aM" x="688" y="162">ordinary kind of bug.</text>
+
+        <rect x="14" y="190" width="852" height="210" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="190" width="852" height="26" rx="10" fill="#9C3D18"></rect>
+        <rect x="14" y="203" width="852" height="13" fill="#9C3D18"></rect>
+        <text class="p2aT" x="30" y="208">INSIDE STAGE 1 · WHY THE DECODE HOLDS THE DOMAIN KNOWLEDGE</text>
+
+        <rect x="30" y="270" width="140" height="60" rx="8" fill="#EFF7F5" stroke="#1F5F5B"></rect>
+        <text class="p2aC" x="42" y="294">ONE PAYLOAD</text>
+        <text class="p2aS" x="42" y="312">bytes, identical</text>
+        <line x1="174" y1="300" x2="200" y2="300" stroke="#1F5F5B" stroke-width="1.8" marker-end="url(#p2aAr)"></line>
+
+        <rect x="206" y="232" width="380" height="150" rx="8" fill="#FDF3EE" stroke="#9C3D18" stroke-width="1.5" stroke-dasharray="6 4"></rect>
+        <text class="p2aA" x="220" y="254">FOUR JUDGEMENTS, NOT FOUR PARSES</text>
+        <text class="p2aB" x="220" y="280">1 · Which published definition do these bytes match?</text>
+        <text class="p2aB" x="220" y="304">2 · What is this event called in our own vocabulary?</text>
+        <text class="p2aB" x="220" y="328">3 · Does a failed attempt count as an event at all?</text>
+        <text class="p2aB" x="220" y="352">4 · Is a reward moved between two of our own</text>
+        <text class="p2aB" x="234" y="370">addresses still a reward?</text>
+        <line x1="590" y1="300" x2="616" y2="300" stroke="#1F5F5B" stroke-width="1.8" marker-end="url(#p2aAr)"></line>
+
+        <rect x="622" y="248" width="220" height="46" rx="6" fill="#EFF7F5" stroke="#1F5F5B"></rect>
+        <text class="p2aC" x="634" y="268">TEAM A's TABLE</text>
+        <text class="p2aX" x="634" y="286">reward_issued</text>
+        <rect x="622" y="306" width="220" height="46" rx="6" fill="#EFF7F5" stroke="#1F5F5B"></rect>
+        <text class="p2aC" x="634" y="326">TEAM B's TABLE</text>
+        <text class="p2aX" x="634" y="344">transfer</text>
+        <text class="p2aM" x="622" y="374">Same bytes. Different tables. No bug.</text>
+
+        <rect x="14" y="418" width="852" height="92" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p2aK" x="30" y="442">The decode is not a parsing step with a domain expert standing nearby. The decode is the domain knowledge, as code.</text>
+        <text class="p2aM" x="30" y="464">Stages 2, 3 and 4 are ordinary transformation work and the craft for them already exists. Stage 1 is where your organisation's</text>
+        <text class="p2aM" x="30" y="482">answer to "what happened" gets written down, usually by one engineer, usually in a hurry, and almost never reviewed as policy.</text>
+        <text class="p2aM" x="30" y="500">Every reconciliation argument you will ever have with another team resolves to a difference inside that box.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the four questions in the amber box have no technically correct answer. They have a house answer, and it belongs in a document.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The four stages, and which one is the product<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Decode</strong> takes a payload and produces a named event with typed fields. It needs the definition that the deploying code published, and it needs a decision about which family of records you are even looking for. That is the unfamiliar stage.</p>
+        <p><strong>Normalise</strong> folds several record shapes into the one table your team agreed on. It is the same work as reconciling three source systems into a conformed dimension, and the same failure modes apply.</p>
+        <p><strong>Enrich</strong> attaches what you know and the chain does not: your own product's mapping of an address to a campaign, your own labels, your own categories. This is the only stage where private data enters, and every field it adds should be marked as yours rather than the chain's, because a reader six months later will assume every column came from the source.</p>
+        <p><strong>Aggregate</strong> produces the counts and cohorts. It is completely ordinary, and it is where everybody looks first when a number is wrong, which is almost never where the number went wrong.</p>
+        <p>Say the four out loud in order a few times. The value is not the taxonomy, it is that when a figure is disputed you can ask which stage the dispute is in, and the answer is nearly always stage one.</p>
+      </div>
+    </details>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The decode is a judgement, not a parse<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Look again at the four questions in the amber box. Not one of them has a technically correct answer. Whether an uncollected reward happened, whether an internal movement is a reward, whether a batch of forty is one event or forty, whether a failed attempt is an event at all: these are questions about what Larkfield means, and the decoder is where the answer is recorded. Usually by one engineer, usually under time pressure, usually without anyone calling it policy.</p>
+        <p>This is why the decode deserves review by the people who own the definition rather than only by the people who own the code. A pull request that changes a threshold in an aggregation is an engineering change. A pull request that changes which payloads are recognised as a reward is a change to what the company reports, and it will move the number without any dashboard showing a deploy.</p>
+        <p>The practical move is small and it is worth insisting on: write the four answers down in prose, keep them beside the decoder, version them together, and put the prose in front of whoever will be defending the number. If that document does not exist, the definition still exists. It is just only readable by someone who can read the decoder.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Enrich is the stage that quietly ruins provenance<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Enrichment is the least discussed stage and it carries a specific risk here that it does not carry elsewhere. The whole claimed advantage of working from a public ledger is that a stranger can recompute your figure from the same inputs. The moment stage three attaches a column from your own systems, that property is gone for every metric downstream of that column, and nothing in the table says so.</p>
+        <p>The fix is naming rather than architecture. Prefix enriched columns, put them in a separate table, or mark them in the model documentation, but make it impossible to read a wide table and not know which columns a stranger could reproduce. Teams that skip this end up publishing figures that look publicly verifiable and are not, which is worse than publishing a figure that is clearly internal.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The three stages that are just a pipeline<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>It is worth being explicit about how much of this is ordinary, because a session that dwells only on the strange parts leaves people thinking they need a new discipline. They do not.</p>
+        <p>Idempotent loads, watermarking, late-arriving records, incremental models, tests on uniqueness and referential integrity, a restatable published layer, documented lineage, contract tests between your own layers: all of that is exactly what you already do, all of it applies, and none of it changes shape because the upstream happens to be a ledger. That craft lives in <b>learn-data-engineering-with-phoebe</b> and there is no version of it that is special here.</p>
+        <p>Two habits transfer with a small twist. First, your uniqueness tests should be written against the grain you chose in session 1, and the grain should be in the table name, because both grains will exist in the warehouse. Second, your freshness checks cannot be written against a promise, because there is no promise. They have to be written against a baseline you measured, which makes them a little weaker and considerably more honest.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers what makes it abnormal</span>
+      <h2>Three properties, and two teams who will never agree</h2>
+      <span class="tag concept">13 min live</span>
+    </div>
+    <p class="lede">Subtract the ordinary craft and three things are left over. Each one breaks a specific habit, each one is worth a line in a design document, and only the first of the three is usually anticipated. Then the consequence that follows from all three at once: two teams, the same rows, the same month, the same question, and different answers with no bug anywhere.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 566" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three properties of this upstream that an ordinary pipeline never has to handle, each drawn as a mechanism. First, the source can retract history you already loaded: five blocks arrive in order, the last three are replaced, and the warehouse still holds their rows, with a note that nothing errors, session 6 measures it and session 7 designs against it. Second, the schema belongs to code you did not write: definition version one flows through your decoder and produces right rows, then definition version two is deployed, a faded dashed path shows the change never reaching you, the unchanged decoder now produces wrong rows, and no notice arrives and nothing fails. Third, one business event has many expressions: three different record shapes, a direct issue, a batched issue and a reward claimed by the user, all converge on the single business event that a reward reached a user, and recognising all three is a judgement rather than a parse.">
+        <style>
+          .p2bH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .p2bT { font: 800 9.5px Inter, sans-serif; fill: #FFFFFF; letter-spacing: .07em; }
+          .p2bL { font: 800 9px Inter, sans-serif; fill: #54655F; letter-spacing: .11em; }
+          .p2bN { font: 800 11px Inter, sans-serif; fill: #13201E; }
+          .p2bB { font: 400 10.5px Inter, sans-serif; fill: #13201E; }
+          .p2bM { font: 400 10px Inter, sans-serif; fill: #54655F; }
+          .p2bS { font: 400 9.5px Inter, sans-serif; fill: #13201E; }
+          .p2bA { font: 800 9.5px Inter, sans-serif; fill: #9C3D18; }
+          .p2bC { font: 800 10px Inter, sans-serif; fill: #1F5F5B; }
+          .p2bX { font: 700 8.5px "SF Mono", Menlo, monospace; fill: #13201E; }
+        </style>
+        <defs>
+          <marker id="p2bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1F5F5B"></path></marker>
+          <marker id="p2bArA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9C3D18"></path></marker>
+        </defs>
+
+        <text class="p2bH" x="14" y="20">Subtract the ordinary craft and exactly three things are left</text>
+
+        <!-- BAND 1 -->
+        <rect x="14" y="34" width="852" height="160" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="34" width="852" height="26" rx="10" fill="#9C3D18"></rect>
+        <rect x="14" y="47" width="852" height="13" fill="#9C3D18"></rect>
+        <text class="p2bT" x="30" y="52">1 · THE SOURCE CAN RETRACT HISTORY YOU ALREADY LOADED</text>
+
+        <text class="p2bL" x="30" y="82">BLOCKS AS THEY ARRIVED, AND WHAT YOU LOADED</text>
+        <rect x="30" y="90" width="42" height="26" rx="4" fill="#C7E0DC" stroke="#1F5F5B"></rect>
+        <text class="p2bX" x="42" y="107">n-4</text>
+        <rect x="78" y="90" width="42" height="26" rx="4" fill="#C7E0DC" stroke="#1F5F5B"></rect>
+        <text class="p2bX" x="90" y="107">n-3</text>
+        <rect x="126" y="90" width="42" height="26" rx="4" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p2bX" x="138" y="107">n-2</text>
+        <rect x="174" y="90" width="42" height="26" rx="4" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p2bX" x="186" y="107">n-1</text>
+        <rect x="222" y="90" width="42" height="26" rx="4" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p2bX" x="240" y="107">n</text>
+        <line x1="126" y1="124" x2="264" y2="124" stroke="#9C3D18" stroke-width="2"></line>
+        <text class="p2bA" x="126" y="140">these three were replaced</text>
+        <rect x="30" y="150" width="234" height="30" rx="6" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p2bS" x="42" y="169">their rows are still in your tables</text>
+
+        <text class="p2bN" x="450" y="86">No other upstream does this to you.</text>
+        <text class="p2bB" x="450" y="110">A normal source sends a late row, a correction or a</text>
+        <text class="p2bB" x="450" y="128">restatement, and it tells you. This one withdraws blocks</text>
+        <text class="p2bB" x="450" y="146">that were already read, already loaded and already</text>
+        <text class="p2bB" x="450" y="164">reported on, and sends no signal at all when it does.</text>
+        <text class="p2bM" x="450" y="186">Measured in session 6. Designed against in session 7.</text>
+
+        <!-- BAND 2 -->
+        <rect x="14" y="208" width="852" height="160" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="208" width="852" height="26" rx="10" fill="#123D3A"></rect>
+        <rect x="14" y="221" width="852" height="13" fill="#123D3A"></rect>
+        <text class="p2bT" x="30" y="226">2 · THE SCHEMA BELONGS TO CODE YOU DID NOT WRITE</text>
+
+        <rect x="30" y="248" width="110" height="32" rx="6" fill="#EFF7F5" stroke="#1F5F5B"></rect>
+        <text class="p2bS" x="42" y="268">definition v1</text>
+        <line x1="144" y1="264" x2="168" y2="264" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p2bAr)"></line>
+        <rect x="174" y="248" width="124" height="32" rx="6" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <text class="p2bS" x="186" y="268">your decoder</text>
+        <line x1="302" y1="264" x2="326" y2="264" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p2bAr)"></line>
+        <rect x="332" y="248" width="96" height="32" rx="6" fill="#C7E0DC" stroke="#1F5F5B"></rect>
+        <text class="p2bS" x="344" y="268">right rows</text>
+
+        <rect x="30" y="300" width="110" height="32" rx="6" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p2bS" x="42" y="320">definition v2</text>
+        <line x1="144" y1="316" x2="168" y2="316" stroke="#CFDEDA" stroke-width="1.6" stroke-dasharray="4 3"></line>
+        <rect x="174" y="300" width="124" height="32" rx="6" fill="#FFFFFF" stroke="#CFDEDA"></rect>
+        <text class="p2bS" x="186" y="320">decoder, unchanged</text>
+        <line x1="302" y1="316" x2="326" y2="316" stroke="#9C3D18" stroke-width="1.6" marker-end="url(#p2bArA)"></line>
+        <rect x="332" y="300" width="96" height="32" rx="6" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p2bS" x="344" y="320">wrong rows</text>
+        <text class="p2bA" x="30" y="354">The deploy happened. The dashed path is the notice you never get.</text>
+
+        <text class="p2bN" x="450" y="260">Your decode is a pinned interpretation.</text>
+        <text class="p2bB" x="450" y="284">It is right until a different definition is deployed, and</text>
+        <text class="p2bB" x="450" y="302">that arrives with no version bump you can subscribe to,</text>
+        <text class="p2bB" x="450" y="320">no deprecation window and nobody to notify you.</text>
+        <text class="p2bM" x="450" y="342">The first symptom is a metric bending in a direction</text>
+        <text class="p2bM" x="450" y="360">nobody ordered, which is why the baseline is the alarm.</text>
+
+        <!-- BAND 3 -->
+        <rect x="14" y="382" width="852" height="160" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="382" width="852" height="26" rx="10" fill="#1F5F5B"></rect>
+        <rect x="14" y="395" width="852" height="13" fill="#1F5F5B"></rect>
+        <text class="p2bT" x="30" y="400">3 · ONE BUSINESS EVENT, MANY EXPRESSIONS IN THE ROWS</text>
+
+        <rect x="30" y="420" width="150" height="28" rx="6" fill="#EFF7F5" stroke="#1F5F5B"></rect>
+        <text class="p2bS" x="42" y="439">issued directly</text>
+        <rect x="30" y="458" width="150" height="28" rx="6" fill="#EFF7F5" stroke="#1F5F5B"></rect>
+        <text class="p2bS" x="42" y="477">issued in a batch of 40</text>
+        <rect x="30" y="496" width="150" height="28" rx="6" fill="#EFF7F5" stroke="#1F5F5B"></rect>
+        <text class="p2bS" x="42" y="515">claimed by the user</text>
+        <line x1="186" y1="432" x2="242" y2="460" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p2bAr)"></line>
+        <line x1="186" y1="472" x2="242" y2="472" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p2bAr)"></line>
+        <line x1="186" y1="512" x2="242" y2="484" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p2bAr)"></line>
+        <rect x="250" y="450" width="178" height="44" rx="8" fill="#C7E0DC" stroke="#1F5F5B"></rect>
+        <text class="p2bC" x="262" y="470">A REWARD REACHED</text>
+        <text class="p2bC" x="262" y="486">A USER</text>
+
+        <text class="p2bN" x="450" y="434">Folding all three in is a judgement, not a parse.</text>
+        <text class="p2bB" x="450" y="458">The business calls these one thing. The rows call them</text>
+        <text class="p2bB" x="450" y="476">three, and a fourth appears the quarter a new contract</text>
+        <text class="p2bB" x="450" y="494">ships. Nothing in the data says the three belong together.</text>
+        <text class="p2bM" x="450" y="516">A team that folds all three in and a team that counts</text>
+        <text class="p2bM" x="450" y="534">only the first are both right, and will never reconcile.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the third band is the one that gets missed in design. The first two are upstream behaviour; the third is a vocabulary problem wearing a schema costume.</figcaption>
+    </figure>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="One set of rows feeding four defensible definitions of the same metric. On the left a panel says the same rows: one month, 4,000 transactions, about 1,000 addresses, identical for everyone. Four lines fan out to four rules: addresses credited by a reward, described as the widest reading and not people; addresses that ever spent, described as activity rather than receipt; addresses that spent more than once, described as repeat activity and not everyone active; and holders after co-spend clustering, described as an upper bound on parties and not a point estimate. A note says all four counts are computed live in the box below. A closing band says four teams, four numbers, no bug, and that the number is a property of the definition rather than of the chain.">
+        <style>
+          .p2cH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .p2cT { font: 800 9.5px Inter, sans-serif; fill: #FFFFFF; letter-spacing: .07em; }
+          .p2cB { font: 400 10.5px Inter, sans-serif; fill: #13201E; }
+          .p2cN { font: 800 11px Inter, sans-serif; fill: #13201E; }
+          .p2cM { font: 400 10px Inter, sans-serif; fill: #54655F; }
+          .p2cA { font: 800 10px Inter, sans-serif; fill: #9C3D18; }
+          .p2cK { font: 800 11.5px Inter, sans-serif; fill: #1F5F5B; }
+        </style>
+        <defs>
+          <marker id="p2cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1F5F5B"></path></marker>
+        </defs>
+
+        <text class="p2cH" x="14" y="20">One set of rows, four defensible readings of the same question</text>
+
+        <rect x="14" y="60" width="150" height="250" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="60" width="150" height="24" rx="10" fill="#123D3A"></rect>
+        <rect x="14" y="72" width="150" height="12" fill="#123D3A"></rect>
+        <text class="p2cT" x="26" y="77">THE SAME ROWS</text>
+        <text class="p2cB" x="26" y="112">One month.</text>
+        <text class="p2cB" x="26" y="136">4,000 transactions.</text>
+        <text class="p2cB" x="26" y="160">About 1,000</text>
+        <text class="p2cB" x="26" y="178">addresses.</text>
+        <text class="p2cM" x="26" y="212">Identical for</text>
+        <text class="p2cM" x="26" y="230">everyone who</text>
+        <text class="p2cM" x="26" y="248">reads them.</text>
+
+        <line x1="168" y1="180" x2="194" y2="98" stroke="#1F5F5B" stroke-width="1.4" marker-end="url(#p2cAr)"></line>
+        <line x1="168" y1="180" x2="194" y2="158" stroke="#1F5F5B" stroke-width="1.4" marker-end="url(#p2cAr)"></line>
+        <line x1="168" y1="180" x2="194" y2="218" stroke="#1F5F5B" stroke-width="1.4" marker-end="url(#p2cAr)"></line>
+        <line x1="168" y1="180" x2="194" y2="278" stroke="#1F5F5B" stroke-width="1.4" marker-end="url(#p2cAr)"></line>
+
+        <rect x="200" y="70" width="440" height="52" rx="8" fill="#EFF7F5" stroke="#8FBDB8"></rect>
+        <text class="p2cN" x="214" y="92">Addresses credited by a reward this month</text>
+        <text class="p2cM" x="214" y="110">The widest reading, and the easiest to compute</text>
+        <text class="p2cA" x="660" y="100">NOT PEOPLE</text>
+
+        <rect x="200" y="130" width="440" height="52" rx="8" fill="#EFF7F5" stroke="#8FBDB8"></rect>
+        <text class="p2cN" x="214" y="152">Addresses that ever spent</text>
+        <text class="p2cM" x="214" y="170">Activity rather than receipt, which is a real distinction</text>
+        <text class="p2cA" x="660" y="160">NOT RECEIPT</text>
+
+        <rect x="200" y="190" width="440" height="52" rx="8" fill="#EFF7F5" stroke="#8FBDB8"></rect>
+        <text class="p2cN" x="214" y="212">Addresses that spent more than once</text>
+        <text class="p2cM" x="214" y="230">Repeat activity, which many teams mean by active</text>
+        <text class="p2cA" x="660" y="220">NOT EVERYONE ACTIVE</text>
+
+        <rect x="200" y="250" width="440" height="52" rx="8" fill="#C7E0DC" stroke="#1F5F5B"></rect>
+        <text class="p2cN" x="214" y="272">Holders after co-spend clustering</text>
+        <text class="p2cM" x="214" y="290">The nearest thing to a party count, and session 3 builds it</text>
+        <text class="p2cA" x="660" y="280">NOT A POINT ESTIMATE</text>
+
+        <text class="p2cM" x="200" y="324">All four counts are computed live in the box below, from the same generator every session uses.</text>
+
+        <rect x="14" y="340" width="852" height="66" rx="10" fill="#EFF7F5" stroke="#1F5F5B"></rect>
+        <text class="p2cK" x="30" y="364">Four teams, four numbers, no bug anywhere.</text>
+        <text class="p2cM" x="30" y="386">The number is a property of the definition, not a property of the chain. Which is why reconciling with another team starts by</text>
+        <text class="p2cM" x="30" y="400">comparing decoders and definitions, and never by comparing totals.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - nothing here is a data quality problem. Four teams doing careful work produce four numbers, and the gap is in the words.</figcaption>
+    </figure>
+
+    <div class="wk" id="p2-defs">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">Four definitions, one month, computed in this page. Change the month and watch the spread rather than the values.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="p2-seed">Which month of Larkfield data to index</label>
+        <select class="sql-code" id="p2-seed">
+          <option value="11">Month A</option>
+          <option value="101">Month B</option>
+          <option value="2024">Month C</option>
+          <option value="7">Month D</option>
+          <option value="55555">Month E</option>
+        </select>
+        <div id="p2-out"></div>
+        <p class="sql-note" id="p2-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="p2-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Retraction is the property with no analogue<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every pipeline handles data that is late, data that is wrong and data that gets restated. The habit that covers all three is the same: accept that the past can change, make the load idempotent, keep the published layer restatable. That habit is necessary here and it is not sufficient, because it assumes somebody tells you.</p>
+        <p>What happens here is that blocks you already read get replaced, and their rows stay in your tables describing history the chain no longer has. There is no restatement message, no correction record, no changed row, no failed load and no alert. The rows are simply wrong from a certain moment onwards and nothing in your stack has any reason to think so.</p>
+        <p>Session 6 measures exactly how much of a warehouse ends up in that state on Larkfield's numbers, and it is more than most people guess. Session 7 takes apart the two defences, which are separate mechanisms that are constantly confused for each other. Tonight the only thing to carry is that this belongs in the design document as a named property of the source, not as an operational surprise.</p>
+      </div>
+    </details>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Two teams, same rows, different numbers<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Run the live box through all five months and read the spread rather than the values. Four definitions of one metric, every one of them defensible in a review, and the widest and narrowest are hundreds apart on a population of about a thousand addresses. Nobody made an error. There is no data quality incident to open.</p>
+        <p>This is the part that surprises people who expect a public dataset to produce a single agreed truth. Shared rows remove the argument about what the data says. They do not touch the argument about what the question means, and that argument turns out to be the bigger one. The chain gives everybody the same inputs and then leaves the definition entirely to you, which means the only way two teams agree is by agreeing on words first.</p>
+        <p>The operational consequence is worth stating flatly. When your figure does not match another team's figure, do not start by comparing totals, and do not start by looking for a bug. Start by putting the two decoders and the two written definitions side by side. The difference is nearly always visible in the first ten minutes, and it is nearly always a sentence rather than a line of code.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>One camp says every team must own its own decode. Their argument is that the decode is the business definition, so outsourcing it means outsourcing what your company means by a customer, a reward and an event. A team that adopts somebody else's interpretation inherits every judgement inside it, cannot explain its own number under questioning, and discovers the inherited assumptions only when a regulator or a board member asks the one question the borrowed definition answers differently. On this view the nine weeks Larkfield spent are not waste, they are the cost of knowing what you are reporting.</p>
+        <p>The other camp says that is an expensive way to produce a number nobody else can compare with. Every team writing its own decode means every team's figure is incomparable with every other team's, which destroys the single genuine advantage of a shared public dataset. Better, on this view, to adopt a published shared definition, contribute corrections to it in the open, and accept that your number will sometimes be wrong in the same way everybody else's is. A figure that is comparable and slightly wrong is more useful than a figure that is bespoke and slightly right, because comparability is the thing you cannot manufacture later.</p>
+        <p>Both have shipped this and neither is being naive. Notice that they disagree about what the number is for: one camp is optimising for defending it internally, the other for comparing it externally. Notice also that the second position quietly depends on the shared definition being maintained by somebody, and the first quietly depends on your organisation actually writing its judgements down. Ask which of those two conditions holds where you work, and the argument usually answers itself.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Find your decode, and find out who owns it</h2>
+      <span class="tag build">15 min hands on</span>
+    </div>
+    <p class="lede">No code. Six steps against a pipeline your team already runs, said out loud in the room. Every one of them is a question about where a definition is written down, because that is the thing this session says is the product.</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Name your four stages</h4>
+        <p>Take one pipeline you own and split it into decode, normalise, enrich, aggregate. Some stages will be missing and one will be enormous. Say which one is enormous and whether that is where your incidents come from.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Find the sentence that defines your main metric</h4>
+        <p>Not the SQL, the sentence. Go and find it. If it does not exist, say who would have to write it and how long the argument would take, and notice that the argument is happening anyway, once per disputed number.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Answer the four judgement questions for Larkfield</h4>
+        <p>In the room, decide: does an uncollected reward count, is a movement between two company addresses a reward, is a batch of forty one event or forty, does a failed attempt exist. Two minutes each, no consensus required. Count how many of the four split the room.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Move the month and read the spread</h4>
+        <p>In the live box, step through all five months and write down the widest and narrowest of the four counts each time. Then say which of the four you would have picked by default, and what you would have called it in a dashboard title.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Mark your enriched columns</h4>
+        <p>In one published table, list the columns that came from your own systems rather than the source. Then ask whether a reader could tell. If not, that table is being read as more verifiable than it is.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write one line for the design document</h4>
+        <p>One sentence naming retraction as a property of the source, in words a reviewer who has never seen a ledger would understand. Bring it to session 6, which puts a percentage on it.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When two teams disagree on a number, the reflex is to diff the data. Diff the definitions instead, and diff them in prose before diffing them in code. Shared inputs make the arithmetic uncontroversial and leave the vocabulary as the only remaining place for a disagreement to hide, which is exactly where it will be.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Two teams index the same rows for the same month and publish active user figures that differ by several hundred. Both pipelines pass their tests. What is the most likely cause?</p>
+      <div class="qopt">A · One of them has a bug in an aggregation that its tests do not cover</div>
+      <div class="qopt">B · One of them is reading a stale copy of the rows</div>
+      <div class="qopt">C · The two decoded and defined the metric differently, so they are answering two different questions with the same words</div>
+      <q class="qwhy">Shared inputs remove the argument about what the data says and leave the argument about what the question means. Four defensible definitions on Larkfield's month give four different counts with no bug anywhere. Reconciliation starts with the two definitions side by side, not with the two totals.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Which of the three abnormal properties is the one an ordinary pipeline's habits do not cover at all?</p>
+      <div class="qopt">A · Retraction, because idempotent loads and restatable tables assume somebody tells you the past changed, and here nobody does</div>
+      <div class="qopt">B · Schema ownership, because no pipeline has ever had to handle a schema change</div>
+      <div class="qopt">C · Many expressions of one event, because conformed dimensions are an unsolved problem</div>
+      <q class="qwhy">Schema changes and multi-shape sources are both familiar problems with existing craft, harder here but recognisable. Retraction is the one with no analogue: rows already loaded silently start describing history the chain no longer has, with no correction record, no failed load and no alert. Session 6 measures it.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">An indexer adds a column mapping each address to a marketing campaign, taken from Larkfield's own systems, and publishes it in the same wide table as the decoded chain fields. What has that cost?</p>
+      <div class="qopt">A · Nothing, since the column is accurate and the join is tested</div>
+      <div class="qopt">B · Every metric derived from that column is no longer recomputable by an outsider, and nothing in the table tells a reader which columns those are</div>
+      <div class="qopt">C · The table can no longer be restated, because enrichment is not idempotent</div>
+      <q class="qwhy">Enrichment is ordinary work with one specific cost here. The claimed advantage of public rows is that a stranger can recompute your figure. A private column silently removes that for everything downstream of it, and a wide table that mixes the two is read as more verifiable than it is. The fix is naming, not architecture.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 3</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty minutes, on the definition you went looking for in step 2 and the four answers your room gave in step 3.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Write the decode document that does not exist</h4>
+        <p>Half a page, in prose, for one metric you publish: what counts, what does not, and which of those calls you would lose an argument about. Put it next to the code and see whether anyone objects to it being called policy.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Bring the clustering question</h4>
+        <p>The fourth definition in the live box is holders after co-spend clustering. Write down, before session 3, what you think that rule is and how much of the gap between addresses and people you expect it to close. Session 3 builds the algorithm in code.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The four stages in order</span><span class="note">Decode, normalise, enrich, aggregate, and which failure each stage produces.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Why the decode holds the domain knowledge</span><span class="note">Four judgement questions with no technically correct answer, recorded in code and rarely reviewed as policy.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Enrichment and the provenance it spends</span><span class="note">Private columns remove public recomputability downstream, and nothing in a wide table says which columns those are.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The three abnormal properties</span><span class="note">Retraction, a schema owned by deployed code, and one business event with many expressions in the rows.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Four definitions, four numbers</span><span class="note">Computed live on Larkfield's month, all four defensible, and the spread read off the page.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">How to reconcile with another team</span><span class="note">Compare decoders and written definitions first, and totals last.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">The co-spend clustering rule</span><span class="note">Named tonight as the fourth definition. Session 3 builds it in code with union-find.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">What retraction costs a warehouse</span><span class="note">Named tonight as a property of the source. Session 6 measures the share of rows affected.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">The two defences against retraction</span><span class="note">Session 7, where holding rows back and removing them are kept apart.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Idempotency, late-arriving data and restatement</span><span class="note">General pipeline craft, and it lives in learn-data-engineering-with-phoebe.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Hashes, blocks, consensus and chain mechanics</span><span class="note">The prerequisite is learn-blockchain-with-phoebe and it is assumed rather than repeated.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Named networks, platforms or indexing software</span><span class="note">None of it can be verified from here and all of it moves faster than a session. Every figure comes from the generator.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Anything to do with price, markets or holdings</span><span class="note">Out of scope by design, and nothing here is advice of any kind.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The four stages.</strong> Decode, normalise, enrich, aggregate. Only the first has no ordinary equivalent.</div>
+      <div class="cheat-item"><strong>The decode is the product.</strong> It is your organisation's answer to what happened, written as code, usually by one person in a hurry.</div>
+      <div class="cheat-item"><strong>The four judgements.</strong> Which definition, what is it called, does a failure count, is an internal move a real event. None has a technical answer.</div>
+      <div class="cheat-item"><strong>Property 1, retraction.</strong> Rows you loaded describe history the chain no longer has, with no signal of any kind. Session 6 measures it.</div>
+      <div class="cheat-item"><strong>Property 2, someone else's schema.</strong> A new definition is deployed, your decoder is unchanged, and nothing fails.</div>
+      <div class="cheat-item"><strong>Property 3, many expressions.</strong> One business event, several record shapes, and a new one each quarter. Folding them in is a judgement.</div>
+      <div class="cheat-item"><strong>Four definitions, four numbers.</strong> Same rows, same month, no bug. The number is a property of the definition.</div>
+      <div class="cheat-item"><strong>The reconciliation rule.</strong> Diff the definitions in prose, then the decoders. Diff the totals last, if at all.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 2 of 10 · learn-web3-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p1-reading-a-chain-as-a-dataset.html">← Practitioner session 1 · Reading a chain as a dataset</a>
+        <a href="p3-addresses-are-not-people.html">Practitioner session 3 · Addresses are not people →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/w3-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof W3 === "undefined") return;
+  var sel = document.getElementById("p2-seed");
+  var out = document.getElementById("p2-out");
+  var verdict = document.getElementById("p2-verdict");
+  var self = document.getElementById("p2-self");
+
+  function comma(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+
+  function render() {
+    var s = Number(sel.value);
+    var world = W3.makeWorld({ seed: s });
+    var txs = W3.makeTransactions(world, { seed: s + 1 });
+    var cl = W3.clusterByCoSpend(world, txs);
+    var sc = W3.scoreClustering(world, cl);
+
+    var seen = {}, i, j;
+    for (i = 0; i < txs.length; i++) {
+      for (j = 0; j < txs[i].length; j++) {
+        seen[txs[i][j]] = (seen[txs[i][j]] || 0) + 1;
+      }
+    }
+    var keys = Object.keys(seen);
+    var everSpent = keys.length;
+    var repeat = 0;
+    for (i = 0; i < keys.length; i++) if (seen[keys[i]] > 1) repeat++;
+
+    var vals = [world.addresses.length, everSpent, repeat, sc.clustered];
+    var hi = Math.max.apply(null, vals), lo = Math.min.apply(null, vals);
+
+    var html = '<table class="sql-table"><thead><tr><th>Definition of an active address</th><th>Count</th><th>Defensible because</th></tr></thead><tbody>';
+    html += "<tr><td>1 · Credited by a reward this month</td><td>" + comma(world.addresses.length) + "</td><td>it is what the product did, counted directly</td></tr>";
+    html += "<tr><td>2 · Ever appeared as a spend input</td><td>" + comma(everSpent) + "</td><td>receipt is not activity, and this measures activity</td></tr>";
+    html += "<tr><td>3 · Spent more than once</td><td>" + comma(repeat) + "</td><td>one action is a trial, two is use</td></tr>";
+    html += "<tr><td>4 · Holders after co-spend clustering</td><td>" + comma(sc.clustered) + "</td><td>the nearest thing to a party count, built in session 3</td></tr>";
+    html += '<tr><td>Spread, widest minus narrowest</td><td><b class="p2-gap">' + comma(hi - lo) + '</b></td><td>no bug anywhere, and no reconciliation possible</td></tr>';
+    html += "</tbody></table>";
+    out.innerHTML = html;
+
+    verdict.textContent = "Four teams could publish " + comma(vals[0]) + ", " + comma(vals[1]) + ", "
+      + comma(vals[2]) + " or " + comma(vals[3])
+      + " for the same month and defend every one of them in a review. The widest and narrowest differ by " + comma(hi - lo)
+      + ". Nothing in the rows settles it, because the disagreement is in the words.";
+  }
+
+  var t = W3.selfTest();
+  self.textContent = t.ok
+    ? "The generator's five properties pass in this browser, so these counts are the counts any correct run gives. Nothing here describes a real network."
+    : "The generator's self test did not pass in this browser, so nothing above should be believed.";
+
+  sel.addEventListener("change", render);
+  render();
+})();
+</script>
+<style>
+  #p2-defs .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 14rem; }
+  #p2-defs table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+  #p2-defs .p2-gap { color: var(--amber); }
+</style>
+</body>
+</html>

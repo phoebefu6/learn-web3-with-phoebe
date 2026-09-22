@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 7 of 10. Two defences against a warehouse full of withdrawn history: hold rows back, or take them back. A lag of 3 leaves 0 wrong rows and holds 125; a retracting loader corrects all 511 at lag 0. Each costs the opposite thing.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Designing for retraction - learn web3 with phoebe">
+<meta property="og:description" content="Practitioner session 7 of 10. A finality lag is cheap to build and expensive in freshness. A retracting loader is the reverse. Pick with the numbers in front of you.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-web3-with-phoebe/courses/p7-designing-for-retraction.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Designing for retraction - learn web3 with phoebe">
+<meta name="twitter:description" content="Late-arriving data is additive and your toolkit expects it. Withdrawn data is subtractive and almost nothing downstream survives it.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 7 · Designing for retraction - learn web3 with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-web3-with-phoebe</a> / Practitioner session 7 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Web3 with Phoebe · Practitioner session 7 of 10</div>
+    <h1>Designing for <span class="accent">retraction</span></h1>
+    <p class="sub">There are exactly two defences and they are not variations of each other. You can hold rows back until the chain has stopped changing its mind, which costs you freshness and nothing else. Or you can load immediately and remove rows when the blocks they came from are replaced, which costs you engineering across every table, extract and cached report you own. Bench B prices both: a lag of 3 against a depth 3 reorganisation leaves 0 wrong rows and 125 rows unreported, and a retracting loader corrects all 511 at no lag at all. Tonight is which one Larkfield should build, argued with the numbers on screen rather than from taste.</p>
+    <div class="chip-row">
+      <span class="chip level">🔧 Practitioner track</span>
+      <span class="chip audience">Data engineers who own the loader</span>
+      <span class="chip audience">Anyone whose report has to be reproducible</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-17 · Holding rows back</span>
+      <span class="a3" style="flex:3">17-30 · Taking rows back</span>
+      <span class="a4" style="flex:4">30-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Two defences, and they cost opposite things</h2>
+    </div>
+    <p class="lede">Larkfield's loader appends every block as it arrives, and 5.75 percent of the rows in the warehouse describe history the chain no longer has. That is the measurement, and it is already made. Tonight is the design conversation that follows it, which turns out to be shorter and sharper than most people expect, because there are only two mechanisms available and they pull in opposite directions. One is four lines of loader code and a large freshness bill. The other is a small freshness bill and a change to every consumer downstream of you.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The finality lag priced properly: 0 wrong rows at lag 3, and the 125, 249 and 497 rows that lag 3, lag 6 and lag 12 hold back for it. The retracting loader priced properly: all 511 corrected at lag 0, and the reason its bill lands on people who do not work for you. The combination, and why lag 3 with retraction has nothing left to correct. And the sentence that decides most of these arguments: late-arriving data is additive, withdrawn data is subtractive, and your warehouse was built for the first one.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Where the two defences actually sit<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Both defences live in the loader, which is the only place they can live, and that is worth saying before either of them is described. Nothing upstream will help: the chain is entitled to replace a branch and it is not going to ask. Nothing downstream will help either, because by the time a row is in a mart it has already been counted, cached and probably emailed. The loader is the boundary, and the boundary is where the decision gets made.</p>
+        <p>The first defence changes <em>when</em> a row is allowed through the boundary. The second changes <em>whether a row that went through can come back</em>. Those are different questions and they have different answers, which is why bundling them into one setting is a mistake serious enough that session 9 is about a version of this bench that did exactly that.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Larkfield's first instinct was the one almost every team has: set a lag, pick a small number for it because a small number sounds cautious, and move on. The number they picked was 1. It is the single worst choice available and it feels like the responsible one, which is the whole problem with it.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words used tonight<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Finality lag.</strong> How far behind the tip the loader stays before it writes a block's rows. Measured in blocks. Bench B sweeps it from 0 to 12.</li>
+          <li><strong>Held rows.</strong> Rows that exist, are correct, and have not been loaded yet because the lag has not elapsed. The freshness bill, and the only cost a lag has.</li>
+          <li><strong>Orphaned rows.</strong> Rows already loaded whose blocks were subsequently replaced. Wrong, unflagged, and counted by nobody.</li>
+          <li><strong>Retraction.</strong> A loader that deletes already-loaded rows when their blocks are replaced. Bench B calls the rows it removes <em>corrected</em> rather than orphaned, because they no longer sit in the warehouse being wrong.</li>
+          <li><strong>Reorganisation depth.</strong> How many blocks deep a replacement goes. Bench B uses 3 throughout. The value is the parameter nobody writes down and everything depends on.</li>
+          <li><strong>Late arriving.</strong> A record describing an earlier period that shows up now. Additive. Handled by patterns that already exist in <b>learn-data-engineering-with-phoebe</b>.</li>
+          <li><strong>Withdrawn.</strong> A record that was loaded and is now gone. Subtractive. Not the same thing, and Part 2 is largely about the difference.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the lag</span>
+      <h2>Hold rows back, or take them back</h2>
+      <span class="tag concept">14 min live</span>
+    </div>
+    <p class="lede">Draw the two of them next to each other and the asymmetry is immediate. The lag is a gate: rows wait, and the ones that get through were never wrong. Retraction has no gate: rows go straight in, some of them are wrong for a while, and a second mechanism goes back and removes them. Same outcome in the warehouse, completely different bill.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 476" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The two defences drawn as loader mechanisms, one above the other. Top row, hold rows back: a train of six blocks with an amber gate line standing three blocks behind the newest block. The three blocks left of the gate send arrows down into a warehouse bar. The three newest blocks sit inside a dashed amber bracket labelled held, three blocks, 125 rows. On the right, two result tiles read zero wrong rows in the warehouse and 125 rows not reported yet, with notes saying it is cheap to build and expensive in freshness. Bottom row, take rows back: the same six blocks with no gate, all six sending arrows down into the warehouse bar, and an amber arrow leading out of the warehouse to a box reading 511 rows deleted after loading. Result tiles read zero wrong rows left and 511 rows removed after they were reported, with notes saying it works at any lag and that every downstream consumer has to tolerate rows disappearing. A closing band says the two are separate mechanisms, that a lag equal to the depth leaves retraction nothing to correct, and that neither one is free.">
+        <style>
+          .p7aH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .p7aT { font: 800 10px Inter, sans-serif; fill: #FFFFFF; }
+          .p7aL { font: 800 9px Inter, sans-serif; fill: #54655F; letter-spacing: .11em; }
+          .p7aB { font: 400 10.5px Inter, sans-serif; fill: #13201E; }
+          .p7aM { font: 400 10.5px Inter, sans-serif; fill: #54655F; }
+          .p7aBk { font: 700 9px Inter, sans-serif; fill: #123D3A; }
+          .p7aBw { font: 700 9px Inter, sans-serif; fill: #FFFFFF; }
+          .p7aBig { font: 800 21px Inter, sans-serif; fill: #1F5F5B; }
+          .p7aBigA { font: 800 21px Inter, sans-serif; fill: #9C3D18; }
+          .p7aTile { font: 600 9.5px Inter, sans-serif; fill: #54655F; }
+          .p7aAmb { font: 800 9.5px Inter, sans-serif; fill: #9C3D18; }
+          .p7aK { font: 800 11.5px Inter, sans-serif; fill: #1F5F5B; }
+        </style>
+        <defs>
+          <marker id="p7aArI" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1F5F5B"></path></marker>
+          <marker id="p7aArA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9C3D18"></path></marker>
+        </defs>
+
+        <text class="p7aH" x="14" y="20">Same warehouse, same reorganisation. One gate keeps rows out; the other lets them in and pulls them back.</text>
+
+        <!-- ===== ROW A: the lag ===== -->
+        <rect x="14" y="36" width="852" height="158" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="36" width="852" height="26" rx="10" fill="#1F5F5B"></rect>
+        <rect x="14" y="49" width="852" height="13" fill="#1F5F5B"></rect>
+        <text class="p7aT" x="30" y="54">DEFENCE 1 · HOLD ROWS BACK, WITH A FINALITY LAG</text>
+
+        <text class="p7aL" x="30" y="82">BLOCKS, NEWEST ON THE RIGHT</text>
+        <rect x="40" y="90" width="52" height="34" rx="5" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="p7aBk" x="56" y="111">195</text>
+        <rect x="100" y="90" width="52" height="34" rx="5" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="p7aBk" x="116" y="111">196</text>
+        <rect x="160" y="90" width="52" height="34" rx="5" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="p7aBk" x="176" y="111">197</text>
+        <rect x="220" y="90" width="52" height="34" rx="5" fill="#FFFFFF" stroke="#CFDEDA"></rect>
+        <text class="p7aBk" x="236" y="111">198</text>
+        <rect x="280" y="90" width="52" height="34" rx="5" fill="#FFFFFF" stroke="#CFDEDA"></rect>
+        <text class="p7aBk" x="296" y="111">199</text>
+        <rect x="340" y="90" width="52" height="34" rx="5" fill="#FFFFFF" stroke="#CFDEDA"></rect>
+        <text class="p7aBk" x="356" y="111">200</text>
+
+        <rect x="212" y="82" width="188" height="50" rx="7" fill="none" stroke="#9C3D18" stroke-width="1.4" stroke-dasharray="4 4"></rect>
+        <line x1="214" y1="78" x2="214" y2="136" stroke="#9C3D18" stroke-width="2.4"></line>
+
+        <line x1="66" y1="128" x2="66" y2="144" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p7aArI)"></line>
+        <line x1="126" y1="128" x2="126" y2="144" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p7aArI)"></line>
+        <line x1="186" y1="128" x2="186" y2="144" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p7aArI)"></line>
+
+        <rect x="30" y="148" width="172" height="30" rx="6" fill="#EFF7F5" stroke="#8FBDB8"></rect>
+        <text class="p7aBk" x="46" y="167">WAREHOUSE</text>
+
+        <text class="p7aAmb" x="306" y="153" text-anchor="middle">HELD: 3 BLOCKS, 125 ROWS</text>
+        <text class="p7aM" x="306" y="171" text-anchor="middle">the lag equals the reorganisation depth</text>
+
+        <line x1="420" y1="76" x2="420" y2="182" stroke="#DCE9E6" stroke-width="1.4"></line>
+
+        <text class="p7aL" x="440" y="82">WHAT BENCH B MEASURES</text>
+        <rect x="440" y="90" width="196" height="44" rx="7" fill="#EFF7F5" stroke="#8FBDB8"></rect>
+        <text class="p7aBig" x="456" y="114">0</text>
+        <text class="p7aTile" x="480" y="113">wrong rows in the warehouse</text>
+        <rect x="652" y="90" width="196" height="44" rx="7" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p7aBigA" x="668" y="114">125</text>
+        <text class="p7aTile" x="706" y="113">rows not reported yet</text>
+        <text class="p7aB" x="440" y="154">Cheap to build: one comparison in the loader, and no consumer hears about it.</text>
+        <text class="p7aM" x="440" y="172">Expensive in freshness, and only correct when the lag reaches the depth.</text>
+
+        <!-- ===== ROW B: retraction ===== -->
+        <rect x="14" y="206" width="852" height="158" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="206" width="852" height="26" rx="10" fill="#9C3D18"></rect>
+        <rect x="14" y="219" width="852" height="13" fill="#9C3D18"></rect>
+        <text class="p7aT" x="30" y="224">DEFENCE 2 · TAKE ROWS BACK, WITH A RETRACTING LOADER</text>
+
+        <text class="p7aL" x="30" y="252">BLOCKS, NEWEST ON THE RIGHT</text>
+        <rect x="40" y="260" width="52" height="34" rx="5" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="p7aBk" x="56" y="281">195</text>
+        <rect x="100" y="260" width="52" height="34" rx="5" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="p7aBk" x="116" y="281">196</text>
+        <rect x="160" y="260" width="52" height="34" rx="5" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="p7aBk" x="176" y="281">197</text>
+        <rect x="220" y="260" width="52" height="34" rx="5" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="p7aBk" x="236" y="281">198</text>
+        <rect x="280" y="260" width="52" height="34" rx="5" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="p7aBk" x="296" y="281">199</text>
+        <rect x="340" y="260" width="52" height="34" rx="5" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="p7aBk" x="356" y="281">200</text>
+        <text class="p7aAmb" x="404" y="281">no gate</text>
+
+        <line x1="66" y1="298" x2="66" y2="314" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p7aArI)"></line>
+        <line x1="126" y1="298" x2="126" y2="314" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p7aArI)"></line>
+        <line x1="186" y1="298" x2="186" y2="314" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p7aArI)"></line>
+        <line x1="246" y1="298" x2="246" y2="314" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p7aArI)"></line>
+        <line x1="306" y1="298" x2="306" y2="314" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p7aArI)"></line>
+        <line x1="366" y1="298" x2="366" y2="314" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p7aArI)"></line>
+
+        <rect x="30" y="318" width="172" height="30" rx="6" fill="#EFF7F5" stroke="#8FBDB8"></rect>
+        <text class="p7aBk" x="46" y="337">WAREHOUSE</text>
+        <line x1="206" y1="333" x2="238" y2="333" stroke="#9C3D18" stroke-width="1.8" marker-end="url(#p7aArA)"></line>
+        <rect x="242" y="317" width="152" height="32" rx="6" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p7aAmb" x="256" y="337">511 ROWS DELETED</text>
+
+        <line x1="420" y1="246" x2="420" y2="352" stroke="#DCE9E6" stroke-width="1.4"></line>
+
+        <text class="p7aL" x="440" y="252">WHAT BENCH B MEASURES</text>
+        <rect x="440" y="260" width="196" height="44" rx="7" fill="#EFF7F5" stroke="#8FBDB8"></rect>
+        <text class="p7aBig" x="456" y="284">0</text>
+        <text class="p7aTile" x="480" y="283">wrong rows left behind</text>
+        <rect x="652" y="260" width="196" height="44" rx="7" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p7aBigA" x="668" y="284">511</text>
+        <text class="p7aTile" x="706" y="283">rows removed after loading</text>
+        <text class="p7aB" x="440" y="324">Works at any lag, including none at all, so freshness is untouched.</text>
+        <text class="p7aM" x="440" y="342">Expensive to build: every table, extract and cached report must survive a deletion.</text>
+
+        <rect x="14" y="384" width="852" height="80" rx="10" fill="#EFF7F5" stroke="#1F5F5B"></rect>
+        <text class="p7aK" x="30" y="408">Two mechanisms, not two settings of one. Combine them and lag 3 leaves retraction nothing to correct.</text>
+        <text class="p7aB" x="30" y="430">Bench B at lag 3 with retraction on reports 0 orphaned rows and 0 corrected rows, because nothing wrong was ever written.</text>
+        <text class="p7aB" x="30" y="448">That is the only configuration where the retraction code is present and never fires, which is also the only way to know it works.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the gate in the top row and the outbound arrow in the bottom row are the entire difference. Everything else about the two pipelines is identical.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The lag only works when it reaches the depth<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A finality lag is not a dial that trades safety against freshness smoothly. It is a threshold, and the threshold is the reorganisation depth. Bench B runs a depth 3 reorganisation four times across 200 blocks, and the wrong-row count goes 511, 346, 172, 0 as the lag goes 0, 1, 2, 3. The first three of those are all failures. The last one is the answer.</p>
+        <p>Read the middle of that sequence carefully, because it is where the damage gets done in practice. A lag of 1 leaves 346 wrong rows, which is 3.99 percent of the warehouse. A lag of 2 leaves 172, which is 2.03 percent. Both of those configurations feel like caution. Both of them were chosen deliberately by somebody who was thinking about this problem. And both of them leave the warehouse wrong while removing the pressure to look again, which is a worse position than having no lag at all and knowing it.</p>
+        <p>The arithmetic is not subtle once you draw it: a reorganisation replaces the last three blocks, so any row from those three blocks that has already been written is a row that has to be unwritten. A lag of 1 writes two of those three blocks before the replacement lands. A lag of 2 writes one of them. A lag of 3 writes none.</p>
+      </div>
+    </details>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Going deeper than the depth buys exactly nothing<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The other end of the sweep is the part people get wrong in the opposite direction. At lag 3 the wrong rows are 0. At lag 4 they are 0. At lag 6 they are 0. At lag 12 they are 0. The defence is complete at 3 and every block of lag past that is pure cost with no corresponding benefit.</p>
+        <p>The cost is not trivial either. Lag 3 holds 125 rows back from the report. Lag 6 holds 249. Lag 12 holds 497, which is about 6 percent of the loaded volume sitting in a queue because somebody picked a round number that sounded safe. A team that cannot state the depth will reach for a big lag to cover its ignorance, and it will pay for that ignorance in freshness forever, on every report, with no way to tell whether it is overpaying by a factor of two or four.</p>
+        <p>Which leads to the uncomfortable requirement the whole defence rests on. You cannot choose a lag without knowing the depth, and the depth is not a column in your data. It is a property of the thing producing your data, it varies, and it is the input that nobody writes down.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Retraction works at any lag, which is its whole appeal<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A retracting loader does not need to know the depth. When the blocks a set of rows came from are replaced, it removes those rows, whatever depth the replacement went to. At lag 0 it corrects all 511. At lag 1 it corrects 346, at lag 2 it corrects 172, and in every one of those cases the warehouse ends up with 0 wrong rows.</p>
+        <p>That is a genuinely stronger property than the lag has, and it is worth saying plainly before the costs arrive. The lag is a bet on a number you do not control. Retraction is a mechanism that responds to what actually happened. If the depth doubles next month, the lag silently stops working and the retracting loader carries on being correct.</p>
+        <p>It is also the only one of the two that can recover from a mistake. A lag that turned out to be too shallow has already written the wrong rows and has no way to find them again. A retracting loader that was running the whole time has already taken them out.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where the reorganisation depth actually comes from<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Bench B fixes the depth at 3 because a bench has to fix something, and every number on this page is conditional on that choice. What the bench cannot tell you, and what no generated data could tell you, is what the depth is for whatever Larkfield is actually reading. That question has to be answered outside the warehouse, and the answer is not a constant.</p>
+        <p>What a practitioner can do is measure it rather than assume it. The loader already sees every block it loads. Recording, for each replacement it observes, how many blocks were replaced, gives an empirical distribution of depths over time rather than a folklore number. That distribution is the input to the lag decision, and it is the only honest basis for one. A team that has been running for six months and cannot produce that histogram has been guessing for six months.</p>
+        <p>Note also what the distribution does to the framing. A lag is chosen against a percentile of it, not against a maximum, because the maximum is unbounded. So a lag is a statement about how often you are willing to be wrong, and that is a decision for whoever owns the report rather than whoever owns the loader.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the bill</span>
+      <h2>Where each bill lands, and who pays it</h2>
+      <span class="tag demo">13 min live</span>
+    </div>
+    <p class="lede">The lag's bill is measured in rows and lands entirely inside the loader. Retraction's bill is not measured in rows at all, which is what makes it easy to underestimate. It lands on people who do not report to you, in systems you do not own, and it is due the first time a row disappears from under one of them.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 372" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two bar charts side by side, both plotted against finality lag in blocks with categories zero, one, two, three, four, six and twelve. The left chart, wrong rows in the warehouse, falls from 511 at lag zero to 346 at lag one, 172 at lag two, and zero at lag three, four, six and twelve. The right chart, rows held back from the report, rises from zero at lag zero to 44, 84, 125, 168, 249 and 497. A dashed amber vertical marker stands at lag three in both charts, labelled the reorganisation depth. Below, a band says the left chart reaches its floor at lag three while the right chart keeps climbing, so every block of lag past three is cost with no benefit.">
+        <style>
+          .p7bH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .p7bP { font: 800 10.5px Inter, sans-serif; fill: #13201E; }
+          .p7bA { font: 700 9px Inter, sans-serif; fill: #54655F; }
+          .p7bV { font: 800 9.5px Inter, sans-serif; fill: #123D3A; }
+          .p7bVz { font: 800 9.5px Inter, sans-serif; fill: #1F5F5B; }
+          .p7bX { font: 700 9.5px Inter, sans-serif; fill: #13201E; }
+          .p7bAx { font: 600 9.5px Inter, sans-serif; fill: #54655F; }
+          .p7bMk { font: 800 8.5px Inter, sans-serif; fill: #9C3D18; letter-spacing: .06em; }
+          .p7bK { font: 800 11.5px Inter, sans-serif; fill: #9C3D18; }
+          .p7bB { font: 400 10.5px Inter, sans-serif; fill: #13201E; }
+        </style>
+
+        <text class="p7bH" x="14" y="20">One chart hits its floor at lag 3. The other one never stops climbing.</text>
+
+        <!-- LEFT PANEL -->
+        <rect x="14" y="32" width="418" height="250" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <text class="p7bP" x="30" y="52">Wrong rows left in the warehouse</text>
+
+        <line x1="60" y1="70" x2="410" y2="70" stroke="#DCE9E6" stroke-width="1"></line>
+        <line x1="60" y1="150" x2="410" y2="150" stroke="#DCE9E6" stroke-width="1"></line>
+        <line x1="60" y1="230" x2="410" y2="230" stroke="#54655F" stroke-width="1.2"></line>
+        <text class="p7bA" x="52" y="73" text-anchor="end">560</text>
+        <text class="p7bA" x="52" y="153" text-anchor="end">280</text>
+        <text class="p7bA" x="52" y="233" text-anchor="end">0</text>
+
+        <rect x="72" y="84" width="26" height="146" rx="3" fill="#9C3D18"></rect>
+        <text class="p7bV" x="85" y="78" text-anchor="middle">511</text>
+        <rect x="122" y="131" width="26" height="99" rx="3" fill="#9C3D18"></rect>
+        <text class="p7bV" x="135" y="125" text-anchor="middle">346</text>
+        <rect x="172" y="181" width="26" height="49" rx="3" fill="#9C3D18"></rect>
+        <text class="p7bV" x="185" y="175" text-anchor="middle">172</text>
+        <text class="p7bVz" x="235" y="224" text-anchor="middle">0</text>
+        <text class="p7bVz" x="285" y="224" text-anchor="middle">0</text>
+        <text class="p7bVz" x="335" y="224" text-anchor="middle">0</text>
+        <text class="p7bVz" x="385" y="224" text-anchor="middle">0</text>
+
+        <line x1="235" y1="94" x2="235" y2="208" stroke="#9C3D18" stroke-width="1.6" stroke-dasharray="4 4"></line>
+        <text class="p7bMk" x="245" y="100">REORGANISATION DEPTH</text>
+
+        <line x1="85" y1="230" x2="85" y2="236" stroke="#54655F" stroke-width="1.2"></line>
+        <line x1="135" y1="230" x2="135" y2="236" stroke="#54655F" stroke-width="1.2"></line>
+        <line x1="185" y1="230" x2="185" y2="236" stroke="#54655F" stroke-width="1.2"></line>
+        <line x1="235" y1="230" x2="235" y2="236" stroke="#54655F" stroke-width="1.2"></line>
+        <line x1="285" y1="230" x2="285" y2="236" stroke="#54655F" stroke-width="1.2"></line>
+        <line x1="335" y1="230" x2="335" y2="236" stroke="#54655F" stroke-width="1.2"></line>
+        <line x1="385" y1="230" x2="385" y2="236" stroke="#54655F" stroke-width="1.2"></line>
+        <text class="p7bX" x="85" y="252" text-anchor="middle">0</text>
+        <text class="p7bX" x="135" y="252" text-anchor="middle">1</text>
+        <text class="p7bX" x="185" y="252" text-anchor="middle">2</text>
+        <text class="p7bX" x="235" y="252" text-anchor="middle">3</text>
+        <text class="p7bX" x="285" y="252" text-anchor="middle">4</text>
+        <text class="p7bX" x="335" y="252" text-anchor="middle">6</text>
+        <text class="p7bX" x="385" y="252" text-anchor="middle">12</text>
+        <text class="p7bAx" x="235" y="270" text-anchor="middle">finality lag, in blocks</text>
+
+        <!-- RIGHT PANEL -->
+        <rect x="448" y="32" width="418" height="250" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <text class="p7bP" x="464" y="52">Rows held back from the report</text>
+
+        <line x1="494" y1="70" x2="844" y2="70" stroke="#DCE9E6" stroke-width="1"></line>
+        <line x1="494" y1="150" x2="844" y2="150" stroke="#DCE9E6" stroke-width="1"></line>
+        <line x1="494" y1="230" x2="844" y2="230" stroke="#54655F" stroke-width="1.2"></line>
+        <text class="p7bA" x="486" y="73" text-anchor="end">560</text>
+        <text class="p7bA" x="486" y="153" text-anchor="end">280</text>
+        <text class="p7bA" x="486" y="233" text-anchor="end">0</text>
+
+        <text class="p7bVz" x="519" y="224" text-anchor="middle">0</text>
+        <rect x="556" y="217" width="26" height="13" rx="3" fill="#1F5F5B"></rect>
+        <text class="p7bV" x="569" y="211" text-anchor="middle">44</text>
+        <rect x="606" y="206" width="26" height="24" rx="3" fill="#1F5F5B"></rect>
+        <text class="p7bV" x="619" y="200" text-anchor="middle">84</text>
+        <rect x="656" y="194" width="26" height="36" rx="3" fill="#1F5F5B"></rect>
+        <text class="p7bV" x="669" y="188" text-anchor="middle">125</text>
+        <rect x="706" y="182" width="26" height="48" rx="3" fill="#1F5F5B"></rect>
+        <text class="p7bV" x="719" y="176" text-anchor="middle">168</text>
+        <rect x="756" y="159" width="26" height="71" rx="3" fill="#1F5F5B"></rect>
+        <text class="p7bV" x="769" y="153" text-anchor="middle">249</text>
+        <rect x="806" y="88" width="26" height="142" rx="3" fill="#1F5F5B"></rect>
+        <text class="p7bV" x="819" y="82" text-anchor="middle">497</text>
+
+        <line x1="669" y1="100" x2="669" y2="172" stroke="#9C3D18" stroke-width="1.6" stroke-dasharray="4 4"></line>
+        <text class="p7bMk" x="679" y="106">REORGANISATION DEPTH</text>
+
+        <line x1="519" y1="230" x2="519" y2="236" stroke="#54655F" stroke-width="1.2"></line>
+        <line x1="569" y1="230" x2="569" y2="236" stroke="#54655F" stroke-width="1.2"></line>
+        <line x1="619" y1="230" x2="619" y2="236" stroke="#54655F" stroke-width="1.2"></line>
+        <line x1="669" y1="230" x2="669" y2="236" stroke="#54655F" stroke-width="1.2"></line>
+        <line x1="719" y1="230" x2="719" y2="236" stroke="#54655F" stroke-width="1.2"></line>
+        <line x1="769" y1="230" x2="769" y2="236" stroke="#54655F" stroke-width="1.2"></line>
+        <line x1="819" y1="230" x2="819" y2="236" stroke="#54655F" stroke-width="1.2"></line>
+        <text class="p7bX" x="519" y="252" text-anchor="middle">0</text>
+        <text class="p7bX" x="569" y="252" text-anchor="middle">1</text>
+        <text class="p7bX" x="619" y="252" text-anchor="middle">2</text>
+        <text class="p7bX" x="669" y="252" text-anchor="middle">3</text>
+        <text class="p7bX" x="719" y="252" text-anchor="middle">4</text>
+        <text class="p7bX" x="769" y="252" text-anchor="middle">6</text>
+        <text class="p7bX" x="819" y="252" text-anchor="middle">12</text>
+        <text class="p7bAx" x="669" y="270" text-anchor="middle">finality lag, in blocks</text>
+
+        <rect x="14" y="296" width="852" height="62" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p7bK" x="30" y="320">Both charts have a corner at lag 3, and only one of them stops there.</text>
+        <text class="p7bB" x="30" y="342">Past the depth the left chart cannot improve, because it is already at zero, and the right chart keeps climbing at roughly 42 rows a block.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the two charts share an x axis and a scale on purpose, so the flat tail on the left and the rising tail on the right can be compared by eye.</figcaption>
+    </figure>
+
+    <div class="wk" id="p7-defend">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">Bench B running in this page. Set the lag, turn retraction on and off, and watch which column moves.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="p7-lag">Finality lag, in blocks, against a depth 3 reorganisation</label>
+        <select class="sql-code" id="p7-lag">
+          <option value="0">lag 0 (append everything immediately)</option>
+          <option value="1">lag 1</option>
+          <option value="2">lag 2</option>
+          <option value="3" selected>lag 3</option>
+          <option value="4">lag 4</option>
+          <option value="6">lag 6</option>
+          <option value="12">lag 12</option>
+        </select>
+        <p class="p7-toggle"><label for="p7-retract"><input type="checkbox" id="p7-retract"> Retracting loader: remove rows when their blocks are replaced</label></p>
+        <div id="p7-out"></div>
+        <p class="sql-note" id="p7-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="p7-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Late is additive. Withdrawn is subtractive.<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every warehouse has machinery for data that shows up after the period it belongs to. Idempotent loads, merge keys, restatement windows, slowly changing dimensions: the general craft is well developed and it is taught properly in <b>learn-data-engineering-with-phoebe</b>, which is where it should be learned rather than here. What matters tonight is a distinction that craft does not have to make, because it never has to.</p>
+        <p>Those patterns handle data that arrives <strong>late</strong>. This is data that is <strong>withdrawn</strong>. Late data is additive: a total goes up, a previously missing row appears, and nothing that was already correct becomes wrong. Withdrawn data is subtractive: a total goes down, a row that was counted is gone, and a figure that was right yesterday cannot be reproduced today. Those two are not variations of the same event and the second one almost never appears in a downstream consumer's mental model.</p>
+        <p>This is why the retraction bill is hard to size. You are not paying for the delete statement. You are paying for the first time a monthly extract that was already sent to a partner no longer matches the source, the first time a cached dashboard has a higher number than the table it reads from, and the first time somebody reruns last week's query and gets a different answer with no code change in between.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 332" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two panels comparing a late-arriving row with a withdrawn row. Left panel, arrives late: a before box holding four row bars and an arrow to an after box holding the same four bars plus a fifth new one drawn in dark teal. Notes say a row describing an earlier day turns up today, the total goes up, nothing already correct becomes wrong, and idempotent loads, merge keys and late-arriving windows all assume exactly this. A teal band reads handled by patterns your warehouse already has. Right panel, is withdrawn: a before box holding five row bars and an arrow to an after box holding two solid bars and three dashed empty slots. Notes say three rows already loaded and already reported are removed, the total goes down, a figure correct yesterday is now unreproducible, and almost no downstream consumer is built to survive a row disappearing. An amber band reads this is the case those patterns do not cover, late is additive and withdrawn is subtractive.">
+        <style>
+          .p7cH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .p7cT { font: 800 10px Inter, sans-serif; fill: #FFFFFF; }
+          .p7cL { font: 800 9px Inter, sans-serif; fill: #54655F; letter-spacing: .11em; }
+          .p7cB { font: 400 10.5px Inter, sans-serif; fill: #13201E; }
+          .p7cM { font: 400 10.5px Inter, sans-serif; fill: #54655F; }
+          .p7cK { font: 800 10.5px Inter, sans-serif; fill: #1F5F5B; }
+          .p7cKa { font: 800 10.5px Inter, sans-serif; fill: #9C3D18; }
+          .p7cS { font: 700 9px Inter, sans-serif; fill: #1F5F5B; }
+          .p7cSa { font: 700 9px Inter, sans-serif; fill: #9C3D18; }
+        </style>
+        <defs>
+          <marker id="p7cArI" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1F5F5B"></path></marker>
+          <marker id="p7cArA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9C3D18"></path></marker>
+        </defs>
+
+        <text class="p7cH" x="14" y="20">Your warehouse has a pattern for the left-hand case. It has no pattern for the right-hand one.</text>
+
+        <!-- LEFT -->
+        <rect x="14" y="32" width="418" height="284" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="32" width="418" height="26" rx="10" fill="#1F5F5B"></rect>
+        <rect x="14" y="45" width="418" height="13" fill="#1F5F5B"></rect>
+        <text class="p7cT" x="30" y="50">A ROW ARRIVES LATE</text>
+
+        <text class="p7cL" x="40" y="78">BEFORE</text>
+        <rect x="40" y="84" width="140" height="84" rx="6" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <line x1="54" y1="98" x2="166" y2="98" stroke="#8FBDB8" stroke-width="5" stroke-linecap="round"></line>
+        <line x1="54" y1="112" x2="166" y2="112" stroke="#8FBDB8" stroke-width="5" stroke-linecap="round"></line>
+        <line x1="54" y1="126" x2="166" y2="126" stroke="#8FBDB8" stroke-width="5" stroke-linecap="round"></line>
+        <line x1="54" y1="140" x2="166" y2="140" stroke="#8FBDB8" stroke-width="5" stroke-linecap="round"></line>
+
+        <line x1="188" y1="126" x2="222" y2="126" stroke="#1F5F5B" stroke-width="1.8" marker-end="url(#p7cArI)"></line>
+
+        <text class="p7cL" x="230" y="78">AFTER</text>
+        <rect x="230" y="84" width="140" height="84" rx="6" fill="#EFF7F5" stroke="#8FBDB8"></rect>
+        <line x1="244" y1="98" x2="356" y2="98" stroke="#8FBDB8" stroke-width="5" stroke-linecap="round"></line>
+        <line x1="244" y1="112" x2="356" y2="112" stroke="#8FBDB8" stroke-width="5" stroke-linecap="round"></line>
+        <line x1="244" y1="126" x2="356" y2="126" stroke="#8FBDB8" stroke-width="5" stroke-linecap="round"></line>
+        <line x1="244" y1="140" x2="356" y2="140" stroke="#8FBDB8" stroke-width="5" stroke-linecap="round"></line>
+        <line x1="244" y1="154" x2="356" y2="154" stroke="#1F5F5B" stroke-width="5" stroke-linecap="round"></line>
+        <text class="p7cS" x="378" y="158">new</text>
+
+        <text class="p7cB" x="40" y="192">A row describing an earlier day turns up today.</text>
+        <text class="p7cM" x="40" y="210">The total goes up. Nothing that was already correct becomes wrong.</text>
+        <text class="p7cM" x="40" y="228">Merge keys and late-arriving windows all assume exactly this shape.</text>
+
+        <rect x="40" y="246" width="350" height="56" rx="8" fill="#EFF7F5" stroke="#1F5F5B"></rect>
+        <text class="p7cK" x="56" y="270">Handled by patterns the warehouse already has.</text>
+        <text class="p7cM" x="56" y="290">learn-data-engineering-with-phoebe owns that craft.</text>
+
+        <!-- RIGHT -->
+        <rect x="448" y="32" width="418" height="284" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="448" y="32" width="418" height="26" rx="10" fill="#9C3D18"></rect>
+        <rect x="448" y="45" width="418" height="13" fill="#9C3D18"></rect>
+        <text class="p7cT" x="464" y="50">A ROW IS WITHDRAWN</text>
+
+        <text class="p7cL" x="474" y="78">BEFORE</text>
+        <rect x="474" y="84" width="140" height="84" rx="6" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <line x1="488" y1="98" x2="600" y2="98" stroke="#8FBDB8" stroke-width="5" stroke-linecap="round"></line>
+        <line x1="488" y1="112" x2="600" y2="112" stroke="#8FBDB8" stroke-width="5" stroke-linecap="round"></line>
+        <line x1="488" y1="126" x2="600" y2="126" stroke="#8FBDB8" stroke-width="5" stroke-linecap="round"></line>
+        <line x1="488" y1="140" x2="600" y2="140" stroke="#8FBDB8" stroke-width="5" stroke-linecap="round"></line>
+        <line x1="488" y1="154" x2="600" y2="154" stroke="#8FBDB8" stroke-width="5" stroke-linecap="round"></line>
+
+        <line x1="622" y1="126" x2="656" y2="126" stroke="#9C3D18" stroke-width="1.8" marker-end="url(#p7cArA)"></line>
+
+        <text class="p7cL" x="664" y="78">AFTER</text>
+        <rect x="664" y="84" width="140" height="84" rx="6" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <line x1="678" y1="98" x2="790" y2="98" stroke="#8FBDB8" stroke-width="5" stroke-linecap="round"></line>
+        <line x1="678" y1="112" x2="790" y2="112" stroke="#8FBDB8" stroke-width="5" stroke-linecap="round"></line>
+        <line x1="678" y1="126" x2="790" y2="126" stroke="#CFDEDA" stroke-width="5" stroke-linecap="round" stroke-dasharray="5 5"></line>
+        <line x1="678" y1="140" x2="790" y2="140" stroke="#CFDEDA" stroke-width="5" stroke-linecap="round" stroke-dasharray="5 5"></line>
+        <line x1="678" y1="154" x2="790" y2="154" stroke="#CFDEDA" stroke-width="5" stroke-linecap="round" stroke-dasharray="5 5"></line>
+        <text class="p7cSa" x="812" y="140">gone</text>
+
+        <text class="p7cB" x="474" y="192">Rows already loaded, and already in a report, are removed.</text>
+        <text class="p7cM" x="474" y="210">The total goes down. A figure correct yesterday is unreproducible.</text>
+        <text class="p7cM" x="474" y="228">Almost nothing downstream is built to survive a row disappearing.</text>
+
+        <rect x="474" y="246" width="350" height="56" rx="8" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p7cKa" x="490" y="270">This is the case those patterns do not cover.</text>
+        <text class="p7cM" x="490" y="290">Late is additive. Withdrawn is subtractive.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the before boxes hold the same rows. The only difference is the direction the count moves, and that direction is the whole engineering bill.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The combination, and the configuration nobody chooses<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Turn both on and set the lag to 3 and the bench reports 0 orphaned rows and 0 corrected rows. The retraction code is present, wired in, and never fires, because the gate stopped every row that would have needed retracting. It looks like waste. It is the only configuration in the sweep that is both correct and honest about why.</p>
+        <p>The reason to build it that way is that the lag and the retraction fail in different circumstances. The lag fails when the depth is deeper than you assumed, silently and completely. Retraction fails when a downstream consumer cannot cope with a deletion, loudly and locally. Running both means the common case costs you nothing beyond the freshness you already agreed to, and the day the depth exceeds your lag, the second mechanism catches what the first one let through and you find out because the correction count stops being 0.</p>
+        <p>That last point is the useful one for an on-call engineer. In a both-on pipeline, a non-zero corrected count is a signal that your lag assumption has just been violated. In a lag-only pipeline, the same event produces no signal whatsoever.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>One camp says: hold the rows. A warehouse's contract with everyone downstream is that a row, once present, stays present, and that contract is worth more than a few hours of freshness. Break it and you have not built a fresher warehouse, you have built a cache with a warehouse's interface, and every consumer who trusted the interface is now wrong in a way they cannot detect. On this view the freshness cost is the cheapest thing in the entire design and the argument about it is a distraction. Pick a lag at a high percentile of the observed depth, publish it as a documented latency, and be done.</p>
+        <p>The other camp says: that contract was never true, it was only never tested. Any warehouse whose upstream can restate is already breaking it and nobody noticed because restatements are rare and usually additive. What a lag actually does is hide the problem behind a delay, which means the one time the depth exceeds the lag, the warehouse is wrong and has no mechanism to recover. On this view a retracting loader is not the expensive option, it is the only option that tells the truth, and the engineering cost downstream is the real cost of the data being what it is. Paying it once is cheaper than discovering it during an incident.</p>
+        <p>Both camps are staffed by people who have run production pipelines against upstreams that restate. They disagree about which failure is worse, and that is a judgement about your consumers rather than about your loader. The tell is what your downstream looks like. If it is three internal marts and a dashboard, retraction is affordable and the second camp is right. If it includes extracts that leave the building, contractual reports, or anything a regulator has already received, the first camp is right and the argument is over before it starts.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Price both defences on a pipeline you own</h2>
+      <span class="tag exercise">15 min hands on</span>
+    </div>
+    <p class="lede">Six steps, on a real pipeline in your own estate, whether or not it touches a chain. Most of these questions have answers you can find in ten minutes and have never been asked to find.</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Find your loader's boundary</h4>
+        <p>Name the exact line of code where a record stops being "arrived" and starts being "loaded". If you cannot point at one line, you do not have a boundary, you have a habit, and neither defence can be installed in a habit.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ask what your current lag is</h4>
+        <p>Not what it should be. What it is, today, in whatever unit your pipeline measures. Most teams discover theirs is zero and was never a decision. Write the number down before anyone rationalises it.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write down the depth you are defending against</h4>
+        <p>How far back can your upstream change something you have already loaded? If the honest answer is that nobody knows, that is the finding. A lag chosen against an unknown depth is a number, not a defence.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Count the consumers that would break on a delete</h4>
+        <p>List everything reading your table: marts, extracts, cached dashboards, scheduled emails, partner feeds, notebooks somebody reruns. Mark each one as survives a deletion or does not. The count of the second group is the retraction bill.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Price a lag at the 95th percentile</h4>
+        <p>Take your freshness cost per unit of lag and multiply. Bench B holds 125 rows at lag 3 and 497 at lag 12, roughly 42 rows a block. Do the same arithmetic on your volumes and say the number out loud to whoever owns the report.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Decide which bill you would rather send</h4>
+        <p>One goes to the people who read your numbers and is paid in staleness. The other goes to every team downstream of you and is paid in engineering. Commit to one in the room, and say who you would have to convince.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When someone tells you their pipeline has a finality lag, ask two questions in this order. What is the depth it is set against, and where did that number come from? A lag with a confident answer to the first and no answer to the second is the 346-rows-wrong configuration wearing the language of the zero-rows-wrong one. The defence is not the lag. The defence is the lag being at least as deep as the thing it is defending against, and only one of those two facts is visible in the code.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">A team sets a finality lag of 1 block against a reorganisation depth of 3, reasoning that some protection is better than none. What does Bench B say happens?</p>
+      <div class="qopt">A · Roughly a third of the wrong rows remain, which is an acceptable partial defence</div>
+      <div class="qopt">B · 346 rows are still wrong, 3.99 percent of the warehouse, and the lag has mostly bought the feeling of having addressed it</div>
+      <div class="qopt">C · The lag has no effect at all, since it is shallower than the depth</div>
+      <q class="qwhy">Partial is the trap. Lag 1 does remove some damage, going from 511 to 346, and that is exactly why it is dangerous: the warehouse is still wrong, and the team has already spent the concern that would have made them look again.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Why is a retracting loader described as expensive when the code change in the loader itself is small?</p>
+      <div class="qopt">A · Because deleting rows is slower than inserting them at warehouse scale</div>
+      <div class="qopt">B · Because it has to know the reorganisation depth in order to decide what to remove</div>
+      <div class="qopt">C · Because the cost lands downstream: every table, extract and cached report has to tolerate rows disappearing, and most warehouses are built on the assumption that they do not</div>
+      <q class="qwhy">The delete is trivial. The bill is that a total can now go down. Option B is also the opposite of true, which is retraction's main advantage: it responds to the replacement that actually happened rather than to an assumed depth.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Your upstream restates data regularly and your team already handles late-arriving records well. Why does that not carry over?</p>
+      <div class="qopt">A · Late data is additive and withdrawn data is subtractive, so the existing patterns cover the case where a total goes up and not the case where it goes down</div>
+      <div class="qopt">B · Late-arriving patterns only work on dimension tables, not on fact tables</div>
+      <div class="qopt">C · It does carry over, since both are just restatements of a previous period</div>
+      <q class="qwhy">A merge key handles a row that turns up late. It has nothing to say about a row that was loaded, counted, cached and sent, and is now gone. The first leaves every previously correct figure correct. The second does not.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 8</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty five minutes. One inventory and one number, both taken from a system you actually run.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Build the deletion-tolerance inventory</h4>
+        <p>Every consumer of one of your tables, with a yes or no against "survives a row being removed". Bring the list and the total count of no. That count is what a retraction design would cost you, and almost nobody has ever written it down.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Bring one training set you would trust</h4>
+        <p>Session 8 is the modelling half. Pick a dataset you would happily train on and write down how it was assembled: the grain, the label source, and whether any finality lag was applied before the rows were frozen. Three lines is enough, and all three get used.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The finality lag as a threshold</span><span class="note">511, 346, 172, 0 across lags 0 to 3. Nothing works until the lag reaches the depth.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The freshness bill, priced</span><span class="note">125 rows held at lag 3, 249 at lag 6, 497 at lag 12, and nothing bought past the depth.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The retracting loader</span><span class="note">All 511 corrected at lag 0, correct at any lag, and it never needs to know the depth.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Where the retraction bill lands</span><span class="note">Not in the loader. In every table, extract and cached report that assumed rows do not vanish.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Both defences together</span><span class="note">Lag 3 with retraction on: 0 orphaned and 0 corrected, and a corrected count that becomes an alarm.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Late against withdrawn</span><span class="note">Additive against subtractive, and why the second one has no pattern waiting for it.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Idempotency and late-arriving data</span><span class="note">Named and pointed at learn-data-engineering-with-phoebe. The general craft is theirs.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">A training set assembled without a lag</span><span class="note">Raised tonight as a consequence. Session 8 measures what it does to a model.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Testing a defence against what it defends from</span><span class="note">Used tonight as a design argument. Session 9 is the bench that got it wrong.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Chain mechanics and why branches get replaced</span><span class="note">The prerequisite is learn-blockchain-with-phoebe and it is assumed rather than repeated.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Any real network's reorganisation behaviour</span><span class="note">Every figure here comes from the generator in w3-live.js and describes no real network.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Anything to do with price, markets or holdings</span><span class="note">Out of scope by design, and nothing here is advice of any kind.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The one sentence.</strong> Hold rows back or take them back. There is no third mechanism, and they cost opposite things.</div>
+      <div class="cheat-item"><strong>The lag is a threshold.</strong> 511, 346, 172, 0 at lags 0, 1, 2, 3. Anything short of the depth is a failure that feels like a precaution.</div>
+      <div class="cheat-item"><strong>Deeper buys nothing.</strong> Lag 3, 4, 6 and 12 all leave 0 wrong rows. Lag 12 just holds 497 rows instead of 125.</div>
+      <div class="cheat-item"><strong>The lag's bill.</strong> Freshness, paid by the report, roughly 42 rows a block, entirely inside the loader.</div>
+      <div class="cheat-item"><strong>Retraction's bill.</strong> Engineering, paid by every downstream consumer, and due the first time a total goes down.</div>
+      <div class="cheat-item"><strong>Retraction needs no depth.</strong> It responds to the replacement that happened. A lag bets on a number you do not control.</div>
+      <div class="cheat-item"><strong>Both on, lag at the depth.</strong> 0 orphaned and 0 corrected, and a corrected count above zero becomes your alarm that the depth moved.</div>
+      <div class="cheat-item"><strong>The distinction to keep.</strong> Late is additive and your toolkit expects it. Withdrawn is subtractive and nothing downstream does.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 7 of 10 · learn-web3-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p6-reorgs-hit-your-warehouse.html">← Practitioner session 6 · Reorgs hit your warehouse</a>
+        <a href="p8-ml-on-public-adversarial-data.html">Practitioner session 8 · ML on public adversarial data →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/w3-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof W3 === "undefined") return;
+  var sel = document.getElementById("p7-lag");
+  var box = document.getElementById("p7-retract");
+  var out = document.getElementById("p7-out");
+  var verdict = document.getElementById("p7-verdict");
+  var self = document.getElementById("p7-self");
+
+  function comma(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+  function pct(x) { return (Math.round(x * 10000) / 100).toFixed(2) + "%"; }
+
+  function render() {
+    var lag = Number(sel.value);
+    var retract = box.checked;
+    var r = W3.runPipeline({ finalityLag: lag, retract: retract, seed: 5 });
+    var base = W3.runPipeline({ finalityLag: 0, retract: false, seed: 5 });
+
+    var html = '<table class="sql-table"><thead><tr><th>What the pipeline did</th><th>Value</th><th>Which defence owns it</th></tr></thead><tbody>';
+    html += "<tr><td>Reorganisations, each 3 blocks deep</td><td>" + r.reorgs + "</td><td>the chain, not you</td></tr>";
+    html += "<tr><td>Rows written to the warehouse</td><td>" + comma(r.rowsWritten) + "</td><td>the loader</td></tr>";
+    html += '<tr><td>Wrong rows left behind</td><td><b class="' + (r.orphanedRows === 0 ? "p7-ok" : "p7-bad") + '">'
+      + comma(r.orphanedRows) + "</b></td><td>" + (r.orphanedRows === 0 ? "nothing wrong survived" : "neither defence caught these") + "</td></tr>";
+    html += "<tr><td>Share of the warehouse that is wrong</td><td>" + pct(r.wrongRowShare) + "</td><td>orphaned over warehouse rows</td></tr>";
+    html += '<tr><td>Rows removed after loading</td><td><b class="' + (r.correctedRows > 0 ? "p7-bad" : "p7-ok") + '">'
+      + comma(r.correctedRows) + "</b></td><td>" + (retract ? "the retracting loader" : "retraction is off") + "</td></tr>";
+    html += '<tr><td>Rows held back, not reported yet</td><td><b class="' + (r.rowsStillHeld > 0 ? "p7-bad" : "p7-ok") + '">'
+      + comma(r.rowsStillHeld) + "</b></td><td>" + (lag > 0 ? "the finality lag" : "no lag, so nothing is held") + "</td></tr>";
+    html += "<tr><td>Rows a report would see</td><td>" + comma(r.warehouseRows) + "</td><td>what the board is shown</td></tr>";
+    html += "</tbody></table>";
+    out.innerHTML = html;
+
+    var v;
+    if (lag === 0 && !retract) {
+      v = "The undefended pipeline. " + comma(r.orphanedRows) + " rows, " + pct(r.wrongRowShare)
+        + " of the warehouse, describe history the chain no longer has, and nothing errored.";
+    } else if (!retract && lag > 0 && lag < 3) {
+      v = "A lag of " + lag + " is shallower than the depth of 3, so it removed " + comma(base.orphanedRows - r.orphanedRows)
+        + " of the " + comma(base.orphanedRows) + " wrong rows and left " + comma(r.orphanedRows)
+        + " behind. It also holds " + comma(r.rowsStillHeld) + " rows back. Paying a freshness cost for a warehouse that is still wrong.";
+    } else if (!retract && lag >= 3) {
+      v = "A lag of " + lag + " reaches the depth of 3, so the wrong rows are 0. The bill is " + comma(r.rowsStillHeld)
+        + " rows held back" + (lag > 3 ? ", and every block past 3 added to that bill without improving the 0." : ".");
+    } else if (retract && lag < 3) {
+      v = "Retraction removed " + comma(r.correctedRows) + " rows after they were already loaded, so the wrong rows are 0 at a lag of "
+        + lag + ". Every one of those removals is a deletion some downstream consumer has to survive.";
+    } else {
+      v = "Lag " + lag + " with retraction on: 0 wrong rows and 0 corrected rows. The retraction code never fired, because the gate stopped "
+        + comma(r.rowsStillHeld) + " rows that would otherwise have needed it. A corrected count above 0 here would mean the depth had moved.";
+    }
+    verdict.textContent = v;
+  }
+
+  var t = W3.selfTest();
+  self.textContent = t.ok
+    ? "The generator's five properties pass in this browser, including the one that checks a lag deeper than the reorganisation orphans nothing. Nothing here describes a real network."
+    : "The generator's self test did not pass in this browser, so nothing above should be believed.";
+
+  sel.addEventListener("change", render);
+  box.addEventListener("change", render);
+  render();
+})();
+</script>
+<style>
+  #p7-defend .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 24rem; }
+  #p7-defend table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+  #p7-defend .p7-bad { color: var(--amber); }
+  #p7-defend .p7-ok { color: var(--indigo); }
+  #p7-defend .p7-toggle { margin: .7rem 0 .2rem; font-size: .85rem; font-weight: 600; color: var(--ink); }
+  #p7-defend .p7-toggle input { margin-right: .45rem; }
+</style>
+</body>
+</html>

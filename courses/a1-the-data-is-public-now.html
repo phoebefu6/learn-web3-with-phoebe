@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 1 of 6. A data team normally owns its dataset, can correct it, can join it to identity, and has nobody outside optimising against its metrics. On a public ledger all four change at once. Larkfield, and the four couplings that come apart.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="The data is public now - learn web3 with phoebe">
+<meta property="og:description" content="Leader session 1 of 6. Four assumptions a data team runs on, and what happens when the dataset is shared, permanent, pseudonymous and adversarial.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-web3-with-phoebe/courses/a1-the-data-is-public-now.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The data is public now - learn web3 with phoebe">
+<meta name="twitter:description" content="Some of what changes is a genuine improvement for a data team and some of it is a tax. The two get separated rather than argued over.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 1 · The data is public now - learn web3 with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-web3-with-phoebe</a> / Leader session 1 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Web3 with Phoebe · Leader session 1 of 6</div>
+    <h1>The data is <span class="accent">public now</span></h1>
+    <p class="sub">A data team runs on four quiet assumptions: the dataset is ours, we can fix a wrong row, we can join it to a person, and nobody outside is working to move our numbers. Larkfield's product issues rewards on a public ledger, and all four of those stopped being true on the same day. Tonight is the four couplings, drawn as a mechanism rather than a feature list, and an honest split between the ones that cost Larkfield something and the one that gives it something back.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Leader track</span>
+      <span class="chip audience">Anyone asked to build on a public ledger</span>
+      <span class="chip audience">Anyone who signs off the user number</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · Four assumptions</span>
+      <span class="a3" style="flex:3">18-28 · Larkfield</span>
+      <span class="a4" style="flex:4">28-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Larkfield, on the morning the board asks for a user number</h2>
+    </div>
+    <p class="lede">Larkfield ships a product that issues rewards on a public ledger. The engineering side of that is settled and is not tonight's subject; how a ledger is built, agreed and kept tamper evident belongs to <b>learn-blockchain-with-phoebe</b>, which is the prerequisite here. Tonight starts one step later, in the warehouse, with a data team that has been asked a plain question: how many people use this? Every instinct that team has for answering a question like that was formed on datasets with four properties that its current dataset does not have.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The four couplings a data team relies on without noticing, named out loud, and the point in Larkfield's mechanism where each one comes apart. A clear-eyed view of which of the four is a tax and which is a genuine improvement, held apart rather than blended into a position. And the one number Larkfield is about to report, staring at you unanswered, so that session 2 has something to measure rather than something to describe.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Four assumptions nobody writes down<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Ask a data leader what their team depends on and you get tooling, headcount and a warehouse. The four things that actually hold the work together are further down and rarely said: we own this dataset, we can correct it, we can attach a person to a row, and the only people optimising against our metrics are us.</p>
+        <p>None of those is a technology choice. They are properties of the arrangement, and they are so reliable that the entire craft is built on top of them without a mention. A public ledger removes all four in one move, which is why the experience of working on one is disorienting rather than merely unfamiliar. It is not that the tools are different. It is that four load-bearing assumptions are gone and the tools were built assuming them.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Larkfield's team is competent and well equipped. Their first month on the public data went badly not because they lacked skill but because every recovery move they reached for assumed at least one of the four. They tried to correct a wrong row. They tried to join to a customer table. They tried to keep a metric definition quiet until it stabilised. Each of those is the right instinct somewhere else.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words that keep coming back<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Address.</strong> The only identifier a row carries. It is not a person and it is not an account you can look up. Part 2 tonight, measured in session 2.</li>
+          <li><strong>Entity.</strong> The real party behind one or more addresses. The gap between an address count and an entity count is session 2's whole subject.</li>
+          <li><strong>Append only.</strong> New records can be added. Existing records cannot be altered. Session 4.</li>
+          <li><strong>Adversarial data.</strong> A dataset where some rows exist because somebody wanted your metric to read differently. Session 3.</li>
+          <li><strong>Pseudonymous.</strong> Persistent identifiers with no attached identity. Not the same as anonymous, and the difference matters more than it sounds.</li>
+          <li><strong>Provenance.</strong> The record of where a figure came from and what produced it. The one place a public ledger hands a data team something better than usual. Session 5.</li>
+          <li><strong>Record linkage.</strong> Joining records that describe the same party through fuzzy attributes and probability. That craft lives in <b>learn-entity-resolution-with-phoebe</b>; the evidence here is structural instead, so the machinery differs even where the problem rhymes.</li>
+          <li><strong>Scoping.</strong> What to ask before agreeing to build on any of this. Session 6.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers what changes</span>
+      <h2>Four couplings, and all four come apart at once</h2>
+      <span class="tag concept">15 min live</span>
+    </div>
+    <p class="lede">Each of the four is easiest to see as a mechanism rather than a statement. On the usual arrangement there is a wall with one set of readers inside it, an edit path that rewrites a row in place, a key that joins a row to a person, and a metric that only the people who own it can reach. Take the wall away and every one of those parts behaves differently, including the three that were never touched.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 542" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Four couplings drawn twice, once as they normally work and once on a public ledger. Column one, ownership: normally a dashed wall encloses the rows and one reader sits inside it; on a public ledger the wall is a faded outline and three readers, including a competitor, pull from the same rows. Column two, correction: normally an update arrow loops back and rewrites a row in place; on a public ledger the word update is struck through, the wrong row remains, and a second corrected row is appended below it. Column three, identity: normally a rows block and a people block are joined by a solid connector with a key; on a public ledger the people block is a dashed box holding a question mark and the connector has a marked gap with no key. Column four, the metric: normally rows feed a metric and a single reader looks at it, one direction only; on a public ledger the same reader has an amber arrow running back into the rows. A closing band says all four change at the same time, so none of them can be handled alone.">
+        <style>
+          .a1aH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .a1aL { font: 800 10px Inter, sans-serif; fill: #54655F; letter-spacing: .12em; }
+          .a1aT { font: 800 10px Inter, sans-serif; fill: #FFFFFF; }
+          .a1aB { font: 400 11px Inter, sans-serif; fill: #13201E; }
+          .a1aS { font: 400 8.5px Inter, sans-serif; fill: #54655F; }
+          .a1aSd { font: 400 8.5px Inter, sans-serif; fill: #13201E; }
+          .a1aSb { font: 700 9px Inter, sans-serif; fill: #1F5F5B; }
+          .a1aSa { font: 700 9px Inter, sans-serif; fill: #9C3D18; }
+          .a1aQ { font: 800 20px Inter, sans-serif; fill: #9C3D18; }
+          .a1aK { font: 800 11.5px Inter, sans-serif; fill: #9C3D18; }
+          .a1aM { font: 400 11px Inter, sans-serif; fill: #54655F; }
+        </style>
+        <defs>
+          <marker id="a1aArI" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#123D3A"></path></marker>
+          <marker id="a1aArA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9C3D18"></path></marker>
+        </defs>
+
+        <text class="a1aH" x="14" y="20">The same four parts, drawn twice. Only the wall was removed, and all four behave differently.</text>
+        <text class="a1aL" x="14" y="42">NORMALLY, ON A DATASET YOU RUN</text>
+
+        <!-- row A panels -->
+        <rect x="14" y="50" width="198" height="168" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="50" width="198" height="24" rx="10" fill="#123D3A"></rect>
+        <rect x="14" y="62" width="198" height="12" fill="#123D3A"></rect>
+        <text class="a1aT" x="28" y="67">1 · OWNERSHIP</text>
+        <rect x="38" y="84" width="160" height="62" rx="8" fill="none" stroke="#1F5F5B" stroke-width="1.6" stroke-dasharray="5 4"></rect>
+        <rect x="50" y="94" width="80" height="42" rx="5" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <line x1="58" y1="105" x2="122" y2="105" stroke="#8FBDB8" stroke-width="4" stroke-linecap="round"></line>
+        <line x1="58" y1="115" x2="122" y2="115" stroke="#8FBDB8" stroke-width="4" stroke-linecap="round"></line>
+        <line x1="58" y1="125" x2="122" y2="125" stroke="#8FBDB8" stroke-width="4" stroke-linecap="round"></line>
+        <circle cx="166" cy="115" r="10" fill="#1F5F5B"></circle>
+        <line x1="153" y1="115" x2="136" y2="115" stroke="#123D3A" stroke-width="1.6" marker-end="url(#a1aArI)"></line>
+        <text class="a1aB" x="28" y="178">One dataset, one wall, and</text>
+        <text class="a1aB" x="28" y="195">one set of readers: yours.</text>
+
+        <rect x="232" y="50" width="198" height="168" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="232" y="50" width="198" height="24" rx="10" fill="#123D3A"></rect>
+        <rect x="232" y="62" width="198" height="12" fill="#123D3A"></rect>
+        <text class="a1aT" x="246" y="67">2 · CORRECTION</text>
+        <path d="M 366 94 C 384 64, 254 64, 270 91" fill="none" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#a1aArI)"></path>
+        <rect x="262" y="96" width="110" height="20" rx="5" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a1aSd" x="270" y="110">row 41, the wrong value</text>
+        <text class="a1aSb" x="262" y="136">UPDATE rewrites it in place</text>
+        <text class="a1aB" x="246" y="178">A wrong row gets fixed and</text>
+        <text class="a1aB" x="246" y="195">the table still has one row.</text>
+
+        <rect x="450" y="50" width="198" height="168" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="450" y="50" width="198" height="24" rx="10" fill="#123D3A"></rect>
+        <rect x="450" y="62" width="198" height="12" fill="#123D3A"></rect>
+        <text class="a1aT" x="464" y="67">3 · IDENTITY</text>
+        <rect x="468" y="92" width="66" height="48" rx="5" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a1aSb" x="484" y="120">rows</text>
+        <rect x="572" y="92" width="66" height="48" rx="5" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a1aSb" x="584" y="120">people</text>
+        <line x1="534" y1="116" x2="572" y2="116" stroke="#1F5F5B" stroke-width="2.2"></line>
+        <circle cx="553" cy="116" r="5" fill="#1F5F5B"></circle>
+        <text class="a1aS" x="468" y="156">joined on a key you control</text>
+        <text class="a1aB" x="464" y="178">A row can be turned into a</text>
+        <text class="a1aB" x="464" y="195">person whenever you need it.</text>
+
+        <rect x="668" y="50" width="198" height="168" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="668" y="50" width="198" height="24" rx="10" fill="#123D3A"></rect>
+        <rect x="668" y="62" width="198" height="12" fill="#123D3A"></rect>
+        <text class="a1aT" x="682" y="67">4 · THE METRIC</text>
+        <rect x="684" y="94" width="54" height="42" rx="5" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a1aSb" x="696" y="119">rows</text>
+        <line x1="740" y1="115" x2="758" y2="115" stroke="#123D3A" stroke-width="1.6" marker-end="url(#a1aArI)"></line>
+        <rect x="762" y="94" width="56" height="42" rx="5" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a1aSb" x="772" y="119">metric</text>
+        <line x1="820" y1="115" x2="832" y2="115" stroke="#123D3A" stroke-width="1.6" marker-end="url(#a1aArI)"></line>
+        <circle cx="848" cy="115" r="10" fill="#1F5F5B"></circle>
+        <text class="a1aS" x="684" y="156">one direction only</text>
+        <text class="a1aB" x="682" y="178">Nobody outside is trying to</text>
+        <text class="a1aB" x="682" y="195">move the number you report.</text>
+
+        <text class="a1aL" x="14" y="242">WHEN THE LEDGER IS PUBLIC</text>
+
+        <!-- row B panels -->
+        <rect x="14" y="250" width="198" height="168" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="250" width="198" height="24" rx="10" fill="#9C3D18"></rect>
+        <rect x="14" y="262" width="198" height="12" fill="#9C3D18"></rect>
+        <text class="a1aT" x="28" y="267">1 · OWNERSHIP</text>
+        <rect x="38" y="284" width="160" height="62" rx="8" fill="none" stroke="#CFDEDA" stroke-width="1.6" stroke-dasharray="2 6"></rect>
+        <rect x="50" y="294" width="80" height="42" rx="5" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <line x1="58" y1="305" x2="122" y2="305" stroke="#8FBDB8" stroke-width="4" stroke-linecap="round"></line>
+        <line x1="58" y1="315" x2="122" y2="315" stroke="#8FBDB8" stroke-width="4" stroke-linecap="round"></line>
+        <line x1="58" y1="325" x2="122" y2="325" stroke="#8FBDB8" stroke-width="4" stroke-linecap="round"></line>
+        <circle cx="168" cy="296" r="9" fill="#1F5F5B"></circle>
+        <circle cx="168" cy="318" r="9" fill="#9C3D18"></circle>
+        <circle cx="168" cy="340" r="9" fill="#54655F"></circle>
+        <line x1="156" y1="298" x2="137" y2="302" stroke="#123D3A" stroke-width="1.4" marker-end="url(#a1aArI)"></line>
+        <line x1="156" y1="318" x2="137" y2="316" stroke="#123D3A" stroke-width="1.4" marker-end="url(#a1aArI)"></line>
+        <line x1="156" y1="338" x2="137" y2="330" stroke="#123D3A" stroke-width="1.4" marker-end="url(#a1aArI)"></line>
+        <text class="a1aB" x="28" y="378">The same rows, read by you,</text>
+        <text class="a1aB" x="28" y="395">your competitor and anyone.</text>
+
+        <rect x="232" y="250" width="198" height="168" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="232" y="250" width="198" height="24" rx="10" fill="#9C3D18"></rect>
+        <rect x="232" y="262" width="198" height="12" fill="#9C3D18"></rect>
+        <text class="a1aT" x="246" y="267">2 · CORRECTION</text>
+        <text class="a1aS" x="262" y="294">UPDATE</text>
+        <line x1="258" y1="290" x2="312" y2="290" stroke="#9C3D18" stroke-width="2"></line>
+        <rect x="262" y="302" width="110" height="18" rx="4" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a1aS" x="270" y="315">row 41, still wrong</text>
+        <line x1="317" y1="322" x2="317" y2="331" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#a1aArI)"></line>
+        <rect x="262" y="334" width="110" height="18" rx="4" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a1aSd" x="270" y="347">row 118, the fix</text>
+        <text class="a1aB" x="246" y="378">The wrong row stays. A new</text>
+        <text class="a1aB" x="246" y="395">row is appended beside it.</text>
+
+        <rect x="450" y="250" width="198" height="168" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="450" y="250" width="198" height="24" rx="10" fill="#9C3D18"></rect>
+        <rect x="450" y="262" width="198" height="12" fill="#9C3D18"></rect>
+        <text class="a1aT" x="464" y="267">3 · IDENTITY</text>
+        <rect x="468" y="292" width="66" height="48" rx="5" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a1aSb" x="484" y="320">rows</text>
+        <rect x="572" y="292" width="66" height="48" rx="5" fill="#FFFFFF" stroke="#9C3D18" stroke-width="1.6" stroke-dasharray="4 3"></rect>
+        <text class="a1aQ" x="598" y="324">?</text>
+        <line x1="534" y1="316" x2="547" y2="316" stroke="#CFDEDA" stroke-width="2.2"></line>
+        <line x1="559" y1="316" x2="572" y2="316" stroke="#CFDEDA" stroke-width="2.2"></line>
+        <line x1="547" y1="307" x2="547" y2="325" stroke="#9C3D18" stroke-width="1.6"></line>
+        <line x1="559" y1="307" x2="559" y2="325" stroke="#9C3D18" stroke-width="1.6"></line>
+        <text class="a1aSa" x="468" y="356">no key, and none is coming</text>
+        <text class="a1aB" x="464" y="378">An address is the only name</text>
+        <text class="a1aB" x="464" y="395">that the data carries at all.</text>
+
+        <rect x="668" y="250" width="198" height="168" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="668" y="250" width="198" height="24" rx="10" fill="#9C3D18"></rect>
+        <rect x="668" y="262" width="198" height="12" fill="#9C3D18"></rect>
+        <text class="a1aT" x="682" y="267">4 · THE METRIC</text>
+        <rect x="684" y="294" width="54" height="42" rx="5" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <text class="a1aSb" x="696" y="319">rows</text>
+        <line x1="740" y1="315" x2="758" y2="315" stroke="#123D3A" stroke-width="1.6" marker-end="url(#a1aArI)"></line>
+        <rect x="762" y="294" width="56" height="42" rx="5" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="a1aSb" x="772" y="319">metric</text>
+        <line x1="820" y1="315" x2="832" y2="315" stroke="#123D3A" stroke-width="1.6" marker-end="url(#a1aArI)"></line>
+        <circle cx="848" cy="315" r="10" fill="#9C3D18"></circle>
+        <path d="M 848 328 L 848 350 L 711 350 L 711 340" fill="none" stroke="#9C3D18" stroke-width="1.8" marker-end="url(#a1aArA)"></path>
+        <text class="a1aB" x="682" y="378">The reader can add rows and</text>
+        <text class="a1aB" x="682" y="395">move the number themselves.</text>
+
+        <rect x="14" y="442" width="852" height="84" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="a1aK" x="30" y="466">All four change at the same time, which is why none of them can be handled on its own.</text>
+        <text class="a1aM" x="30" y="488">Larkfield can work around any single one of these. It cannot work around all four, because every workaround it reaches for</text>
+        <text class="a1aM" x="30" y="506">assumes at least one of the other three still holds. Sessions 2, 3 and 4 take three of them apart with numbers.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - nothing in the bottom row was redesigned. The wall came off and the other three parts changed behaviour on their own.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>You do not own it, and neither does anyone else<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The first coupling is the one people expect to hurt most and it is the most double-edged of the four. Larkfield's competitor can query exactly the rows Larkfield queries, at the same moment, with the same completeness. A data moat built on exclusive access to those rows does not exist and cannot be built, because the rows were never Larkfield's to withhold.</p>
+        <p>That removes an advantage. It also removes an excuse, and the second half is the part that gets left out. When the underlying rows are public, "our numbers say something different" stops being the end of a conversation. Anyone can go and look. A team that has been quietly resting on the unverifiability of its own reporting finds that support gone, and a team that has been reporting carefully finds that its care is now visible to people who could not previously check.</p>
+        <p>Neither of those is a small change to how a data function is run. The first shifts where the advantage has to come from: not the rows, but what is built on top of them, which is a harder and more honest place to compete. The second shifts what a reported figure is: a claim that can be audited by a stranger rather than a claim that has to be taken.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>You cannot correct it<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Appending a fix is possible. Changing a record is not. Read that twice, because the first half makes the second half sound survivable and it is only survivable if every consumer of the data knows the difference.</p>
+        <p>The usual restatement machinery assumes a rewrite somewhere. A wrong figure is corrected, the corrected figure is what the table now says, and the history of the error lives in a changelog that nobody reads. Here the error is a row, it stays a row, and the fix is a second row. Every reader who does not know to look for the second row is reading the first one and getting the wrong answer, permanently and with no warning.</p>
+        <p>The general craft of append-only loading and late-arriving data is handled in the data engineering courses. Session 4 deals with the twist that those do not have to handle: the upstream can withdraw history that has already been loaded and reported.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Identity is an address, not a person<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every row carries an address. An address is persistent, so it behaves like an identifier, which is exactly the trap. It looks like the customer id column that every analyst has used since they started, and it will pass every schema check and every join that column would pass. It just does not mean what that column means.</p>
+        <p>One person can hold four addresses and often does, for reasons that have nothing to do with concealment. Four addresses can also be one party holding sixty. Nothing in the data distinguishes those cases, and nothing outside the data can be joined in to settle them, because the key that would do the joining does not exist and is not being withheld from you by anyone you could ask.</p>
+        <p>Session 2 measures what this does to Larkfield's headcount, on generated data where the truth is known and the answer can be checked rather than asserted.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>One camp holds that a dataset you cannot correct has no business being the system of record for anything a regulator, a customer or a court might ask about. Their argument is not squeamishness: it is that every governance regime in existence assumes a correction path, so a dataset without one cannot be brought into compliance by effort, only by building a second, private, correctable store beside it and treating the public one as an input. On this view the right answer is usually to keep the ledger out of the reporting line entirely.</p>
+        <p>The other camp holds that the correction path was always the problem. A dataset that can be quietly rewritten has no provenance worth the name, and the reason nobody noticed is that the rewriting was done by people acting in good faith. An append-only record forces every correction to be visible as a correction, which is the first time most data functions will have had genuine, externally checkable lineage. On this view the discomfort is the machinery working, and the teams complaining loudest are the ones whose previous numbers would not have survived it.</p>
+        <p>Both positions are held by people who have shipped regulated data products. They point at different first moves: one starts by drawing a boundary and keeping the ledger outside it, the other starts by rebuilding the reporting layer so that a superseded row is a first-class concept. Which one the person across the table holds tells you more about how the project will go than any technical answer they give you.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers Larkfield</span>
+      <h2>Larkfield, and the sentence it has to put in a report</h2>
+      <span class="tag concept">10 min live</span>
+    </div>
+    <p class="lede">Larkfield's mechanism is four steps long and there is nothing exotic in any of them. A reward is issued, it lands at an address, the row is written where anyone can read it and cannot be changed, and a number is reported. Each step is ordinary. Each step is also where exactly one of the four couplings comes apart, and they come apart in that order.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 506" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Larkfield's mechanism drawn as four stations with what breaks at each one. Above station two, a box says anyone can read the same rows: a competitor, an auditor, anyone, with an arrow pointing down into the ledger station. Station one, a reward is issued to an address, and the break below it is that identity is an address, with no person on the row and no key that gets you one. Station two, the ledger records it where anyone can read it with no request and no account, and the break is that you do not own it. Station three, the row is permanent, it can be added to but not edited or withdrawn, and the break is that you cannot correct it. Station four, Larkfield reports how many people used the product, and the break is that the metric is reachable by whoever it is about. An amber loop runs from the fourth break back into the first, labelled the number is worth money to move and moving it costs one new address. A closing band says three of the four are a tax and one is the improvement.">
+        <style>
+          .a1bH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .a1bT { font: 800 9.5px Inter, sans-serif; fill: #FFFFFF; }
+          .a1bB { font: 400 10px Inter, sans-serif; fill: #13201E; }
+          .a1bM { font: 400 10px Inter, sans-serif; fill: #54655F; }
+          .a1bE { font: 800 9px Inter, sans-serif; fill: #9C3D18; letter-spacing: .1em; }
+          .a1bN { font: 800 10.5px Inter, sans-serif; fill: #13201E; }
+          .a1bC { font: 800 10.5px Inter, sans-serif; fill: #1F5F5B; }
+          .a1bA { font: 800 10.5px Inter, sans-serif; fill: #9C3D18; }
+          .a1bK { font: 800 11.5px Inter, sans-serif; fill: #1F5F5B; }
+          .a1bS { font: 400 9.5px Inter, sans-serif; fill: #54655F; }
+        </style>
+        <defs>
+          <marker id="a1bArI" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1F5F5B"></path></marker>
+          <marker id="a1bArA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9C3D18"></path></marker>
+        </defs>
+
+        <text class="a1bH" x="14" y="20">From a reward issued to a number in a board pack, and what comes apart at each step</text>
+
+        <rect x="232" y="36" width="192" height="54" rx="9" fill="#EFF7F5" stroke="#8FBDB8"></rect>
+        <text class="a1bC" x="246" y="58">Anyone can read these rows</text>
+        <text class="a1bS" x="246" y="76">A competitor, an auditor, anyone.</text>
+        <line x1="328" y1="108" x2="328" y2="94" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#a1bArI)"></line>
+
+        <!-- stations -->
+        <rect x="14" y="110" width="192" height="92" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="110" width="192" height="26" rx="10" fill="#1F5F5B"></rect>
+        <rect x="14" y="123" width="192" height="13" fill="#1F5F5B"></rect>
+        <text class="a1bT" x="28" y="128">1 · A REWARD IS ISSUED</text>
+        <text class="a1bB" x="28" y="154">Larkfield sends a reward to</text>
+        <text class="a1bB" x="28" y="171">an address. The address is</text>
+        <text class="a1bB" x="28" y="188">the whole of the recipient.</text>
+
+        <line x1="208" y1="156" x2="228" y2="156" stroke="#1F5F5B" stroke-width="1.8" marker-end="url(#a1bArI)"></line>
+
+        <rect x="232" y="110" width="192" height="92" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="232" y="110" width="192" height="26" rx="10" fill="#1F5F5B"></rect>
+        <rect x="232" y="123" width="192" height="13" fill="#1F5F5B"></rect>
+        <text class="a1bT" x="246" y="128">2 · THE LEDGER RECORDS IT</text>
+        <text class="a1bB" x="246" y="154">The row is written where</text>
+        <text class="a1bB" x="246" y="171">anyone reads it, with no</text>
+        <text class="a1bB" x="246" y="188">request and no account.</text>
+
+        <line x1="426" y1="156" x2="446" y2="156" stroke="#1F5F5B" stroke-width="1.8" marker-end="url(#a1bArI)"></line>
+
+        <rect x="450" y="110" width="192" height="92" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="450" y="110" width="192" height="26" rx="10" fill="#1F5F5B"></rect>
+        <rect x="450" y="123" width="192" height="13" fill="#1F5F5B"></rect>
+        <text class="a1bT" x="464" y="128">3 · THE ROW IS PERMANENT</text>
+        <text class="a1bB" x="464" y="154">It can be added to. It</text>
+        <text class="a1bB" x="464" y="171">cannot be edited and it</text>
+        <text class="a1bB" x="464" y="188">cannot be withdrawn.</text>
+
+        <line x1="644" y1="156" x2="664" y2="156" stroke="#1F5F5B" stroke-width="1.8" marker-end="url(#a1bArI)"></line>
+
+        <rect x="668" y="110" width="192" height="92" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="668" y="110" width="192" height="26" rx="10" fill="#1F5F5B"></rect>
+        <rect x="668" y="123" width="192" height="13" fill="#1F5F5B"></rect>
+        <text class="a1bT" x="682" y="128">4 · LARKFIELD REPORTS</text>
+        <text class="a1bB" x="682" y="154">The board is told how many</text>
+        <text class="a1bB" x="682" y="171">people used the product</text>
+        <text class="a1bB" x="682" y="188">in the last month.</text>
+
+        <line x1="110" y1="202" x2="110" y2="226" stroke="#CFDEDA" stroke-width="1.5"></line>
+        <line x1="328" y1="202" x2="328" y2="226" stroke="#CFDEDA" stroke-width="1.5"></line>
+        <line x1="546" y1="202" x2="546" y2="226" stroke="#CFDEDA" stroke-width="1.5"></line>
+        <line x1="764" y1="202" x2="764" y2="226" stroke="#CFDEDA" stroke-width="1.5"></line>
+
+        <!-- breaks -->
+        <rect x="14" y="226" width="192" height="96" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="a1bE" x="28" y="246">WHAT BREAKS HERE</text>
+        <text class="a1bN" x="28" y="266">Identity is an address</text>
+        <text class="a1bM" x="28" y="286">No person sits on the row,</text>
+        <text class="a1bM" x="28" y="303">and no key gets you one.</text>
+
+        <rect x="232" y="226" width="192" height="96" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="a1bE" x="246" y="246">WHAT BREAKS HERE</text>
+        <text class="a1bN" x="246" y="266">You do not own it</text>
+        <text class="a1bM" x="246" y="286">Your competitor queries the</text>
+        <text class="a1bM" x="246" y="303">same rows that you query.</text>
+
+        <rect x="450" y="226" width="192" height="96" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="a1bE" x="464" y="246">WHAT BREAKS HERE</text>
+        <text class="a1bN" x="464" y="266">You cannot correct it</text>
+        <text class="a1bM" x="464" y="286">Appending a fix is possible.</text>
+        <text class="a1bM" x="464" y="303">Changing a record is not.</text>
+
+        <rect x="668" y="226" width="192" height="96" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="a1bE" x="682" y="246">WHAT BREAKS HERE</text>
+        <text class="a1bN" x="682" y="266">The metric is reachable</text>
+        <text class="a1bM" x="682" y="286">Whoever the number is about</text>
+        <text class="a1bM" x="682" y="303">can also go and move it.</text>
+
+        <path d="M 764 322 L 764 352 L 110 352 L 110 326" fill="none" stroke="#9C3D18" stroke-width="1.8" marker-end="url(#a1bArA)"></path>
+        <text class="a1bA" x="130" y="374">The number is worth something to move, and moving it costs one new address.</text>
+        <text class="a1bM" x="130" y="392">Nothing in the mechanism separates a person who wants a reward from a party who wants many.</text>
+
+        <rect x="14" y="410" width="852" height="80" rx="10" fill="#EFF7F5" stroke="#1F5F5B"></rect>
+        <text class="a1bK" x="30" y="434">Three of these four are a tax on the data team. One of them is the improvement.</text>
+        <text class="a1bB" x="30" y="456">Not owning the rows removes a moat, and the same property removes an excuse: a figure taken from here can be checked by a stranger,</text>
+        <text class="a1bB" x="30" y="474">which almost no reported figure anywhere can. Sessions 2, 3 and 4 price the other three. Session 5 counts the credit side properly.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber loop is the part that has no equivalent in a normal pipeline. The output of the report is an input to the data.</figcaption>
+    </figure>
+
+    <div class="wk" id="a1-public">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The generator behind the whole Larkfield estate, running in this page. Everything below is computed here.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="a1-seed">Which month of Larkfield data to look at</label>
+        <select class="sql-code" id="a1-seed">
+          <option value="11">Month A</option>
+          <option value="101">Month B</option>
+          <option value="2024">Month C</option>
+          <option value="7">Month D</option>
+          <option value="55555">Month E</option>
+        </select>
+        <div id="a1-out"></div>
+        <p class="sql-note" id="a1-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="a1-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why the last row of that table is the honest one<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Change the month and watch the address count move around a thousand. That figure is solid: it is a count of distinct things in the data and no judgement went into it. Then look at the row underneath, which is the row the board actually asked about, and notice that the correct entry is not a worse number. It is a statement that the data does not contain the answer.</p>
+        <p>A data team's reflex at this point is to go and find the answer, and there is a standard method for doing so. Session 2 runs it on this same data, where the truth is known, and reports how close it gets. The result is not what most people expect, in a direction most people do not guess.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The metric and the incentive in the same place<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>In an ordinary pipeline the people who can move a metric and the people the metric is about are different sets, mostly. Here they overlap completely. Larkfield issues a reward for activity; activity is what the metric counts; creating activity costs one new address. There is no separating layer, because the thing being measured and the thing being paid for are the same event, written to the same row.</p>
+        <p>The consequence for a data function is that data quality stops being a function of the pipeline and becomes a function of what the product pays for. A metric that nobody has an interest in moving can be fixed by better engineering. A metric that somebody is being paid to move cannot, and treating it as an engineering problem produces a cleaner pipeline reporting the same wrong number. Session 3 is where that gets measured.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What is genuinely better here<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Three of the four couplings cost Larkfield something, and it would be easy to leave tonight with the impression that the whole arrangement is a downgrade. That would be the wrong conclusion and it would also be a useless one, because Larkfield is not going to stop shipping the product.</p>
+        <p>The credit side is real and it is mostly provenance. A figure derived from these rows can be recomputed by anyone who doubts it, from the same inputs, without asking Larkfield for access. Two parties who disagree about a number can settle the disagreement by running the derivation rather than by escalating. A regulator can check a claim without an audit engagement. None of those is available on a private warehouse at any price, because the bottleneck there is not the quality of the data, it is that the other party has to be granted access to it and then has to trust that what they were granted is complete.</p>
+        <p>Whether that credit outweighs the three costs depends entirely on what is being built, which is why it is session 5 and session 6 rather than a slogan. Session 5 takes the credit side seriously enough to say where it fails too.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Take the four couplings apart on your own data</h2>
+      <span class="tag build">17 min hands on</span>
+    </div>
+    <p class="lede">No code. Six steps on a dataset your own team owns today, said out loud in the room. The aim is to feel which of the four you are leaning on hardest, because that is the one that will hurt first.</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Name the four from memory</h4>
+        <p>Without looking up: ownership, correction, identity, and the metric. Say what each one means in one sentence. The one most people cannot state is the fourth, which is also the one with no engineering fix.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Pick a dataset you report from weekly</h4>
+        <p>Something real, with a number that goes to someone senior. Write down who else can read the underlying rows today. If the answer is nobody outside, say plainly what that is worth to you and what it is covering up.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Count last quarter's corrections</h4>
+        <p>How many times did somebody change a row rather than add one? Then ask whether any downstream reader would have been able to tell. That number is the size of your dependence on coupling two.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Find the join that makes a row a person</h4>
+        <p>Trace the key from the row to the human being. Count the hops. Then imagine the key is deleted and nobody has it, including your vendors, and say what your weekly number becomes.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ask who is paid to move your number</h4>
+        <p>Anyone at all: a team with a bonus on it, a supplier, a customer, an affiliate. Write the list. If it is empty, say whether that is because nobody has the incentive or because nobody has the access.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Commit to a guess about Larkfield</h4>
+        <p>Larkfield sees about a thousand addresses in a month. Write down how many real people you think are behind them, as a single number, on paper where you can see it. Do not hedge it and do not qualify it. Session 2 checks it against the truth.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When someone hands you a number taken from a public ledger, ask which of the four they were relying on when they computed it. Not whether they know the chain mechanics, which they usually do, but whether their method quietly assumed they owned the rows, could correct them, could reach a person, or had nobody working against them. The method is almost never wrong about the arithmetic. It is wrong about which of the four it still had.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Larkfield's competitor can read every row Larkfield reads. What is the second consequence of that, the one teams usually leave out?</p>
+      <div class="qopt">A · The rows will be read less carefully, because responsibility for them is now shared</div>
+      <div class="qopt">B · Larkfield's figures become less accurate, because it no longer controls the source</div>
+      <div class="qopt">C · Larkfield loses the ability to rest on an unverifiable claim, because anyone who doubts a reported figure can recompute it from the same rows</div>
+      <q class="qwhy">Losing exclusivity removes an advantage and it also removes a defence. A figure that cannot be checked by an outsider is easy to defend and hard to trust. Once the inputs are public, care in the derivation becomes visible, and so does its absence.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">A new analyst joins Larkfield and joins the reward table to the address column, treating it as a customer id. Why is that a problem even though every query runs and every schema check passes?</p>
+      <div class="qopt">A · Because addresses change too often for a join key</div>
+      <div class="qopt">B · Because an address is persistent and looks like an identifier, but one party can hold many of them and nothing in the data or reachable from it says which ones belong together</div>
+      <div class="qopt">C · Because joining on an address is slower than joining on a numeric key</div>
+      <q class="qwhy">The failure is silent, which is what makes it expensive. The column behaves like a key in every mechanical sense. It simply is not one entity per value, and there is no external table to correct that, because the key that would do it does not exist anywhere.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Larkfield's pipeline is rebuilt, tested and instrumented to a very high standard. Which of the four couplings does that work not help with at all?</p>
+      <div class="qopt">A · The fourth: a metric that somebody is paid to move stays wrong no matter how clean the pipeline carrying it is</div>
+      <div class="qopt">B · The second: correction, since a better pipeline cannot append rows</div>
+      <div class="qopt">C · None of them, since pipeline quality is the root cause in every case</div>
+      <q class="qwhy">Engineering fixes the transport. It does not touch the incentive that created the rows. A cleaner pipeline reporting an inflated count reports it faster, more reliably and with better monitoring, and the number is exactly as wrong as it was.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 2</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty minutes, on a number your own team reports and on the guess you just wrote down.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Write your four couplings down</h4>
+        <p>For one reported number: who else can read the rows, how corrections are made, how a row becomes a person, and who benefits from the number moving. One line each. Mark the ones you had never articulated before tonight.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Bring the guess you committed to</h4>
+        <p>Your single number for how many real people sit behind Larkfield's thousand addresses, unhedged, on paper. Session 2 runs the standard method on the same data and puts both against a truth the generator knows.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The four couplings</span><span class="note">Ownership, correction, identity and the metric, drawn as a mechanism rather than listed as features.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Shared access and what it costs</span><span class="note">A moat that cannot be built, and an excuse that can no longer be used.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Append against correct</span><span class="note">Why a fix is a second row, and why every reader who misses it gets the old answer forever.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Larkfield's mechanism end to end</span><span class="note">Reward issued, address credited, row written, number reported, and the loop from the number back to the rows.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The credit side, honestly</span><span class="note">Provenance a stranger can recompute, which no private warehouse offers at any price.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">How far off the address count is</span><span class="note">Asked tonight, with your guess on paper. Session 2 measures it on data where the truth is known.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Metrics people are paid to move</span><span class="note">Named tonight as the fourth coupling. Session 3 puts numbers on it.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Immutability against restatement and erasure</span><span class="note">Sketched tonight. Session 4 takes the correction path apart properly.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Hashes, blocks, consensus and the chain itself</span><span class="note">The prerequisite is learn-blockchain-with-phoebe and it is assumed rather than repeated.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Probabilistic record linkage</span><span class="note">Fuzzy matching, blocking and scoring live in learn-entity-resolution-with-phoebe.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Anything to do with price, markets or holdings</span><span class="note">Out of scope by design, and nothing here is advice of any kind.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The one sentence.</strong> Four assumptions hold a data function together, and a public ledger removes all four at the same time.</div>
+      <div class="cheat-item"><strong>Coupling 1, ownership.</strong> You do not own it and neither does anyone else. No moat, and no excuse either.</div>
+      <div class="cheat-item"><strong>Coupling 2, correction.</strong> Appending a fix is possible. Changing a record is not. The wrong row stays readable forever.</div>
+      <div class="cheat-item"><strong>Coupling 3, identity.</strong> An address is a persistent identifier that is not a person, and no key exists to make it one.</div>
+      <div class="cheat-item"><strong>Coupling 4, the metric.</strong> The number and the incentive to move it sit at the same address. No pipeline work touches this.</div>
+      <div class="cheat-item"><strong>The credit side.</strong> Provenance a stranger can recompute without being granted access, which a private warehouse cannot offer.</div>
+      <div class="cheat-item"><strong>The test for a method.</strong> Ask which of the four it quietly assumed. The arithmetic is usually right; the assumption usually is not.</div>
+      <div class="cheat-item"><strong>The open question.</strong> About a thousand addresses in a month. How many people? Commit to a number before session 2.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Leader session 1 of 6 · learn-web3-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="../index.html">← All sessions</a>
+        <a href="a2-the-user-count-that-is-not-one.html">Leader session 2 · The user count that is not one →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/w3-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof W3 === "undefined") return;
+  var sel = document.getElementById("a1-seed");
+  var out = document.getElementById("a1-out");
+  var verdict = document.getElementById("a1-verdict");
+  var self = document.getElementById("a1-self");
+
+  function comma(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+
+  function render() {
+    var s = Number(sel.value);
+    var world = W3.makeWorld({ seed: s });
+    var txs = W3.makeTransactions(world, { seed: s + 1 });
+    var addresses = world.addresses.length;
+
+    var html = '<table class="sql-table"><thead><tr><th>What Larkfield can read</th><th>Value</th><th>Where it comes from</th></tr></thead><tbody>';
+    html += "<tr><td>Addresses appearing in the month</td><td>" + comma(addresses) + "</td><td>counted directly from the rows</td></tr>";
+    html += "<tr><td>Transactions recorded</td><td>" + comma(txs.length) + "</td><td>counted directly from the rows</td></tr>";
+    html += '<tr><td>People behind those addresses</td><td><b class="a1-gap">not in the data</b></td><td>no column, and no table to join</td></tr>';
+    html += "</tbody></table>";
+    out.innerHTML = html;
+
+    verdict.textContent = "A report built only on what is above can honestly say " + comma(addresses)
+      + " active addresses. It cannot say " + comma(addresses)
+      + " people, and nothing in these rows will tell you how far apart those two are. Session 2 measures the distance.";
+  }
+
+  var t = W3.selfTest();
+  self.textContent = t.ok
+    ? "The generator's five properties pass in this browser, so the counts above are the counts any correct run gives. Nothing here describes a real network."
+    : "The generator's self test did not pass in this browser, so nothing above should be believed.";
+
+  sel.addEventListener("change", render);
+  render();
+})();
+</script>
+<style>
+  #a1-public .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 14rem; }
+  #a1-public table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+  #a1-public .a1-gap { color: var(--amber); }
+</style>
+</body>
+</html>

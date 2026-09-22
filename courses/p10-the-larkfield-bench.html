@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 10 of 10. Both Larkfield benches live in the page, driven by you. Move the operator size, the discipline, the reorganisation depth and the loader lag, and watch two measured exchange rates appear.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="The Larkfield bench - learn web3 with phoebe">
+<meta property="og:description" content="Practitioner session 10 of 10. Clustering passes manufactured addresses through at a slope of exactly 1, and every unprotected block of depth costs about 169 wrong rows.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-web3-with-phoebe/courses/p10-the-larkfield-bench.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Larkfield bench - learn web3 with phoebe">
+<meta name="twitter:description" content="The cleaning step is transparent to the population it is supposed to catch. Move the slider and watch the slope stay at 1.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 10 · The Larkfield bench - learn web3 with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-web3-with-phoebe</a> / Practitioner session 10 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Web3 with Phoebe · Practitioner session 10 of 10</div>
+    <h1>The Larkfield <span class="accent">bench</span></h1>
+    <p class="sub">Nine sessions took the two problems apart a piece at a time. This one puts both of them in front of you with every input exposed. Move the size of an operator, how carefully it behaves, how deep the reorganisation goes and how long the loader waits, and watch the counts recompute. Two exchange rates come out of it, and neither is the one people assume. The cleaning step is completely transparent to the population it exists to catch, and a block of waiting buys a fixed amount of protection that stops the moment you pass the depth you never wrote down.</p>
+    <div class="chip-row">
+      <span class="chip level">🔴 Hardest</span>
+      <span class="chip audience">Anyone who will own a pipeline like this</span>
+      <span class="chip audience">Anyone who has to defend one of its numbers</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Who the count is counting</span>
+      <span class="a3" style="flex:4">18-34 · What waiting buys</span>
+      <span class="a4" style="flex:3">34-45 · Write the brief and close</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where this lands</h2>
+    </div>
+    <p class="lede">Sessions 1 and 2 read the chain as a dataset and found the indexer where the product turned out to be. Sessions 3 to 5 took apart what an address is and what an active user count is worth once somebody is paid to move it. Sessions 6 and 7 put a reorganisation through a warehouse and designed for retraction. Session 8 put a model on top of all of it, and session 9 is the record of this bench being wrong. Everything below runs from the same <span class="mono">assets/w3-live.js</span>, whose five properties are checked on load, including the one that only exists because it caught a fault the other four could not see.</p>
+
+    <div class="legend">
+      <span class="pill">Live = worked through in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with today.</strong> Two measured exchange rates you can quote from memory, both obtained by moving a control rather than by being told. A feel for which inputs move the answer and which do nothing at all, which is the difference between understanding a pipeline and having read its documentation. And a short written brief for a chain-sourced dataset, in the form somebody else could check.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What the two benches recompute on every press<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The first bench builds a population of holders and operators, generates transactions from it, then runs the standard co-spend heuristic over those transactions with a union-find and scores the result against the truth it happens to know. It also re-runs the whole thing with slightly larger operators, so the slope it reports is a measurement taken there and then rather than a number quoted from a table.</p>
+        <p>The second bench runs a loader over a chain that reorganises, at whatever depth and lag you set, and counts the rows left describing history the chain no longer has. Nothing here describes a real network, and none of these figures should be quoted as though it did. The population is generated, the reorganisations are placed on purpose, and the only real things in the page are the algorithms run over them.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · bench A</span>
+      <h2>Who the count is counting</h2>
+      <span class="tag build">15 min hands on</span>
+    </div>
+    <p class="lede">Three inputs. Change one at a time and predict the direction before you press. An input whose sign you cannot predict is one you do not yet understand, and finding that out here costs a minute rather than a quarter.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn schematic of the co-spend heuristic. On the left, two addresses belonging to one person both appear as inputs to a single transaction, so a link is drawn between them and the union find merges them into one cluster: two addresses become one entity. On the right, an operator's addresses each spend alone into separate transactions, so no link is ever drawn between any two of them and all of them survive as separate clusters: sixty addresses become sixty entities. A band underneath states the measured consequence, that adding ten more addresses to each operator adds forty addresses and forty clusters, a slope of one, while the same forty addresses added to ordinary holders raise the cluster count by roughly twenty five to thirty eight. The evidence the heuristic runs on is the one thing an operator can withhold.">
+        <style>
+          .p10aH { font: 800 13.5px Inter, sans-serif; fill: #13201E; }
+          .p10aL { font: 800 9px Inter, sans-serif; fill: #54655F; letter-spacing: .1em; }
+          .p10aT { font: 800 10px Inter, sans-serif; fill: #1F5F5B; }
+          .p10aR { font: 800 10px Inter, sans-serif; fill: #9C3D18; }
+          .p10aB { font: 400 10.5px Inter, sans-serif; fill: #13201E; }
+          .p10aM { font: 400 10px Inter, sans-serif; fill: #54655F; }
+          .p10aW { font: 800 9.5px Inter, sans-serif; fill: #FFFFFF; }
+          .p10aK { font: 800 11.5px Inter, sans-serif; fill: #9C3D18; }
+          .p10aN { font: 700 10.5px Inter, sans-serif; fill: #1F5F5B; }
+        </style>
+
+        <text class="p10aH" x="14" y="20">The heuristic can only see one thing, and it is the one thing an operator never does.</text>
+
+        <!-- LEFT PANEL: ordinary holder -->
+        <rect x="14" y="32" width="418" height="248" rx="12" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <text class="p10aL" x="30" y="54">AN ORDINARY HOLDER, TWO ADDRESSES</text>
+
+        <circle cx="70" cy="96" r="17" fill="#EFF7F5" stroke="#1F5F5B" stroke-width="2"></circle>
+        <text class="p10aT" x="70" y="100" text-anchor="middle">a1</text>
+        <circle cx="70" cy="166" r="17" fill="#EFF7F5" stroke="#1F5F5B" stroke-width="2"></circle>
+        <text class="p10aT" x="70" y="170" text-anchor="middle">a2</text>
+
+        <path d="M89 100 C 130 106, 150 118, 178 128" fill="none" stroke="#1F5F5B" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M89 162 C 130 156, 150 144, 178 134" fill="none" stroke="#1F5F5B" stroke-width="2" stroke-linecap="round"></path>
+
+        <rect x="180" y="110" width="98" height="44" rx="9" fill="#1F5F5B"></rect>
+        <text class="p10aW" x="229" y="130" text-anchor="middle">ONE SPEND,</text>
+        <text class="p10aW" x="229" y="144" text-anchor="middle">TWO INPUTS</text>
+
+        <path d="M280 132 C 306 132, 318 132, 342 132" fill="none" stroke="#1F5F5B" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M334 126 L 344 132 L 334 138" fill="none" stroke="#1F5F5B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+
+        <ellipse cx="386" cy="132" rx="30" ry="25" fill="#C7E0DC" stroke="#1F5F5B" stroke-width="2"></ellipse>
+        <text class="p10aT" x="386" y="130" text-anchor="middle">ONE</text>
+        <text class="p10aT" x="386" y="142" text-anchor="middle">ENTITY</text>
+
+        <text class="p10aB" x="30" y="212">A spend with two inputs is the only evidence of common control there is, and</text>
+        <text class="p10aB" x="30" y="228">the union removes exactly one entity from the count. Ordinary holders do this</text>
+        <text class="p10aB" x="30" y="244">about a quarter of the time, so most of them do get found eventually.</text>
+        <text class="p10aN" x="30" y="266">Addresses minus successful merges equals clusters. 982 - 286 = 696.</text>
+
+        <!-- RIGHT PANEL: operator -->
+        <rect x="448" y="32" width="418" height="248" rx="12" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <text class="p10aL" x="464" y="54">ONE OPERATOR, SIXTY ADDRESSES</text>
+
+        <circle cx="500" cy="92" r="14" fill="#FDF3EE" stroke="#9C3D18" stroke-width="2"></circle>
+        <text class="p10aR" x="500" y="96" text-anchor="middle">b1</text>
+        <circle cx="500" cy="136" r="14" fill="#FDF3EE" stroke="#9C3D18" stroke-width="2"></circle>
+        <text class="p10aR" x="500" y="140" text-anchor="middle">b2</text>
+        <circle cx="500" cy="180" r="14" fill="#FDF3EE" stroke="#9C3D18" stroke-width="2"></circle>
+        <text class="p10aR" x="500" y="184" text-anchor="middle">b3</text>
+        <text class="p10aM" x="500" y="212" text-anchor="middle">... 60</text>
+
+        <path d="M516 92 C 546 92, 560 92, 588 92" fill="none" stroke="#9C3D18" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M516 136 C 546 136, 560 136, 588 136" fill="none" stroke="#9C3D18" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M516 180 C 546 180, 560 180, 588 180" fill="none" stroke="#9C3D18" stroke-width="2" stroke-linecap="round"></path>
+
+        <rect x="590" y="78" width="86" height="28" rx="7" fill="#FFFFFF" stroke="#9C3D18" stroke-width="1.6"></rect>
+        <text class="p10aR" x="633" y="96" text-anchor="middle">SPENDS ALONE</text>
+        <rect x="590" y="122" width="86" height="28" rx="7" fill="#FFFFFF" stroke="#9C3D18" stroke-width="1.6"></rect>
+        <text class="p10aR" x="633" y="140" text-anchor="middle">SPENDS ALONE</text>
+        <rect x="590" y="166" width="86" height="28" rx="7" fill="#FFFFFF" stroke="#9C3D18" stroke-width="1.6"></rect>
+        <text class="p10aR" x="633" y="184" text-anchor="middle">SPENDS ALONE</text>
+
+        <path d="M678 92 L 706 92" fill="none" stroke="#9C3D18" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M678 136 L 706 136" fill="none" stroke="#9C3D18" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M678 180 L 706 180" fill="none" stroke="#9C3D18" stroke-width="2" stroke-linecap="round"></path>
+
+        <circle cx="726" cy="92" r="13" fill="#FDF3EE" stroke="#9C3D18" stroke-width="1.6"></circle>
+        <circle cx="726" cy="136" r="13" fill="#FDF3EE" stroke="#9C3D18" stroke-width="1.6"></circle>
+        <circle cx="726" cy="180" r="13" fill="#FDF3EE" stroke="#9C3D18" stroke-width="1.6"></circle>
+        <text class="p10aK" x="792" y="140">60 ENTITIES</text>
+
+        <path d="M470 232 C 600 226, 700 226, 850 232" fill="none" stroke="#9C3D18" stroke-width="1.4" stroke-dasharray="5 4" stroke-linecap="round"></path>
+        <text class="p10aB" x="464" y="256">No link is ever drawn, so no union ever happens, so nothing is ever removed.</text>
+        <text class="p10aK" x="464" y="272">The cleaning step is blind to the population it exists to catch.</text>
+
+        <!-- MEASURED BAND -->
+        <rect x="14" y="294" width="852" height="122" rx="12" fill="#EFF7F5" stroke="#C7E0DC"></rect>
+        <text class="p10aL" x="30" y="318">WHAT THE SLOPE MEASURES, ON SEED 11 AT DISCIPLINE 0.97</text>
+        <text class="p10aB" x="30" y="342">Give each of the 4 operators 10 more addresses and the world gains 40 addresses. The clustered count gains 40.</text>
+        <text class="p10aK" x="30" y="362">A slope of exactly 1. Every manufactured address arrives in the answer as one more entity, and the same is true at</text>
+        <text class="p10aK" x="30" y="378">10, 40, 60 and 90 addresses each, and on all five seeds.</text>
+        <text class="p10aM" x="30" y="400">The exception is informative. The slope only falls below 1 when an operator is both small and careless: at 10 addresses each it</text>
+        <text class="p10aM" x="30" y="414">needs 70 percent discipline to hold the slope at 1, at 20 it needs 40, and at 40 or more it never drops at all.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the heuristic reads co-spends and nothing else, so an operator that never co-spends is not merely hard to detect, it is invisible to the mechanism by construction.</figcaption>
+    </figure>
+
+    <div class="wk" id="p10-a">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The population, the transactions and the co-spend heuristic, running in this page. The slope is re-measured on every press, not quoted.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="p10a-seed">Which Larkfield world</label>
+        <select class="sql-code" id="p10a-seed">
+          <option value="11">World A</option>
+          <option value="101">World B</option>
+          <option value="2024">World C</option>
+          <option value="7">World D</option>
+          <option value="55555">World E</option>
+        </select>
+        <label class="sql-label" for="p10a-addrs">Addresses each operator runs: <b id="p10a-addrs-val">60</b></label>
+        <input class="sql-code" id="p10a-addrs" type="range" min="0" max="120" step="10" value="60">
+        <label class="sql-label" for="p10a-disc">How carefully the operators avoid co-spending: <b id="p10a-disc-val">97</b> percent</label>
+        <input class="sql-code" id="p10a-disc" type="range" min="0" max="100" step="1" value="97">
+        <div id="p10a-out"></div>
+        <p class="sql-note" id="p10a-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="p10a-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The four runs worth doing first<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Leave everything alone.</strong> World A, 60 addresses each, 97 percent discipline. 982 addresses seen, 304 entities in truth, 696 after clustering. Wrongly merged: 0. The naive count is 3.2 times the truth and the cleaned one is 2.3 times, so the standard heuristic removes about half the error and leaves the rest.</li>
+          <li><strong>Drag the discipline slider from 97 down to 50.</strong> The clustered count falls from 696 to 666, a swing of 31 against an excess of 392, which is the sweep session 5 is built on. Now take it to 0, well past anything a real operator would do, and it only reaches 643. The entire travel of the slider is worth 54 of the 392.</li>
+          <li><strong>Now drag the address slider instead, 60 to 90.</strong> The world gains 120 addresses and the clustered count gains 120. The reported slope stays at 1.00. Nothing about the cleaning step resists this, because there is nothing for it to read.</li>
+          <li><strong>Set discipline to 0 and addresses to 10.</strong> The slope drops to 0.55 on World A and stays below 0.75 on the other four. A small operator that co-spends freely is a normal holder with more addresses, and the heuristic finds it. Both conditions have to fail at once.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the error only runs one way, and what that licenses<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Across every seed and every setting in the box above, the wrongly merged count is 0. The heuristic never fuses two real holders, because the only thing it acts on is a spend that genuinely had two inputs, and a spend with two inputs genuinely had one signer. It fails in one direction only: it leaves addresses split that belong together.</p>
+        <p>That asymmetry is worth more than the number itself. A clustered entity count is a <strong>ceiling</strong> on the true entity count and a floor on nothing at all. You may say "at most 696 distinct parties" and be correct. You may not say "about 696 parties", and the difference between those two sentences is the entire professional content of the method. Write the ceiling, state the method, and refuse to be talked into the second phrasing by anybody who wants a headline.</p>
+        <p>A second reason the count overstates is worth naming alongside the first: on World A only about 787 of the 982 addresses ever appear as a spend input at all. The rest are seen only as recipients, so no evidence about them can exist and no heuristic reading spends can ever merge them. That is a separate mechanism from operator discipline, and it means a share of the gap is permanently out of reach of any amount of cleverness on the co-spend side.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The share flip, which is the result people find hardest to accept<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>At address level the operators hold 240 of 982, which is 24.4 percent. After clustering they hold 239 of 696 clusters, which is 34.3 percent. The truth is 4 parties out of 304, which is 1.3 percent. So the cleaning step raised the contamination as a proportion, by ten points.</p>
+        <p>The mechanism is exactly the slope you just measured. Ordinary holders merge, so their entity count falls. Operator addresses do not merge, so theirs does not. Shrinking the honest population while leaving the manufactured one intact raises the manufactured share by arithmetic, no matter how good the heuristic is at what it does. Any model, metric or sample drawn from clustered entities is more operator-weighted than one drawn from raw addresses.</p>
+        <p>Be careful about the blame version of this. Decomposed on World A, the 392 excess is 235 from the operators and 157 from ordinary holders, so operators are the larger share. But only 31 of that 392 responds to operator behaviour across the plausible half of the range, and only 54 across the whole slider, because most of their excess comes from simply holding many addresses that never need to be spent together. The defensible sentence is about behaviour, not about who is at fault: the part of the gap you could close by catching careless operators is small, and the part you cannot close is structural.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · bench B</span>
+      <h2>What waiting actually buys</h2>
+      <span class="tag build">16 min hands on</span>
+    </div>
+    <p class="lede">Two dials that are usually discussed as one. How deep the chain reorganises, which is a property of the world and not a choice, and how long the loader waits, which is the only choice you have. Set them independently and a very simple exchange rate appears.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 452" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn schematic of a loader running behind a chain tip. A row of blocks runs left to right. The last three are crossed through and redrawn above as replacements, marking a three block reorganisation. A loader head sits two blocks behind the tip, labelled finality lag of two. The band between the loader head and the start of the replaced region is labelled the shortfall, depth minus lag, and the rows written inside it are marked as orphaned because they were loaded from blocks that no longer exist and nothing errors. The band between the loader head and the tip is labelled rows held back. Underneath, a measured band states that across four seeds, five depths and every lag, each block of shortfall costs between 166 and 173 orphaned rows, about 1.9 percent of the warehouse, while each block of lag holds back between 40 and 44 rows regardless of the depth. So a block of waiting removes about 169 wrong rows and costs about 42 held rows until the lag reaches the depth, after which the 42 is still paid and the 169 is zero.">
+        <style>
+          .p10bH { font: 800 13.5px Inter, sans-serif; fill: #13201E; }
+          .p10bL { font: 800 9px Inter, sans-serif; fill: #54655F; letter-spacing: .1em; }
+          .p10bT { font: 800 9.5px Inter, sans-serif; fill: #1F5F5B; }
+          .p10bR { font: 800 9.5px Inter, sans-serif; fill: #9C3D18; }
+          .p10bB { font: 400 10.5px Inter, sans-serif; fill: #13201E; }
+          .p10bM { font: 400 10px Inter, sans-serif; fill: #54655F; }
+          .p10bW { font: 800 10px Inter, sans-serif; fill: #FFFFFF; }
+          .p10bK { font: 800 11.5px Inter, sans-serif; fill: #9C3D18; }
+          .p10bN { font: 800 11.5px Inter, sans-serif; fill: #1F5F5B; }
+        </style>
+
+        <text class="p10bH" x="14" y="20">The only quantity that matters is the gap between the depth and the lag.</text>
+
+        <rect x="14" y="32" width="852" height="252" rx="12" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+
+        <!-- replacement blocks drawn above -->
+        <text class="p10bL" x="546" y="58">THE REPLACEMENT, WHICH ARRIVES LATER</text>
+        <rect x="546" y="66" width="86" height="34" rx="7" fill="#FDF3EE" stroke="#9C3D18" stroke-width="1.8" stroke-dasharray="6 4"></rect>
+        <text class="p10bR" x="589" y="87" text-anchor="middle">8 new</text>
+        <rect x="642" y="66" width="86" height="34" rx="7" fill="#FDF3EE" stroke="#9C3D18" stroke-width="1.8" stroke-dasharray="6 4"></rect>
+        <text class="p10bR" x="685" y="87" text-anchor="middle">9 new</text>
+        <rect x="738" y="66" width="86" height="34" rx="7" fill="#FDF3EE" stroke="#9C3D18" stroke-width="1.8" stroke-dasharray="6 4"></rect>
+        <text class="p10bR" x="781" y="87" text-anchor="middle">10 new</text>
+
+        <path d="M589 104 L 589 126" fill="none" stroke="#9C3D18" stroke-width="1.6" stroke-dasharray="4 3"></path>
+        <path d="M685 104 L 685 126" fill="none" stroke="#9C3D18" stroke-width="1.6" stroke-dasharray="4 3"></path>
+        <path d="M781 104 L 781 126" fill="none" stroke="#9C3D18" stroke-width="1.6" stroke-dasharray="4 3"></path>
+
+        <!-- original chain -->
+        <rect x="66" y="130" width="76" height="40" rx="7" fill="#EFF7F5" stroke="#1F5F5B" stroke-width="1.8"></rect>
+        <text class="p10bT" x="104" y="154" text-anchor="middle">block 5</text>
+        <rect x="162" y="130" width="76" height="40" rx="7" fill="#EFF7F5" stroke="#1F5F5B" stroke-width="1.8"></rect>
+        <text class="p10bT" x="200" y="154" text-anchor="middle">block 6</text>
+        <rect x="258" y="130" width="76" height="40" rx="7" fill="#EFF7F5" stroke="#1F5F5B" stroke-width="1.8"></rect>
+        <text class="p10bT" x="296" y="154" text-anchor="middle">block 7</text>
+
+        <rect x="546" y="130" width="86" height="40" rx="7" fill="#FFFFFF" stroke="#9C3D18" stroke-width="1.8"></rect>
+        <rect x="642" y="130" width="86" height="40" rx="7" fill="#FFFFFF" stroke="#9C3D18" stroke-width="1.8"></rect>
+        <rect x="738" y="130" width="86" height="40" rx="7" fill="#FFFFFF" stroke="#9C3D18" stroke-width="1.8"></rect>
+
+        <path d="M552 168 L 626 132" fill="none" stroke="#9C3D18" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M648 168 L 722 132" fill="none" stroke="#9C3D18" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="M744 168 L 818 132" fill="none" stroke="#9C3D18" stroke-width="1.6" stroke-linecap="round"></path>
+
+        <text class="p10bR" x="589" y="154" text-anchor="middle">block 8</text>
+        <text class="p10bR" x="685" y="154" text-anchor="middle">block 9</text>
+        <text class="p10bR" x="781" y="154" text-anchor="middle">block 10</text>
+
+        <path d="M334 150 C 400 150, 460 150, 542 150" fill="none" stroke="#54655F" stroke-width="1.6" stroke-dasharray="5 5" stroke-linecap="round"></path>
+
+        <!-- loader head -->
+        <path d="M642 196 L 642 176" fill="none" stroke="#1F5F5B" stroke-width="2.4" stroke-linecap="round"></path>
+        <path d="M635 184 L 642 174 L 649 184" fill="none" stroke="#1F5F5B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path>
+        <rect x="560" y="198" width="164" height="26" rx="8" fill="#1F5F5B"></rect>
+        <text class="p10bW" x="642" y="216" text-anchor="middle">LOADER HEAD, LAG 2</text>
+
+        <!-- shortfall band -->
+        <rect x="546" y="236" width="86" height="22" rx="6" fill="#9C3D18"></rect>
+        <text class="p10bW" x="589" y="252" text-anchor="middle">SHORTFALL</text>
+        <text class="p10bK" x="30" y="252">1 block unprotected, and every row it wrote is now orphaned</text>
+
+        <!-- held band -->
+        <path d="M642 268 L 824 268" fill="none" stroke="#1F5F5B" stroke-width="1.8" stroke-linecap="round"></path>
+        <path d="M642 264 L 642 272" fill="none" stroke="#1F5F5B" stroke-width="1.8"></path>
+        <path d="M824 264 L 824 272" fill="none" stroke="#1F5F5B" stroke-width="1.8"></path>
+        <text class="p10bN" x="733" y="288" text-anchor="middle">Held back, waiting to be loaded</text>
+
+        <!-- MEASURED BAND -->
+        <rect x="14" y="296" width="852" height="142" rx="12" fill="#EFF7F5" stroke="#C7E0DC"></rect>
+        <text class="p10bL" x="30" y="320">MEASURED OVER 4 SEEDS, 5 DEPTHS AND EVERY LAG, 60 COMBINATIONS IN ALL</text>
+        <text class="p10bB" x="30" y="344">Each block of shortfall costs 166 to 173 orphaned rows, about 1.9 percent of the warehouse each.</text>
+        <text class="p10bB" x="30" y="364">Each block of lag holds back 40 to 44 rows, and that figure does not depend on the depth at all.</text>
+        <text class="p10bN" x="30" y="390">So one block of waiting removes about 169 wrong rows and costs about 42 held ones. Four to one, in your favour.</text>
+        <text class="p10bK" x="30" y="412">The moment the lag reaches the depth, the 169 becomes 0 and the 42 keeps being paid on every further block.</text>
+        <text class="p10bM" x="30" y="430">Which means the whole decision is one number you probably do not have written down anywhere: the depth you are designing for.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - depth and lag are not two knobs with a complicated interaction. They subtract, and the difference is the only thing that costs anything.</figcaption>
+    </figure>
+
+    <div class="wk" id="p10-b">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The warehouse loader, running in this page. Waiting and retracting stay on separate controls, because conflating them is the fault session 9 is about.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="p10b-seed">Which run of Larkfield's loader</label>
+        <select class="sql-code" id="p10b-seed">
+          <option value="5">Run A</option>
+          <option value="42">Run B</option>
+          <option value="777">Run C</option>
+          <option value="20260922">Run D</option>
+        </select>
+        <label class="sql-label" for="p10b-depth">How deep the chain reorganises, which you do not choose: <b id="p10b-depth-val">3</b> blocks</label>
+        <input class="sql-code" id="p10b-depth" type="range" min="1" max="6" step="1" value="3">
+        <label class="sql-label" for="p10b-lag">Defence one, blocks you wait before loading: <b id="p10b-lag-val">0</b></label>
+        <input class="sql-code" id="p10b-lag" type="range" min="0" max="12" step="1" value="0">
+        <label class="sql-label" for="p10b-ret">Defence two, whether you remove rows whose source was replaced</label>
+        <select class="sql-code" id="p10b-ret">
+          <option value="0">No, append only</option>
+          <option value="1">Yes, retract them</option>
+        </select>
+        <div id="p10b-out"></div>
+        <p class="sql-note" id="p10b-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="p10b-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The five runs worth doing first<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Depth 3, lag 0, no retraction.</strong> 511 orphaned rows, 5.75 percent of the warehouse. No job failed, no check fired, and every one of those rows describes history the chain no longer has.</li>
+          <li><strong>Lag to 1.</strong> 346 rows, 3.99 percent. This is the dangerous setting, because it looks like a precaution and leaves two thirds of the damage. A defence shallower than the thing it defends against is not partial safety, it is the same failure with a better story attached.</li>
+          <li><strong>Lag to 3.</strong> Zero. 125 rows held back. That is the whole price, and it is a freshness price rather than a correctness one.</li>
+          <li><strong>Lag to 6, then 12.</strong> Still zero, and 249 then 497 rows held back. You are now paying about 42 rows a block for nothing at all. Going deeper than the depth is pure cost.</li>
+          <li><strong>Put the lag back to 3 and drag the depth to 6.</strong> 508 rows wrong, 5.80 percent, from a lag you had just proved was sufficient. Nothing about your loader changed. The world did, and the loader had no way to notice.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Reading the shortfall column instead of the lag<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The box reports a shortfall, which is the depth minus the lag, floored at zero. Every row in the grid is predicted by that one number to within a few percent, which is why the two-dimensional table people usually build is misleading: it invites you to hunt for an interaction that is not there.</p>
+        <p>Read it as a rate. Roughly 169 wrong rows per block of shortfall, roughly 1.9 percent of the warehouse per block, roughly 42 rows held back per block of lag whatever the depth. Those three numbers let you answer the operational question in your head, in a meeting, without the bench: someone says the chain reorganised deeper than usual last week, by two blocks, and you can say what that did to the reporting layer before anyone opens a laptop.</p>
+        <p>The direction of ignorance matters too. If you do not know the depth, you cannot know whether your lag is sufficient, and there is no signal in your own pipeline that will tell you, because the failure mode is silent by construction. The number has to come from the chain you are reading, not from your warehouse.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Switch retraction on and watch what it hides<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Set the lag to 1 against depth 3 and switch retraction on. The orphaned count goes to zero and 346 rows are corrected instead. The warehouse is clean and the lag did almost none of the work, which is exactly the appearance that an earlier version of this bench produced by accident and reported as a finding.</p>
+        <p>The cost has not gone away, it has changed shape. Retraction means figures that were published move afterwards, so the question stops being an engineering one and becomes a question about what your consumers were told. A daily report that quietly restates last Tuesday is a different product from one that is late, and neither is wrong, but only one of them can be chosen by accident.</p>
+        <p>The habit worth keeping is the one that caught the fault: when a defence produces a clean result, check that it is the defence you think is doing the work. Turn the other one off and re-run. If the result does not change, your mental model of your own pipeline is wrong in a way that will surface at the worst possible time.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · the brief</span>
+      <h2>What you write down</h2>
+      <span class="tag demo">11 min live</span>
+    </div>
+    <p class="lede">Both benches point at the same discipline, which is that the number you publish has to arrive with the thing that bounds it. Ten minutes, on a dataset you actually have.</p>
+
+    <div class="steps">
+      <div class="step">
+        <h4>State the unit of analysis and the direction of its error</h4>
+        <p>Not "users" but "addresses clustered by co-spend, which is a ceiling on parties and never merges two real ones". One sentence. If you cannot say which direction your count is wrong in, you do not yet have a count, you have a query result.</p>
+      </div>
+      <div class="step">
+        <h4>State the load discipline and the depth it assumes</h4>
+        <p>"Loaded at a lag of N blocks, which is sufficient for a reorganisation of depth N or less, and we do not retract." The second half of that sentence is the one that gets omitted, and it is the one that fails.</p>
+      </div>
+      <div class="step">
+        <h4>Name the party that benefits from the number moving</h4>
+        <p>If there is one, the metric is a target and will behave like one. That is not cynicism, it is the same reasoning as the operator slope: a population that is rewarded for looking a certain way will look that way, and no amount of cleaning reads intent.</p>
+      </div>
+      <div class="step">
+        <h4>Say what would change your mind</h4>
+        <p>A measured reorganisation depth from the chain itself. An off-chain identity source that lets you check the clustering against something. Write the trigger down now, while nothing is on fire, because the version you write during an incident will be the version that protects the number rather than the reader.</p>
+      </div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The two exchange rates, on one card<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Clustering.</strong> Every manufactured address becomes one more counted entity, a slope of 1, and the only inputs that change it are ones you do not control. Catching careless operators recovers 31 of a 392 excess, and 54 even if they stop trying entirely. The output is a ceiling, and it is a ceiling that gets proportionally more contaminated the better your cleaning gets.</p>
+        <p><strong>Loading.</strong> Every block of shortfall costs about 169 wrong rows and about 1.9 percent of the warehouse. Every block of lag costs about 42 held rows and buys nothing past the depth. One subtraction decides the whole thing, and one of its two terms is a property of a world you are not running.</p>
+        <p>Both have the same shape. A quantity you can measure precisely, governed by a parameter you do not own, with a silent failure mode in between. That is the honest summary of working with this class of data, and it is a good deal more useful than either enthusiasm or dismissal.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">After the course</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">About an hour, on something real.</p>
+    <div class="steps">
+      <div class="step">
+        <h4>Find the depth</h4>
+        <p>For whatever chain your organisation reads, find a published figure for how deep reorganisations go and where it comes from. If nobody can produce one, that is the finding, and it means the lag in your loader was chosen by whoever wrote it first.</p>
+      </div>
+      <div class="step">
+        <h4>Re-derive one slope yourself</h4>
+        <p>Take any clustering or deduplication step you own and measure what one more duplicate does to its output. If the slope is 1, the step is not doing what its name says, and the name is what people are trusting.</p>
+      </div>
+      <div class="step">
+        <h4>Turn one defence off</h4>
+        <p>Pick a control that is producing a clean result in a pipeline you own and disable the other one. If the result does not move, you have found out something true about your own system for the price of one run.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Adding 10 addresses to each of the 4 operators adds 40 addresses to the world and 40 to the clustered entity count. What does a slope of exactly 1 tell you about the co-spend heuristic?</p>
+      <div class="qopt">A · It is working correctly, since each new address is a new thing to count</div>
+      <div class="qopt">B · It has no evidence about those addresses at all, because the only signal it reads is a co-spend and these addresses never produce one, so they pass through the cleaning step untouched</div>
+      <div class="qopt">C · It is over-merging, and the slope should be above 1</div>
+      <q class="qwhy">A slope of 1 means the step removed nothing. Option A describes what the answer would look like if the addresses were 40 real parties, which is precisely the mistake the count invites. The heuristic is not failing at its job here, it is being run against a population that emits none of the evidence it consumes.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Your loader waits 3 blocks and has been clean for a year. Reorganisations at the source deepen to 6 blocks. What happens in your warehouse?</p>
+      <div class="qopt">A · The loader falls behind and the lag alerts fire</div>
+      <div class="qopt">B · Nothing, because a 3 block lag is a general precaution</div>
+      <div class="qopt">C · About 508 rows, 5.80 percent of the warehouse, now describe history the chain no longer has, and nothing in your pipeline errors or alerts, because the shortfall is now 3 blocks where it used to be 0</div>
+      <q class="qwhy">The measured grid gives 508 orphaned rows at depth 6 with a lag of 3. The dangerous feature is that nothing about your side changed, so there is no signal on your side to detect it. The depth has to be monitored where it happens, which is not in your warehouse.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Clustering raises the operator share of the population from 24.4 percent of addresses to 34.3 percent of entities, against a truth of 1.3 percent. Why does a cleaning step make the contamination worse as a proportion?</p>
+      <div class="qopt">A · Because it shrinks the honest population, whose addresses merge, while leaving the manufactured one intact, since those addresses never co-spend and so never merge</div>
+      <div class="qopt">B · Because the heuristic wrongly merges honest holders into operator clusters</div>
+      <div class="qopt">C · Because operators create more addresses once they detect clustering</div>
+      <q class="qwhy">It is arithmetic on two populations shrinking at different rates, not a defect in the heuristic. Option B is ruled out by measurement: the wrongly merged count is 0 on every seed and every setting. Option C describes an adaptation the bench does not model and does not claim.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Both benches driven by the reader</span><span class="note">Population, discipline, operator size, reorganisation depth, loader lag and retraction, all exposed as controls.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The slope, re-measured on every press</span><span class="note">Exactly 1 across 10 to 90 addresses each and all five worlds, falling to 0.55 only for a small careless operator.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The one-directional error and what it licenses</span><span class="note">0 wrongly merged everywhere, so the clustered figure is a ceiling on parties and a floor on nothing.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The shortfall law</span><span class="note">About 169 orphaned rows and 1.9 percent of the warehouse per block of depth minus lag, over 60 combinations.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The cost of waiting, priced separately</span><span class="note">40 to 44 rows held back per block of lag, independent of the depth, and pure cost once the lag passes it.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">A written brief with four required lines</span><span class="note">Unit of analysis and error direction, load discipline and assumed depth, who benefits, and what would change your mind.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Adaptive behaviour by the counted population</span><span class="note">The bench holds operator behaviour fixed within a run. Nothing here models a party that responds to being measured.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Chain mechanics, including how a reorganisation happens</span><span class="note">Assumed from learn-blockchain-with-phoebe rather than repeated.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Probabilistic record linkage</span><span class="note">Fellegi-Sunter, blocking and string comparison live in learn-entity-resolution-with-phoebe.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Anything about law, price or markets</span><span class="note">Obligations live in learn-gdpr-with-phoebe. Nothing here is advice of any kind, and no figure describes a real network.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The slope.</strong> Every manufactured address becomes one more counted entity. The cleaning step reads co-spends, and that is the one thing an operator withholds.</div>
+      <div class="cheat-item"><strong>The direction.</strong> 0 wrongly merged on every seed. Say "at most N parties", never "about N parties".</div>
+      <div class="cheat-item"><strong>The share flip.</strong> 24.4 percent of addresses, 34.3 percent of clusters, 1.3 percent of the truth. Cleaning raised the contamination.</div>
+      <div class="cheat-item"><strong>The reachable part.</strong> Only 31 of a 392 excess responds to operator behaviour, 54 across the whole slider. The rest is structural.</div>
+      <div class="cheat-item"><strong>The shortfall.</strong> Depth minus lag, floored at zero. About 169 wrong rows and 1.9 percent of the warehouse per block of it.</div>
+      <div class="cheat-item"><strong>The price of waiting.</strong> About 42 rows held per block of lag, whatever the depth, and pure cost once the lag exceeds it.</div>
+      <div class="cheat-item"><strong>The missing input.</strong> You cannot choose a lag without a reorganisation depth, and that number has to come from the chain, not the warehouse.</div>
+      <div class="cheat-item"><strong>The habit.</strong> When a control produces a clean result, turn the other one off and re-run. If nothing moves, you were wrong about which one was working.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 10 of 10 · learn-web3-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p9-the-bench-that-fooled-itself.html">← Practitioner session 9 · The bench that fooled itself</a>
+        <a href="../index.html">All sessions →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/w3-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof W3 === "undefined") return;
+
+  function comma(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+
+  /* ---------- Bench A: who the count is counting ---------- */
+  var aSeed = document.getElementById("p10a-seed");
+  var aAddrs = document.getElementById("p10a-addrs");
+  var aAddrsVal = document.getElementById("p10a-addrs-val");
+  var aDisc = document.getElementById("p10a-disc");
+  var aDiscVal = document.getElementById("p10a-disc-val");
+  var aOut = document.getElementById("p10a-out");
+  var aVerdict = document.getElementById("p10a-verdict");
+
+  function scoreAt(seed, addrs, disc) {
+    var world = W3.makeWorld({ seed: seed, sybilAddrs: addrs });
+    var txs = W3.makeTransactions(world, { seed: seed + 1, sybilDiscipline: disc });
+    return W3.scoreClustering(world, W3.clusterByCoSpend(world, txs));
+  }
+
+  function renderA() {
+    var seed = Number(aSeed.value);
+    var addrs = Number(aAddrs.value);
+    var disc = Number(aDisc.value) / 100;
+    aAddrsVal.textContent = String(addrs);
+    aDiscVal.textContent = String(Number(aDisc.value));
+
+    var s = scoreAt(seed, addrs, disc);
+    /* The slope is measured here rather than quoted: the same world is rebuilt
+       with ten more addresses per operator and the two answers are differenced.
+       At addrs = 120 the slider is at its top, so step downward instead.
+       At addrs = 0 there is no slope to measure: the operators hold nothing, so
+       the step would also change the number of real entities from 300 to 304
+       and the ratio would not be a slope in addresses at all. */
+    var slope = null, dAddr = 0, dClust = 0;
+    if (addrs > 0) {
+      var step = addrs >= 120 ? -10 : 10;
+      var s2 = scoreAt(seed, addrs + step, disc);
+      dAddr = s2.addresses - s.addresses;
+      dClust = s2.clustered - s.clustered;
+      slope = dAddr === 0 ? null : dClust / dAddr;
+    }
+
+    var naiveX = (s.addresses / s.trueEntities).toFixed(1);
+    var clusX = (s.clustered / s.trueEntities).toFixed(1);
+
+    var html = '<table class="sql-table"><thead><tr><th>Quantity</th><th>Value</th><th>What it is</th></tr></thead><tbody>';
+    html += "<tr><td>Addresses seen on chain</td><td>" + comma(s.addresses) + "</td><td>the naive active address count, " + naiveX + " times the truth</td></tr>";
+    html += "<tr><td>Entities in truth</td><td>" + comma(s.trueEntities) + "</td><td>known only because this world was generated</td></tr>";
+    html += "<tr><td>Entities after clustering</td><td><b>" + comma(s.clustered) + "</b></td><td>the co-spend heuristic's answer, " + clusX + " times the truth</td></tr>";
+    html += "<tr><td>Addresses still split from their owner</td><td>" + comma(s.stillSplit) + "</td><td>the excess the cleaning step did not remove</td></tr>";
+    html += '<tr><td>Clusters holding two real parties</td><td><b class="p10-ok">' + comma(s.mixedClusters) + "</b></td><td>the error runs one way only, so this is a ceiling</td></tr>";
+    if (slope !== null) {
+      html += "<tr><td>Slope, measured at this setting</td><td><b>" + slope.toFixed(2) + "</b></td><td>" +
+        Math.abs(dAddr) + " more operator addresses moved the clustered count by " + Math.abs(dClust) + "</td></tr>";
+    }
+    html += "</tbody></table>";
+    aOut.innerHTML = html;
+
+    var msg;
+    if (slope !== null && slope >= 0.95) {
+      msg = "A slope of " + slope.toFixed(2) + " means the cleaning step removed none of those addresses. Every one of them arrived in the answer as another entity, which is why the clustered figure is "
+        + clusX + " times a truth of " + comma(s.trueEntities) + ". The heuristic is not failing, it is being run against addresses that emit no evidence for it to read.";
+    } else if (slope !== null) {
+      msg = "A slope of " + slope.toFixed(2) + " means the heuristic caught some of those addresses. That happens when the operators are both small and careless, which is the one combination where an operator looks like an ordinary holder with a few extra addresses.";
+    } else {
+      msg = "The operators hold no addresses in this world, so there is no slope to measure and nothing is being manufactured. "
+        + comma(s.addresses) + " addresses from " + comma(s.trueEntities) + " real holders cluster to " + comma(s.clustered)
+        + ", which is the error the heuristic leaves behind on an honest population alone. Raise the slider and watch how differently the two behave.";
+    }
+    if (s.mixedClusters === 0) {
+      msg += " No cluster holds two real parties, so " + comma(s.clustered) + " is a ceiling on the number of distinct parties and a floor on nothing.";
+    }
+    aVerdict.textContent = msg;
+  }
+
+  /* ---------- Bench B: what waiting buys ---------- */
+  var bSeed = document.getElementById("p10b-seed");
+  var bDepth = document.getElementById("p10b-depth");
+  var bDepthVal = document.getElementById("p10b-depth-val");
+  var bLag = document.getElementById("p10b-lag");
+  var bLagVal = document.getElementById("p10b-lag-val");
+  var bRet = document.getElementById("p10b-ret");
+  var bOut = document.getElementById("p10b-out");
+  var bVerdict = document.getElementById("p10b-verdict");
+
+  function renderB() {
+    var seed = Number(bSeed.value);
+    var depth = Number(bDepth.value);
+    var lag = Number(bLag.value);
+    var ret = bRet.value === "1";
+    bDepthVal.textContent = String(depth);
+    bLagVal.textContent = String(lag);
+
+    var run = W3.runPipeline({ reorgDepth: depth, finalityLag: lag, retract: ret, seed: seed });
+    var shortfall = Math.max(0, depth - lag);
+    var pct = (run.wrongRowShare * 100).toFixed(2);
+    var perBlock = shortfall > 0 ? Math.round(run.orphanedRows / shortfall) : 0;
+    var heldPer = lag > 0 ? (run.rowsStillHeld / lag).toFixed(1) : "0";
+
+    var html = '<table class="sql-table"><thead><tr><th>Quantity</th><th>Value</th><th>What it costs you</th></tr></thead><tbody>';
+    html += "<tr><td>Shortfall, depth minus lag</td><td><b>" + shortfall + "</b> block" + (shortfall === 1 ? "" : "s") + "</td><td>the only quantity that predicts the damage</td></tr>";
+    html += '<tr><td>Rows describing history the chain no longer has</td><td><b class="p10-bad">' + comma(run.orphanedRows) + "</b></td><td>" + pct + " percent of the warehouse, and nothing errors</td></tr>";
+    if (shortfall > 0 && !ret) {
+      html += "<tr><td>Orphaned rows per block of shortfall</td><td>" + comma(perBlock) + "</td><td>the rate, which holds across depths and seeds</td></tr>";
+    }
+    html += "<tr><td>Rows held back from the report</td><td>" + comma(run.rowsStillHeld) + "</td><td>" + (lag > 0 ? heldPer + " per block of lag, whatever the depth" : "nothing withheld, because nothing is waiting") + "</td></tr>";
+    html += "<tr><td>Rows removed after their source was replaced</td><td>" + comma(run.correctedRows) + "</td><td>" + (ret ? "defence two, paid in figures that move after publication" : "defence two is switched off") + "</td></tr>";
+    html += "</tbody></table>";
+    bOut.innerHTML = html;
+
+    var msg;
+    if (run.orphanedRows === 0 && lag >= depth && !ret) {
+      msg = "A lag of " + lag + " is at least as deep as the " + depth + " block reorganisation, so nothing wrong is ever loaded. "
+        + (lag > depth
+            ? "The extra " + (lag - depth) + " block" + (lag - depth === 1 ? "" : "s") + " of waiting bought nothing and holds back " + comma(run.rowsStillHeld) + " rows."
+            : "This is the cheapest correct setting, at " + comma(run.rowsStillHeld) + " rows held back.");
+    } else if (run.orphanedRows === 0 && ret && lag < depth) {
+      msg = "Clean, but not because of the lag. Retraction removed " + comma(run.correctedRows)
+        + " rows after they had been loaded, so published figures move after publication. A lag of " + lag + " against a depth of " + depth
+        + " leaves a shortfall of " + shortfall + ", and on its own it would not have been enough.";
+    } else if (run.orphanedRows === 0) {
+      msg = "Both defences are on and the warehouse is clean. The lag of " + lag + " was already sufficient on its own, so retraction had "
+        + comma(run.correctedRows) + " rows to remove and is not what saved you here.";
+    } else {
+      msg = "A shortfall of " + shortfall + " block" + (shortfall === 1 ? "" : "s") + " leaves " + comma(run.orphanedRows)
+        + " rows wrong, " + pct + " percent of the warehouse, at about " + comma(perBlock) + " rows a block. No job failed and no check fired."
+        + (lag > 0 ? " A lag of " + lag + " removed part of the damage and left the rest, which is the setting most easily mistaken for safety." : "");
+    }
+    bVerdict.textContent = msg;
+  }
+
+  /* ---------- self test, reported on both benches ---------- */
+  var t = W3.selfTest();
+  var note = t.ok
+    ? "The generator's five properties pass in this browser, including the one that checks a lag shallower than the reorganisation still orphans rows. Nothing here describes a real network."
+    : "The generator's self test did not pass in this browser, so nothing above should be believed.";
+  document.getElementById("p10a-self").textContent = note;
+  document.getElementById("p10b-self").textContent = note;
+
+  aSeed.addEventListener("change", renderA);
+  aAddrs.addEventListener("input", renderA);
+  aDisc.addEventListener("input", renderA);
+  bSeed.addEventListener("change", renderB);
+  bDepth.addEventListener("input", renderB);
+  bLag.addEventListener("input", renderB);
+  bRet.addEventListener("change", renderB);
+  renderA();
+  renderB();
+})();
+</script>
+<style>
+  #p10-a .sql-code, #p10-b .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 24rem; }
+  #p10-a input[type="range"], #p10-b input[type="range"] { max-width: 20rem; padding: 0; }
+  #p10-a table.sql-table, #p10-b table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+  #p10-a .p10-ok { color: var(--indigo); }
+  #p10-b .p10-bad { color: var(--amber); }
+</style>
+</body>
+</html>

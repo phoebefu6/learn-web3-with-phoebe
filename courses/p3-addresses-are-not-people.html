@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 3 of 10. The co-spend heuristic in code: union-find with path halving and union by rank, run against Larkfield's Bench A, where 982 addresses become 696 clusters and 0 of them are wrong.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Addresses are not people - learn web3 with phoebe">
+<meta property="og:description" content="Practitioner session 3 of 10. Build the clustering yourself: find with path halving, union by rank, and the evidence asymmetry that makes the output a ceiling.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-web3-with-phoebe/courses/p3-addresses-are-not-people.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Addresses are not people - learn web3 with phoebe">
+<meta name="twitter:description" content="A co-spend is positive evidence. The absence of one is no evidence at all. That asymmetry is the whole result.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 3 · Addresses are not people - learn web3 with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-web3-with-phoebe</a> / Practitioner session 3 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Web3 with Phoebe · Practitioner session 3 of 10</div>
+    <h1>Addresses are <span class="accent">not people</span></h1>
+    <p class="sub">Tonight you build the thing. The co-spend heuristic is two functions and about twenty lines: addresses that appear together as inputs to one transaction are one holder, and a union-find structure keeps track of which addresses have been joined. That is the entire algorithm. Then it runs against Larkfield's Bench A with the seed convention written down, 982 addresses collapse to 696 clusters, and the number in the wrongly merged column is 0. That 0 is not luck, and deriving why it has to be 0 is the real work of the session.</p>
+    <div class="chip-row">
+      <span class="chip level">🔧 Practitioner track</span>
+      <span class="chip audience">Data engineers who would have to build this</span>
+      <span class="chip audience">Anyone who has to defend the output</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · The whole algorithm</span>
+      <span class="a3" style="flex:3">18-30 · Running it on Larkfield</span>
+      <span class="a4" style="flex:4">30-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Two functions, and one number that has to be zero</h2>
+    </div>
+    <p class="lede">Session 1 left an address column that passes every test for a key and is not one party per value. Session 2 listed holders after co-spend clustering as one of four defensible definitions and deferred the algorithm. Tonight is the algorithm, in code, running on the same generated world every session uses. Nothing here is heavier than an undergraduate data structure, and the interesting part is not the structure. It is what the output can and cannot support once you have it.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Union-find written out and understood line by line: find with path halving, union by rank, and why both exist. The clustering rule in its entirety, which is one <span class="mono">for</span> loop. A reproduction of Bench A with the seed convention stated, so anybody can get 982, 304, 696 and 0 on their own machine. And the derivation of the asymmetry: why a missed link is ordinary and a wrong merge would require something the data cannot express.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What the evidence actually is<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A transaction can draw on more than one input address. Building one that does requires the ability to authorise every input it names, so a transaction with two inputs is a statement that one party could authorise both. That statement is made by the structure of the record rather than inferred from behaviour, timing, amount or anything else, and it is the only statement of its kind that the rows contain.</p>
+        <p>That is the whole of the evidence. There are no attributes to compare, no names to match, no addresses of the postal kind to standardise and no scores to threshold. The family of technique built for that situation, probabilistic linkage with agreement weights and blocking, belongs to <b>learn-entity-resolution-with-phoebe</b> and has nothing to work on here. What is left is deterministic: either two addresses were spent together or they were not.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Larkfield's team spent a week looking for a second signal before accepting that there is not one. Timing correlation between addresses turned out to be a property of when the product issues rewards rather than of who holds them. Amount patterns were a property of the reward schedule. Both produced clusters that looked plausible and scored badly against the generated truth, which is the reason a generated world exists: a plausible method and a correct method are indistinguishable on data where nobody knows the answer.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words that keep coming back<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Co-spend.</strong> A single transaction naming two or more input addresses. The only evidence of common control in the rows.</li>
+          <li><strong>Union-find.</strong> A structure holding a partition of a set, supporting two operations: which group is this in, and merge these two groups.</li>
+          <li><strong>Find.</strong> Walk from a node to the root of its tree. The root is the group's name.</li>
+          <li><strong>Path halving.</strong> While walking, point each node at its grandparent. The next walk is shorter, and nothing about the partition changes.</li>
+          <li><strong>Union by rank.</strong> Attach the shorter tree under the taller one, so the result does not get deeper than it has to.</li>
+          <li><strong>Cluster.</strong> One group in the final partition. The count of distinct roots.</li>
+          <li><strong>Still split.</strong> Clusters beyond the true entity count: links the method failed to make.</li>
+          <li><strong>Wrongly merged.</strong> A cluster holding addresses from more than one party. Tonight derives why this is 0.</li>
+          <li><strong>Probabilistic linkage.</strong> Fellegi-Sunter weights, blocking, string comparison. A different craft for a different evidence base, and it lives in <b>learn-entity-resolution-with-phoebe</b>.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the algorithm</span>
+      <h2>Union-find, and the one loop that uses it</h2>
+      <span class="tag concept">15 min live</span>
+    </div>
+    <p class="lede">Start with the structure, because once it is clear the clustering is trivial. Union-find holds a partition of the addresses. Every address begins in a group of its own. Each group is a tree, and the root of the tree is the group's name. Two operations: <span class="mono">find</span>, which walks to the root, and <span class="mono">union</span>, which joins two trees. Both have one optimisation each and both optimisations exist for the same reason, which is that these functions get called millions of times.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 556" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Union-find drawn as two operations. The first band, find: before find of node 4, the five nodes form a chain, 4 points to 3 points to 2 points to 1 points to 0, and 0 is the root, with parent array 0 0 1 2 3. After find of node 4, the tree is flat: 1 and 2 point to 0, and 3 and 4 point to 2, with parent array 0 0 0 2 2. A shared note says every node the walk touched now sits one level closer to the root, so the next find is cheaper, and nothing about who belongs with whom changed. The second band, union: before, one tree with root 0 and children 1 and 2 stands beside a single node 5, and the operation union of 1 and 5 is applied. After, node 5 hangs directly under root 0 alongside 1 and 2. A panel explains that hanging the taller tree under the shorter one would add a level to every node in it, that rank is a cheap upper bound on height which only increases when two equal trees meet, and that together with the flattening a find is effectively constant time.">
+        <style>
+          .p3aH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .p3aT { font: 800 9.5px Inter, sans-serif; fill: #FFFFFF; letter-spacing: .07em; }
+          .p3aL { font: 800 9px Inter, sans-serif; fill: #54655F; letter-spacing: .11em; }
+          .p3aN { font: 800 11px Inter, sans-serif; fill: #13201E; }
+          .p3aB { font: 400 10.5px Inter, sans-serif; fill: #13201E; }
+          .p3aM { font: 400 10px Inter, sans-serif; fill: #54655F; }
+          .p3aD { font: 800 11px Inter, sans-serif; fill: #13201E; }
+          .p3aW { font: 800 11px Inter, sans-serif; fill: #FFFFFF; }
+          .p3aX { font: 700 10.5px "SF Mono", Menlo, monospace; fill: #1F5F5B; }
+          .p3aS { font: 400 9.5px Inter, sans-serif; fill: #54655F; }
+        </style>
+        <defs>
+          <marker id="p3aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1F5F5B"></path></marker>
+        </defs>
+
+        <text class="p3aH" x="14" y="20">Two operations, one optimisation each, and neither changes who belongs with whom</text>
+
+        <!-- BAND A -->
+        <rect x="14" y="34" width="852" height="274" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="34" width="852" height="26" rx="10" fill="#1F5F5B"></rect>
+        <rect x="14" y="47" width="852" height="13" fill="#1F5F5B"></rect>
+        <text class="p3aT" x="30" y="52">FIND · WALK TO THE ROOT, AND FLATTEN THE PATH ON THE WAY</text>
+
+        <text class="p3aL" x="30" y="84">BEFORE find(4)</text>
+        <circle cx="60" cy="126" r="16" fill="#123D3A"></circle>
+        <text class="p3aW" x="56" y="131">0</text>
+        <circle cx="132" cy="126" r="16" fill="#C7E0DC" stroke="#1F5F5B"></circle>
+        <text class="p3aD" x="128" y="131">1</text>
+        <circle cx="204" cy="126" r="16" fill="#C7E0DC" stroke="#1F5F5B"></circle>
+        <text class="p3aD" x="200" y="131">2</text>
+        <circle cx="276" cy="126" r="16" fill="#C7E0DC" stroke="#1F5F5B"></circle>
+        <text class="p3aD" x="272" y="131">3</text>
+        <circle cx="348" cy="126" r="16" fill="#C7E0DC" stroke="#1F5F5B"></circle>
+        <text class="p3aD" x="344" y="131">4</text>
+        <line x1="330" y1="126" x2="296" y2="126" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p3aAr)"></line>
+        <line x1="258" y1="126" x2="224" y2="126" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p3aAr)"></line>
+        <line x1="186" y1="126" x2="152" y2="126" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p3aAr)"></line>
+        <line x1="114" y1="126" x2="80" y2="126" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p3aAr)"></line>
+        <text class="p3aS" x="46" y="160">the root</text>
+        <text class="p3aM" x="30" y="188">Four hops from 4 to the root, and an arrow means</text>
+        <text class="p3aM" x="30" y="206">"my parent is". The root is its own parent.</text>
+        <text class="p3aX" x="30" y="240">parent = [0, 0, 1, 2, 3]</text>
+
+        <text class="p3aL" x="470" y="84">AFTER find(4)</text>
+        <circle cx="600" cy="118" r="16" fill="#123D3A"></circle>
+        <text class="p3aW" x="596" y="123">0</text>
+        <circle cx="516" cy="174" r="16" fill="#C7E0DC" stroke="#1F5F5B"></circle>
+        <text class="p3aD" x="512" y="179">1</text>
+        <circle cx="668" cy="174" r="16" fill="#C7E0DC" stroke="#1F5F5B"></circle>
+        <text class="p3aD" x="664" y="179">2</text>
+        <circle cx="612" cy="232" r="16" fill="#C7E0DC" stroke="#1F5F5B"></circle>
+        <text class="p3aD" x="608" y="237">3</text>
+        <circle cx="734" cy="232" r="16" fill="#C7E0DC" stroke="#1F5F5B"></circle>
+        <text class="p3aD" x="730" y="237">4</text>
+        <line x1="530" y1="163" x2="584" y2="130" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p3aAr)"></line>
+        <line x1="656" y1="163" x2="616" y2="132" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p3aAr)"></line>
+        <line x1="626" y1="222" x2="658" y2="190" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p3aAr)"></line>
+        <line x1="722" y1="222" x2="686" y2="190" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p3aAr)"></line>
+        <text class="p3aX" x="470" y="272">parent = [0, 0, 0, 2, 2]</text>
+
+        <text class="p3aM" x="30" y="272">Same five nodes. Same one group. Shorter walks.</text>
+        <text class="p3aM" x="30" y="296">Path halving points each node the walk touches at its grandparent, so the next find is cheaper. The partition is untouched.</text>
+
+        <!-- BAND B -->
+        <rect x="14" y="322" width="852" height="210" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="322" width="852" height="26" rx="10" fill="#123D3A"></rect>
+        <rect x="14" y="335" width="852" height="13" fill="#123D3A"></rect>
+        <text class="p3aT" x="30" y="340">UNION · ATTACH THE SHORTER TREE UNDER THE TALLER ONE</text>
+
+        <text class="p3aL" x="30" y="372">BEFORE union(1, 5)</text>
+        <circle cx="96" cy="400" r="16" fill="#123D3A"></circle>
+        <text class="p3aW" x="92" y="405">0</text>
+        <circle cx="60" cy="458" r="16" fill="#C7E0DC" stroke="#1F5F5B"></circle>
+        <text class="p3aD" x="56" y="463">1</text>
+        <circle cx="140" cy="458" r="16" fill="#C7E0DC" stroke="#1F5F5B"></circle>
+        <text class="p3aD" x="136" y="463">2</text>
+        <line x1="70" y1="443" x2="88" y2="418" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p3aAr)"></line>
+        <line x1="132" y1="443" x2="106" y2="418" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p3aAr)"></line>
+        <text class="p3aS" x="60" y="492">rank 1</text>
+        <circle cx="252" cy="400" r="16" fill="#123D3A"></circle>
+        <text class="p3aW" x="248" y="405">5</text>
+        <text class="p3aS" x="234" y="492">rank 0</text>
+
+        <line x1="300" y1="432" x2="344" y2="432" stroke="#1F5F5B" stroke-width="1.8" marker-end="url(#p3aAr)"></line>
+
+        <text class="p3aL" x="380" y="372">AFTER</text>
+        <circle cx="466" cy="400" r="16" fill="#123D3A"></circle>
+        <text class="p3aW" x="462" y="405">0</text>
+        <circle cx="398" cy="458" r="16" fill="#C7E0DC" stroke="#1F5F5B"></circle>
+        <text class="p3aD" x="394" y="463">1</text>
+        <circle cx="466" cy="458" r="16" fill="#C7E0DC" stroke="#1F5F5B"></circle>
+        <text class="p3aD" x="462" y="463">2</text>
+        <circle cx="534" cy="458" r="16" fill="#C7E0DC" stroke="#1F5F5B"></circle>
+        <text class="p3aD" x="530" y="463">5</text>
+        <line x1="410" y1="443" x2="452" y2="418" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p3aAr)"></line>
+        <line x1="466" y1="440" x2="466" y2="420" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p3aAr)"></line>
+        <line x1="522" y1="443" x2="480" y2="418" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p3aAr)"></line>
+        <text class="p3aS" x="398" y="492">rank 1, unchanged</text>
+
+        <text class="p3aN" x="640" y="378">Why rank at all?</text>
+        <text class="p3aB" x="640" y="402">Hanging the taller tree under the</text>
+        <text class="p3aB" x="640" y="420">shorter one would add a level to</text>
+        <text class="p3aB" x="640" y="438">every node inside it. Rank is a</text>
+        <text class="p3aB" x="640" y="456">cheap upper bound on height, and</text>
+        <text class="p3aB" x="640" y="474">it rises only when equals meet.</text>
+        <text class="p3aM" x="640" y="500">With the flattening above, a find</text>
+        <text class="p3aM" x="640" y="518">is effectively constant time.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - neither optimisation changes the answer. They change how long it takes to get it, which at a million calls is the difference between a job and a hung job.</figcaption>
+    </figure>
+
+    <div class="p3code">
+      <span class="p3cap">Union-find, the whole structure</span>
+      <code>function UF(n) {
+  var parent = new Array(n);
+  var rank   = new Array(n).fill(0);
+  for (var i = 0; i &lt; n; i++) parent[i] = i;   // everyone starts alone
+
+  function find(x) {
+    while (parent[x] !== x) {
+      parent[x] = parent[parent[x]];           // path halving
+      x = parent[x];
+    }
+    return x;                                  // the root names the group
+  }
+
+  function union(a, b) {
+    a = find(a); b = find(b);
+    if (a === b) return false;                 // already the same holder
+    if (rank[a] &lt; rank[b]) { var t = a; a = b; b = t; }
+    parent[b] = a;                             // shorter hangs under taller
+    if (rank[a] === rank[b]) rank[a]++;
+    return true;                               // a real merge happened
+  }
+
+  return { find: find, union: union };
+}</code>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Reading find, line by line<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The loop condition is the definition of a root: a node whose parent is itself. Walk until you reach one and that is the group's name. If the structure had no optimisation at all, find would still be correct, and it would be correct in a deep chain that takes as many steps as the chain is long.</p>
+        <p>The one line inside the loop is the optimisation, and it is worth being exact about what it does. <span class="mono">parent[x] = parent[parent[x]]</span> reassigns the current node to point at its grandparent, then the walk continues from there. Two things follow. The tree gets shallower every time anybody looks at it, so the cost is paid down by use rather than by maintenance. And the assignment cannot change the answer, because the grandparent is in the same tree as the parent by construction, so the root at the end of the walk is the same root it would have been.</p>
+        <p>That last point is the one to internalise. Every line in this structure either finds a root or shortens a path. Nothing in it decides whether two addresses belong together. That decision happens somewhere else entirely, in the caller, and it is one line long.</p>
+      </div>
+    </details>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Reading union, and why rank exists<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Union starts by finding both roots, because you never merge nodes, you merge groups. If the two roots are the same the addresses are already in one cluster and there is nothing to do, and returning <span class="mono">false</span> there is what lets the caller count real merges rather than attempted ones. That count matters later.</p>
+        <p>Then the swap. If <span class="mono">a</span> is the shorter tree the two are exchanged, so that <span class="mono">a</span> is always the taller one and <span class="mono">b</span> always hangs underneath. Hanging the taller under the shorter would add a level to every node inside the taller tree, which is the specific thing that turns this structure into a linked list and turns an afternoon into a weekend.</p>
+        <p>The rank only increases when two trees of equal rank are merged, which is the only case where the result is genuinely deeper. Rank is not the height, it is an upper bound on the height, and it stays an upper bound even though path halving keeps making the real height smaller. Nobody recomputes it and nobody needs to.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 376" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A full trace of the clustering over six addresses and five transactions. The table has columns for transaction, inputs, the union attempted, whether it merged, and the cluster count after. Transaction one has a single input so no union is attempted and the count stays at six. Transaction two has inputs 0 and 1, union 0 with 1 merges, and the count falls to five. Transaction three has inputs 3 and 4, union 3 with 4 merges, and the count falls to four. Transaction four has inputs 1 and 0 again, the union is attempted but they already share a root so nothing merges and the count stays at four. Transaction five has inputs 4 and 5, union 4 with 5 merges, and the count falls to three. A panel on the right shows the final partition: a cluster holding 0 and 1, a cluster holding 2 alone, and a cluster holding 3, 4 and 5. A closing band says six addresses minus three real merges equals three clusters, that this identity holds on every run, and that the count can only ever go down.">
+        <style>
+          .p3bH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .p3bT { font: 800 9.5px Inter, sans-serif; fill: #FFFFFF; letter-spacing: .07em; }
+          .p3bC { font: 800 9px Inter, sans-serif; fill: #FFFFFF; letter-spacing: .09em; }
+          .p3bX { font: 700 10.5px "SF Mono", Menlo, monospace; fill: #13201E; }
+          .p3bG { font: 800 10.5px Inter, sans-serif; fill: #1F5F5B; }
+          .p3bR { font: 800 10.5px Inter, sans-serif; fill: #9C3D18; }
+          .p3bM { font: 400 10px Inter, sans-serif; fill: #54655F; }
+          .p3bD { font: 800 11px Inter, sans-serif; fill: #13201E; }
+          .p3bL { font: 800 9px Inter, sans-serif; fill: #54655F; letter-spacing: .11em; }
+          .p3bK { font: 800 11.5px Inter, sans-serif; fill: #9C3D18; }
+        </style>
+
+        <text class="p3bH" x="14" y="20">Six addresses, five transactions, and every step the algorithm takes</text>
+
+        <rect x="14" y="40" width="556" height="24" fill="#123D3A"></rect>
+        <text class="p3bC" x="26" y="56">TX</text>
+        <text class="p3bC" x="72" y="56">INPUTS</text>
+        <text class="p3bC" x="186" y="56">UNION ATTEMPTED</text>
+        <text class="p3bC" x="336" y="56">MERGED</text>
+        <text class="p3bC" x="450" y="56">CLUSTERS AFTER</text>
+
+        <rect x="14" y="64" width="556" height="26" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <text class="p3bX" x="26" y="82">t1</text>
+        <text class="p3bX" x="72" y="82">[0]</text>
+        <text class="p3bM" x="186" y="82">none, one input only</text>
+        <text class="p3bM" x="336" y="82">no</text>
+        <text class="p3bX" x="450" y="82">6</text>
+
+        <rect x="14" y="90" width="556" height="26" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <text class="p3bX" x="26" y="108">t2</text>
+        <text class="p3bX" x="72" y="108">[0, 1]</text>
+        <text class="p3bX" x="186" y="108">union(0, 1)</text>
+        <text class="p3bG" x="336" y="108">YES</text>
+        <text class="p3bX" x="450" y="108">5</text>
+
+        <rect x="14" y="116" width="556" height="26" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <text class="p3bX" x="26" y="134">t3</text>
+        <text class="p3bX" x="72" y="134">[3, 4]</text>
+        <text class="p3bX" x="186" y="134">union(3, 4)</text>
+        <text class="p3bG" x="336" y="134">YES</text>
+        <text class="p3bX" x="450" y="134">4</text>
+
+        <rect x="14" y="142" width="556" height="26" fill="#FDF3EE" stroke="#DCE9E6"></rect>
+        <text class="p3bX" x="26" y="160">t4</text>
+        <text class="p3bX" x="72" y="160">[1, 0]</text>
+        <text class="p3bX" x="186" y="160">union(1, 0)</text>
+        <text class="p3bR" x="336" y="160">NO, SAME ROOT</text>
+        <text class="p3bX" x="450" y="160">4</text>
+
+        <rect x="14" y="168" width="556" height="26" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <text class="p3bX" x="26" y="186">t5</text>
+        <text class="p3bX" x="72" y="186">[4, 5]</text>
+        <text class="p3bX" x="186" y="186">union(4, 5)</text>
+        <text class="p3bG" x="336" y="186">YES</text>
+        <text class="p3bX" x="450" y="186">3</text>
+
+        <text class="p3bM" x="14" y="218">Five transactions, four unions attempted, three of them real. The amber row is the one that changes nothing.</text>
+
+        <rect x="590" y="40" width="276" height="154" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <text class="p3bL" x="604" y="62">THE FINAL PARTITION</text>
+        <rect x="604" y="72" width="108" height="42" rx="8" fill="none" stroke="#1F5F5B" stroke-width="1.4" stroke-dasharray="5 4"></rect>
+        <circle cx="632" cy="93" r="13" fill="#C7E0DC" stroke="#1F5F5B"></circle>
+        <text class="p3bD" x="628" y="98">0</text>
+        <circle cx="684" cy="93" r="13" fill="#C7E0DC" stroke="#1F5F5B"></circle>
+        <text class="p3bD" x="680" y="98">1</text>
+        <rect x="724" y="72" width="56" height="42" rx="8" fill="none" stroke="#9C3D18" stroke-width="1.4" stroke-dasharray="5 4"></rect>
+        <circle cx="752" cy="93" r="13" fill="#EFF7F5" stroke="#1F5F5B"></circle>
+        <text class="p3bD" x="748" y="98">2</text>
+        <rect x="604" y="126" width="160" height="42" rx="8" fill="none" stroke="#1F5F5B" stroke-width="1.4" stroke-dasharray="5 4"></rect>
+        <circle cx="632" cy="147" r="13" fill="#C7E0DC" stroke="#1F5F5B"></circle>
+        <text class="p3bD" x="628" y="152">3</text>
+        <circle cx="684" cy="147" r="13" fill="#C7E0DC" stroke="#1F5F5B"></circle>
+        <text class="p3bD" x="680" y="152">4</text>
+        <circle cx="736" cy="147" r="13" fill="#C7E0DC" stroke="#1F5F5B"></circle>
+        <text class="p3bD" x="732" y="152">5</text>
+        <text class="p3bM" x="604" y="186">Three clusters, three distinct roots.</text>
+
+        <rect x="14" y="242" width="852" height="110" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p3bK" x="30" y="266">Six addresses minus three real merges is three clusters, and that identity holds on every run of any size.</text>
+        <text class="p3bM" x="30" y="288">The cluster count starts at the number of addresses and falls by exactly one each time union returns true. There is no operation in</text>
+        <text class="p3bM" x="30" y="306">the algorithm that increases it, and no amount of extra evidence can. That monotonicity is not a nice property, it is the property,</text>
+        <text class="p3bM" x="30" y="324">and Part 2 shows that it is also what makes the final number a ceiling rather than an estimate.</text>
+        <text class="p3bM" x="30" y="342">Note also that t4 was free: repeated evidence costs a find and changes nothing, which is why duplicate co-spends are harmless.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the amber row is the one people forget. Evidence arriving twice is not stronger evidence, it is the same evidence.</figcaption>
+    </figure>
+
+    <div class="p3code">
+      <span class="p3cap">The clustering, in its entirety</span>
+      <code>function clusterByCoSpend(world, txs) {
+  var uf = UF(world.addresses.length), links = 0;
+
+  txs.forEach(function (inputs) {
+    for (var i = 1; i &lt; inputs.length; i++)
+      if (uf.union(inputs[0], inputs[i])) links++;   // one line of rule
+  });
+
+  var roots = {};
+  for (var a = 0; a &lt; world.addresses.length; a++) roots[uf.find(a)] = true;
+
+  return { uf: uf, entities: Object.keys(roots).length, links: links };
+}</code>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The rule is one line, and it is the only line with an opinion<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Everything interesting in the function is the inner <span class="mono">for</span>. Every input after the first gets unioned with the first, which makes all inputs of a transaction one group without needing to compare them pairwise. There is no threshold, no weight, no similarity, no tuning parameter and nothing to configure. Somebody who dislikes the answer has nothing to turn.</p>
+        <p>That absence is worth naming out loud, because it is unusual and it is valuable. A method with a knob is a method that will be adjusted, quietly, by whoever most wants a different number. This one produces the same output from the same rows for everybody, forever, which is exactly the property you want in a figure that will be read by people who do not work for you.</p>
+        <p>The counter to <span class="mono">links</span> exists for one reason: <span class="mono">union</span> returns <span class="mono">true</span> only when a real merge happened, so <span class="mono">links</span> is the number of times the cluster count went down. Address count minus links is the cluster count, which gives you a free consistency check on any run.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What this is not, and where that craft lives<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>It is tempting to reach for the record linkage toolbox here, and worth being clear about why it does not fit rather than just declining it. Probabilistic linkage compares records on attributes, assigns agreement and disagreement weights, and produces a score you threshold, with blocking to keep the comparison space tractable. It is a mature craft with a real literature, it handles exactly the situation where two records describe the same party and neither is definitive, and it lives in <b>learn-entity-resolution-with-phoebe</b>.</p>
+        <p>The reason it has nothing to do tonight is that there are no attributes. Not weak attributes, not noisy attributes: none. An address carries no name, no locality, no contact detail, no demographic, nothing that could agree or disagree with anything on another address. A scoring model needs two records with fields to compare, and here the entire evidence base is a structural fact about transactions rather than a property of the records being linked.</p>
+        <p>One consequence is worth keeping. Because the evidence is deterministic there is no threshold, so there is no precision-recall trade-off to tune and no operating point to argue about. You get one answer. That makes the method much less flexible and much more defensible, and session 4 makes that trade explicit by measuring exactly what the one answer is worth.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the run and the asymmetry</span>
+      <h2>Bench A, reproduced, and why one column has to be zero</h2>
+      <span class="tag concept">12 min live</span>
+    </div>
+    <p class="lede">Now run it on the full world. Bench A is 300 ordinary people holding one to four addresses each plus 4 operators running 60 addresses each on purpose, so the truth is 304 entities, and 4,000 transactions are produced from them. The seed convention is part of the canon and belongs in the code rather than in somebody's memory: world seed <span class="mono">s</span>, transaction seed <span class="mono">s + 1</span>.</p>
+
+    <div class="p3code">
+      <span class="p3cap">Bench A, reproduced exactly</span>
+      <code>// The seed convention IS part of the canon: world seed s, transaction seed s + 1.
+var s = 11;
+
+var world = W3.makeWorld({
+  people: 300, sybils: 4, sybilAddrs: 60, seed: s
+});
+
+var txs = W3.makeTransactions(world, {
+  transactions: 4000, coSpendRate: 0.25, sybilDiscipline: 0.97, seed: s + 1
+});
+
+var cl    = W3.clusterByCoSpend(world, txs);
+var score = W3.scoreClustering(world, cl);
+
+// score -> { addresses: 982, trueEntities: 304, clustered: 696,
+//            mixedClusters: 0, stillSplit: 392 }
+// cl.links -> 286        and 982 - 286 === 696</code>
+    </div>
+
+    <div class="wk" id="p3-cluster">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The real functions, running in this page. Feed in fewer transactions and watch which columns move and which one never does.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="p3-seed">World seed s (transaction seed is s + 1)</label>
+        <select class="sql-code" id="p3-seed">
+          <option value="11">s = 11 · Month A</option>
+          <option value="101">s = 101 · Month B</option>
+          <option value="2024">s = 2024 · Month C</option>
+          <option value="7">s = 7 · Month D</option>
+          <option value="55555">s = 55555 · Month E</option>
+        </select>
+        <label class="sql-label" for="p3-n">Transactions fed to the clustering: <b id="p3-n-val">4000</b> of 4000</label>
+        <input class="sql-code" id="p3-n" type="range" min="0" max="4000" step="50" value="4000">
+        <div id="p3-out"></div>
+        <p class="sql-note" id="p3-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="p3-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Watch the descent, and watch the column that never moves<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Drag the transaction slider from 0 to the end. At 0 the clustering has seen no evidence at all and returns one cluster per address, which is the naive count and also the correct output for a method with nothing to go on. As transactions arrive the count falls, smoothly, and it never once rises.</p>
+        <p>Stop anywhere on the way and check the identity: addresses minus merges equals clusters. It holds at every position, on every seed, because the only thing that changes the count is a successful union and each one removes exactly one cluster. If you build this yourself, that identity is the cheapest possible test and it will catch almost any implementation error you can make in the structure.</p>
+        <p>Now the column that does not move. Wrongly merged stays at 0 from the first transaction to the last, at every slider position and on every seed. That is not a property of this generator being gentle. Part 2's second half derives why it could not be otherwise.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The derivation of the asymmetry. On the left, a panel headed the only way to merge two parties wrongly shows an address belonging to party X and an address belonging to party Y, both feeding as inputs into one transaction, with an amber cross on the second arrow. A note explains that building that transaction requires authorising both inputs, which means one party controls both, which contradicts them being two parties. On the right, a panel headed what that makes the two errors shows the missed link, where addresses of one party were never spent together, described as possible, ordinary and 392 of them in month A, and the wrong merge, which would require the impossible step on the left, at zero. A closing band says zero wrongly merged across every seed is the shape of the evidence rather than luck, and that this is why the clustered figure of 696 for month A is a ceiling on the 304 true entities and never a floor.">
+        <style>
+          .p3cH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .p3cT { font: 800 9.5px Inter, sans-serif; fill: #FFFFFF; letter-spacing: .07em; }
+          .p3cB { font: 400 10.5px Inter, sans-serif; fill: #13201E; }
+          .p3cM { font: 400 10px Inter, sans-serif; fill: #54655F; }
+          .p3cN { font: 800 11px Inter, sans-serif; fill: #13201E; }
+          .p3cA { font: 800 10px Inter, sans-serif; fill: #9C3D18; }
+          .p3cS { font: 400 9.5px Inter, sans-serif; fill: #13201E; }
+          .p3cZ { font: 800 20px Inter, sans-serif; fill: #9C3D18; }
+          .p3cY { font: 800 20px Inter, sans-serif; fill: #1F5F5B; }
+          .p3cK { font: 800 11.5px Inter, sans-serif; fill: #9C3D18; }
+        </style>
+        <defs>
+          <marker id="p3cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1F5F5B"></path></marker>
+        </defs>
+
+        <text class="p3cH" x="14" y="20">Why one of the two errors is ordinary and the other one cannot be built</text>
+
+        <rect x="14" y="40" width="420" height="230" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="40" width="420" height="26" rx="10" fill="#9C3D18"></rect>
+        <rect x="14" y="53" width="420" height="13" fill="#9C3D18"></rect>
+        <text class="p3cT" x="30" y="58">THE ONLY WAY TO MERGE TWO PARTIES WRONGLY</text>
+
+        <rect x="32" y="92" width="136" height="30" rx="6" fill="#C7E0DC" stroke="#1F5F5B"></rect>
+        <text class="p3cS" x="44" y="112">an address of party X</text>
+        <rect x="32" y="150" width="136" height="30" rx="6" fill="#C7E0DC" stroke="#1F5F5B"></rect>
+        <text class="p3cS" x="44" y="170">an address of party Y</text>
+        <line x1="174" y1="107" x2="222" y2="124" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p3cAr)"></line>
+        <line x1="174" y1="165" x2="222" y2="148" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p3cAr)"></line>
+        <rect x="230" y="112" width="130" height="50" rx="8" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p3cA" x="242" y="132">ONE TRANSACTION</text>
+        <text class="p3cM" x="242" y="150">naming both as inputs</text>
+        <text class="p3cM" x="32" y="204">Building that transaction means authorising both inputs.</text>
+        <text class="p3cM" x="32" y="222">Authorising both means one party controls both, which is</text>
+        <text class="p3cM" x="32" y="240">the thing the wrong merge was supposed to contradict.</text>
+        <text class="p3cA" x="32" y="260">There is no way to construct the case.</text>
+
+        <rect x="450" y="40" width="416" height="230" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="450" y="40" width="416" height="26" rx="10" fill="#123D3A"></rect>
+        <rect x="450" y="53" width="416" height="13" fill="#123D3A"></rect>
+        <text class="p3cT" x="466" y="58">SO THE TWO ERRORS ARE NOT THE SAME SHAPE</text>
+
+        <rect x="466" y="84" width="384" height="76" rx="8" fill="#EFF7F5" stroke="#8FBDB8"></rect>
+        <text class="p3cN" x="480" y="106">Missed link</text>
+        <text class="p3cM" x="480" y="124">One party's addresses simply never got spent</text>
+        <text class="p3cM" x="480" y="142">together. Nothing was hidden and nothing is wrong.</text>
+        <text class="p3cY" x="780" y="130">392</text>
+
+        <rect x="466" y="172" width="384" height="76" rx="8" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p3cN" x="480" y="194">Wrong merge</text>
+        <text class="p3cM" x="480" y="212">Two parties in one cluster, which requires the</text>
+        <text class="p3cM" x="480" y="230">transaction on the left, which cannot be built.</text>
+        <text class="p3cZ" x="798" y="218">0</text>
+
+        <rect x="14" y="286" width="852" height="96" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p3cK" x="30" y="310">A co-spend is positive evidence. The absence of one is not negative evidence, it is no evidence.</text>
+        <text class="p3cM" x="30" y="332">So every error the method makes is a link it failed to make, every one of those inflates the count, and the count can therefore only</text>
+        <text class="p3cM" x="30" y="350">be too high. On month A that is 982 addresses, 696 clusters and 304 real entities: 696 is a ceiling over the truth and never a floor.</text>
+        <text class="p3cM" x="30" y="368">Session 4 measures what that ceiling is worth and how to report it. Session 5 asks whether an operator can break it on purpose.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the left panel is the whole proof. Everything about the shape of the error follows from a transaction that cannot be constructed.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Positive only, and what that buys<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Two addresses spent together is strong evidence of one holder, and it is strong for a structural reason rather than a statistical one. Two addresses never spent together is no evidence of anything. It is exactly as consistent with two separate parties as it is with one party who happened never to spend from both at once, and nothing else in the rows distinguishes those cases.</p>
+        <p>An engineer's instinct at this point is to treat the absence as weak negative evidence and build a model around it. Resist that, and notice what would have to be true for it to work: you would need a rate at which one party fails to co-spend, and that rate is a property of individual behaviour that the data does not contain and cannot be estimated from within. Anything you fit would be fitting your own assumption.</p>
+        <p>What the asymmetry buys is a bound instead of an estimate. Every error inflates, so the output sits above the truth, always, and you can say so without qualification. That is a smaller claim than an estimate and a much more durable one, and the wrongly merged column is the evidence that you are entitled to make it.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The implementation errors this property will catch<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Because the zero is structural rather than empirical, it doubles as a test. If your own implementation ever reports a wrongly merged cluster against a world where the truth is known, you have a bug, and it is usually one of three.</p>
+        <p>The first is an index error: unioning positions in the transaction array rather than address indices, which merges unrelated addresses that happened to appear in the same slot. The second is unioning inputs with outputs, which is a different and much weaker claim and will absolutely fuse separate parties, because paying somebody is not controlling their address. The third is running the union across a batch boundary rather than within a transaction, which quietly unions every address in a block.</p>
+        <p>All three produce clusters that look bigger and better. All three are caught in one assertion, and it is worth writing that assertion before writing anything else.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>One camp says run the clustering and publish the bound. Their argument is practical: the naive address count is wrong by a factor of about three, somebody is going to report a number regardless, and a parameterless method that removes half the error and comes with a known direction is strictly better than the alternative, which is the raw count with a hopeful caveat. Refusing to compute it does not protect anybody, it just means the worse number is the one that gets used.</p>
+        <p>The other camp says the output is a linkage record about real people that did not exist until you built it. The rows were pseudonymous; your cluster table is a map of which pseudonyms belong together, derived without consent, stored in your warehouse, backed up, discoverable, and available to anyone who later gets access to it or compels it. On this view the accuracy gain is real and small, the liability is real and permanent, and the responsible move is to report the address count, label it plainly as an address count, and not create the asset at all.</p>
+        <p>Both camps include people who have built this and shipped it. They are not disagreeing about the algorithm, which nobody disputes, and they are not disagreeing about the measurement. They disagree about whether an inference you can make is an inference you should hold. Notice that the second position gets stronger the better the method works, which is an uncomfortable shape for an argument to have, and notice that the first position depends on your organisation actually reporting the bound rather than the point. Whether that second condition holds where you work is something you already know.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Write it, break it, and prove the zero</h2>
+      <span class="tag build">15 min hands on</span>
+    </div>
+    <p class="lede">Six steps, most of them at a keyboard with the live box open. The aim is not to have used a union-find, it is to have broken one deliberately and watched the wrongly merged column react, because that is the only way the zero stops being something you were told.</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Say the rule in one sentence, then say the loop</h4>
+        <p>The rule first, with no hedging. Then describe the inner loop that implements it, out loud, in one more sentence. If the second sentence is longer than the first, you have added something the algorithm does not do.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Trace the six-address example by hand</h4>
+        <p>On paper, run the five transactions and write the parent array after each one. Check your final partition against the diagram. Then check the identity: six addresses, three real merges, three clusters.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Reproduce Bench A on your own machine</h4>
+        <p>Run the code box with the seed convention, world seed s and transaction seed s plus one. You should get 982, 304, 696 and 0 for s equal to 11. If you get a different number, the seed convention is the first place to look, because it is the thing everybody reconstructs wrongly.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Slide the transactions down and back</h4>
+        <p>Move the slider from 4000 to 0 and watch clusters climb back to the address count. Write down two intermediate positions with addresses, merges and clusters, and check the identity at both. Note that wrongly merged did not move.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Break it on purpose</h4>
+        <p>In your own copy, change the union to join the first input with the transaction's output instead of with its other inputs. Run the score. The wrongly merged column will stop being zero immediately, and the clustered count will look better. Sit with that for a moment.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the assertion you will ship</h4>
+        <p>One line, in the language you work in, that fails if wrongly merged is ever above zero on a world where the truth is known. That assertion is worth more than the rest of your test suite for this component. Bring it to session 4.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When a method produces a suspiciously clean result, find the structural reason or stop believing it. A zero that holds because of what a transaction requires is a fact you can build on. A zero that holds because five seeds happened to be quiet is a coincidence waiting to be reported as a property, and the two look identical in a results table.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Inside find, the line <span class="mono">parent[x] = parent[parent[x]]</span> runs on every step of the walk. What does it change?</p>
+      <div class="qopt">A · It can change which root is returned, which is why it must run before the comparison</div>
+      <div class="qopt">B · Nothing about the partition; it only shortens future walks, because a node's grandparent is in the same tree as its parent</div>
+      <div class="qopt">C · It merges the node with its grandparent, which is why the cluster count falls during a find</div>
+      <q class="qwhy">Path halving is purely a performance optimisation. Reassigning a node to its grandparent keeps it in the same tree, so the root at the end of the walk is unchanged and the cluster count is untouched. Only a successful union changes the partition.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">A run on month A reports 982 addresses, 286 successful merges and 700 clusters. What do you know?</p>
+      <div class="qopt">A · Nothing is wrong; the cluster count varies with the order transactions are processed in</div>
+      <div class="qopt">B · The clustering found extra evidence, so the count is closer to the truth than the canon figure</div>
+      <div class="qopt">C · There is a bug, because every successful merge removes exactly one cluster, so 982 minus 286 must be 696</div>
+      <q class="qwhy">Union returns true only when two distinct groups are joined, and joining two groups reduces the count by one. The identity addresses minus merges equals clusters holds on every run of any size, which makes it the cheapest possible test on an implementation.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Why is the wrongly merged column 0 across every seed, rather than merely small?</p>
+      <div class="qopt">A · A wrong merge would need one transaction naming input addresses held by two different parties, and building that requires authorising both, which means one party controls both</div>
+      <div class="qopt">B · Because the generator was configured so that operators avoid co-spending 97 percent of the time</div>
+      <div class="qopt">C · Because union by rank rejects merges between trees whose ranks differ by more than one</div>
+      <q class="qwhy">The zero is structural, not empirical and not a configuration artefact. The case that would produce it cannot be constructed, so every error is a link the method failed to make, every one of those inflates the count, and the output is therefore a ceiling. Operator discipline changes how many links are missed, never whether a wrong one is made.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 4</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty minutes, on your own implementation and on the assertion you wrote in step 6.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Run all five seeds and tabulate</h4>
+        <p>Addresses, merges, clusters, still split and wrongly merged for s equal to 11, 101, 2024, 7 and 55555. Check the identity on every row and check that the last column is zero on every row.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Bring one sentence about the bound</h4>
+        <p>Write how you would report the clustered figure to somebody who will repeat it without you in the room. Session 4 measures what the ceiling is worth, where it is tight and where it is nearly useless.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Union-find, line by line</span><span class="note">Find with path halving, union by rank, and why neither optimisation can change the answer.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The clustering rule</span><span class="note">Every input after the first unioned with the first. One loop, no threshold, no parameter to turn.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">A full hand trace</span><span class="note">Six addresses, five transactions, four attempted unions, three real merges, three clusters.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The identity that tests your build</span><span class="note">Addresses minus successful merges equals clusters, on every run of any size.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Bench A reproduced with the seed convention</span><span class="note">World seed s and transaction seed s plus one: 982 addresses, 304 entities, 696 clusters, 0 wrongly merged.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The evidence asymmetry, derived</span><span class="note">A co-spend is positive evidence; its absence is no evidence. The wrong merge requires a transaction that cannot be built.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Three implementation bugs the zero catches</span><span class="note">Wrong index space, unioning inputs with outputs, and unioning across a batch rather than within a transaction.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">What the ceiling is worth</span><span class="note">Named tonight as the shape of the result. Session 4 measures it and deals with reporting the bound.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Parties who are trying not to be counted</span><span class="note">The 4 operators are in the world tonight and are not the subject. Session 5 varies their discipline and measures it.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Probabilistic record linkage</span><span class="note">Fellegi-Sunter weights, blocking and string comparison live in learn-entity-resolution-with-phoebe. There are no attributes here for them to use.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Hashes, blocks, consensus and chain mechanics</span><span class="note">The prerequisite is learn-blockchain-with-phoebe and it is assumed rather than repeated.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Named networks, and any real network statistic</span><span class="note">Every figure here comes from the generator in the page, and none of it describes anything outside it.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Anything to do with price, markets or holdings</span><span class="note">Out of scope by design, and nothing here is advice of any kind.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The rule.</strong> Addresses named as inputs to one transaction are one holder. That is the whole of it.</div>
+      <div class="cheat-item"><strong>The structure.</strong> Union-find. Everyone starts alone, find walks to a root, union joins two roots.</div>
+      <div class="cheat-item"><strong>Path halving.</strong> Point each node at its grandparent while walking. Faster next time, same answer.</div>
+      <div class="cheat-item"><strong>Union by rank.</strong> Shorter tree under taller. Rank rises only when two equal trees meet.</div>
+      <div class="cheat-item"><strong>The identity.</strong> Addresses minus successful merges equals clusters. Cheapest test you will ever write.</div>
+      <div class="cheat-item"><strong>The canon.</strong> World seed s, transaction seed s plus one. At s equal to 11: 982, 304, 696, 0.</div>
+      <div class="cheat-item"><strong>The asymmetry.</strong> A co-spend is positive evidence. No co-spend is no evidence. Only missed links are possible.</div>
+      <div class="cheat-item"><strong>Therefore a ceiling.</strong> Every error inflates, so the clustered figure sits above the truth and never below it.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 3 of 10 · learn-web3-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p2-the-indexer-is-the-product.html">← Practitioner session 2 · The indexer is the product</a>
+        <a href="p4-measuring-the-clustering.html">Practitioner session 4 · Measuring the clustering →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/w3-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof W3 === "undefined") return;
+  var sel = document.getElementById("p3-seed");
+  var nIn = document.getElementById("p3-n");
+  var nVal = document.getElementById("p3-n-val");
+  var out = document.getElementById("p3-out");
+  var verdict = document.getElementById("p3-verdict");
+  var self = document.getElementById("p3-self");
+
+  function comma(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+
+  function render() {
+    var s = Number(sel.value);
+    var n = Number(nIn.value);
+    nVal.textContent = comma(n);
+
+    var world = W3.makeWorld({ people: 300, sybils: 4, sybilAddrs: 60, seed: s });
+    var txs = W3.makeTransactions(world, {
+      transactions: 4000, coSpendRate: 0.25, sybilDiscipline: 0.97, seed: s + 1
+    });
+    var cl = W3.clusterByCoSpend(world, txs.slice(0, n));
+    var sc = W3.scoreClustering(world, cl);
+    var identity = (sc.addresses - cl.links) === sc.clustered;
+
+    var html = '<table class="sql-table"><thead><tr><th>Quantity</th><th>Value</th><th>Where it comes from</th></tr></thead><tbody>';
+    html += "<tr><td>Addresses in the world</td><td>" + comma(sc.addresses) + "</td><td>world.addresses.length</td></tr>";
+    html += "<tr><td>Successful merges so far</td><td>" + comma(cl.links) + "</td><td>times union returned true</td></tr>";
+    html += "<tr><td>Clusters the method returns</td><td>" + comma(sc.clustered) + "</td><td>distinct roots after every find</td></tr>";
+    html += "<tr><td>Entities, the truth</td><td>" + comma(sc.trueEntities) + "</td><td>known only to the generator</td></tr>";
+    html += "<tr><td>Still split: links it failed to make</td><td>" + comma(sc.stillSplit) + "</td><td>clustered minus the truth</td></tr>";
+    html += '<tr><td>Wrongly merged: links it invented</td><td><b class="p3-zero">' + comma(sc.mixedClusters) + '</b></td><td>'
+      + (sc.mixedClusters === 0 ? "structurally impossible, and measured at 0" : "impossible by the derivation, so this is a bug") + "</td></tr>";
+    html += '<tr><td>Identity check</td><td><b class="' + (identity ? "p3-ok" : "p3-zero") + '">'
+      + comma(sc.addresses) + " - " + comma(cl.links) + " = " + comma(sc.addresses - cl.links) + "</b></td><td>"
+      + (identity ? "matches the cluster count, as it must" : "does not match the cluster count, which is a bug") + "</td></tr>";
+    html += "</tbody></table>";
+    out.innerHTML = html;
+
+    verdict.textContent = n === 0
+      ? "With no transactions fed in, the method has seen no evidence and returns one cluster per address: " + comma(sc.clustered)
+        + ". That is the naive count, and it is the correct output for a method with nothing to go on."
+      : "After " + comma(n) + " transactions the count has fallen from " + comma(sc.addresses) + " to " + comma(sc.clustered)
+        + ", one step per merge, and it has never risen. The truth is " + comma(sc.trueEntities)
+        + ", so " + comma(sc.stillSplit) + " links are still missing and 0 were invented.";
+  }
+
+  var t = W3.selfTest();
+  self.textContent = t.ok
+    ? "The generator's five properties pass in this browser, so these are the numbers any correct run gives. Nothing here describes a real network."
+    : "The generator's self test did not pass in this browser, so nothing above should be believed.";
+
+  sel.addEventListener("change", render);
+  nIn.addEventListener("input", render);
+  render();
+})();
+</script>
+<style>
+  #p3-cluster .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 16rem; }
+  #p3-cluster input[type="range"] { max-width: 22rem; padding: 0; }
+  #p3-cluster table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+  #p3-cluster .p3-zero { color: var(--amber); }
+  #p3-cluster .p3-ok { color: var(--indigo); }
+  .p3code {
+    background: var(--indigo-50);
+    border: 1px solid var(--hairline);
+    border-left: 4px solid var(--indigo);
+    border-radius: 12px;
+    padding: 1rem 1.15rem 1.1rem;
+    margin: 1rem 0 1.4rem;
+    overflow-x: auto;
+  }
+  .p3code .p3cap {
+    display: block;
+    font-family: Inter, -apple-system, sans-serif;
+    font-size: .68rem;
+    font-weight: 800;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--indigo);
+    margin-bottom: 1rem;
+  }
+  .p3code code {
+    display: block;
+    white-space: pre;
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: .8rem;
+    line-height: 1.75;
+    color: var(--ink);
+  }
+</style>
+</body>
+</html>

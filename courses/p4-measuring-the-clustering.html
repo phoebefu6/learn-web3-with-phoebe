@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 4 of 10. How to report a clustering you cannot validate. Wrongly merged is 0 on every seed and still split runs 372 to 403, so the figure is an upper bound with no matching lower bound, and the honest report is a bound with a direction.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Measuring the clustering - learn web3 with phoebe">
+<meta property="og:description" content="Practitioner session 4 of 10. One-sided error, a ceiling with no floor, and the three checks that still work when the truth is gone.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-web3-with-phoebe/courses/p4-measuring-the-clustering.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Measuring the clustering - learn web3 with phoebe">
+<meta name="twitter:description" content="In the bench the truth is 304 and the error can be measured. In production it cannot, and the question is what you can still say.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-web3-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 4 · Measuring the clustering - learn web3 with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-web3-with-phoebe</a> / Practitioner session 4 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Web3 with Phoebe · Practitioner session 4 of 10</div>
+    <h1>Measuring the <span class="accent">clustering</span></h1>
+    <p class="sub">The clustering runs and returns 696. On Larkfield's bench the truth is 304, so the error is known to the digit. In production nobody knows it, nobody will ever know it, and that is the normal case rather than a gap in the setup. Tonight is what you can still report when the answer sheet is gone: why the error here runs in exactly one direction, why that makes the figure a ceiling with no floor underneath it, and the three things you can validate about a clustering without ever seeing a true entity count.</p>
+    <div class="chip-row">
+      <span class="chip level">🔧 Practitioner track</span>
+      <span class="chip audience">Whoever has to publish the number</span>
+      <span class="chip audience">Whoever has to defend it a quarter later</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · One-sided error</span>
+      <span class="a3" style="flex:3">18-30 · Validating with no truth</span>
+      <span class="a4" style="flex:3">30-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The bench has an answer sheet and your warehouse never will</h2>
+    </div>
+    <p class="lede">Session 3 built the method and derived the structural zero. It ran against a world where the generator knows every owner, which is why the scoring function can report 392 still split and 0 wrongly merged. Strip that away and you are left with what a real run gives you: an address count, a merge count and a cluster count. No truth column, no held-out set, no labels arriving later. Tonight is the reporting problem that leaves behind, and it has a good answer rather than a resigned one.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The two directions an entity-resolution error can run, and the derivation of why only one of them is available here. The consequence stated precisely: 696 is an upper bound on entities and there is no lower bound to pair it with, so the honest output is a bound with a direction rather than a point. A second, non-adversarial source of over-count, measured: on month A only 787 of the 982 addresses ever appear as a spend input, so the method has no evidence at all about the other 195. And three checks that still work with no answer sheet, plus a clear statement of what each one does not prove.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why accuracy is the wrong thing to ask for<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The reflex when a method produces a number is to ask how accurate it is, and the reflex is trained on situations where accuracy is measurable: a held-out set, a label that arrives next week, a reconciliation against a system that does know. None of those exists here. There is no second source that holds the mapping from address to holder, because the mapping was never recorded by anybody. It is not withheld, it is absent.</p>
+        <p>So the request "how accurate is this" has no answer, and the useful move is to stop trying to produce one. What replaces it is not a weaker version of accuracy. It is a different kind of statement: a bound, with a proven direction, that holds for every run on every month regardless of what the truth happens to be. That claim is smaller and it is checkable, which is the trade worth making.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Larkfield's first attempt at this put a confidence interval around the clustered figure. It was computed by bootstrapping the transaction sample, and it was tight and completely meaningless: it measured how much 696 would wobble if a slightly different set of transactions had been drawn, which is a question nobody asked. The distance to 304 is not sampling variation and no resampling scheme can see it.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words that keep coming back<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Still split.</strong> Clusters beyond the true entity count. Links the method failed to make. On Bench A it runs 372 to 403 across the five months.</li>
+          <li><strong>Wrongly merged.</strong> A cluster holding addresses from more than one party. Measured at 0 on every seed, for the reason session 3 derived.</li>
+          <li><strong>Upper bound.</strong> A number the truth cannot exceed. Here, the cluster count.</li>
+          <li><strong>Lower bound.</strong> A number the truth cannot fall below. Here, absent, and the absence is the point.</li>
+          <li><strong>One-sided error.</strong> An error that can only run in one direction. A consequence of evidence that is positive only.</li>
+          <li><strong>Ever spent.</strong> An address that has appeared at least once as a transaction input. The only addresses the method can say anything about at all.</li>
+          <li><strong>Monotonicity.</strong> The property that the cluster count can only fall as more data arrives. Follows from addresses minus merges equals clusters.</li>
+          <li><strong>Window.</strong> The span of history fed to the clustering. The only lever this method has, since it has no threshold and no parameter.</li>
+          <li><strong>Record linkage.</strong> Fuzzy attribute matching with agreement weights, where a precision and recall trade-off does exist. That craft is <b>learn-entity-resolution-with-phoebe</b> and it is a different evidence base.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the shape of the error</span>
+      <h2>Two directions, one of them empty, and what that buys</h2>
+      <span class="tag concept">15 min live</span>
+    </div>
+    <p class="lede">An entity-resolution method can be wrong twice. It can put two parties in one cluster, and it can leave one party in two clusters. Most methods do both, in a proportion you tune, which is why they come with a threshold and an operating point. This one does exactly one of them, and the column proving it is 0 on all five months of Bench A. The consequence runs all the way to the sentence you are allowed to write in a board pack.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 452" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three horizontal bars on a shared scale from zero to one thousand. The top bar, addresses seen in the month, reaches 982. The middle bar, what the clustering reports, reaches 696. The bottom bar, the truth which only the bench knows, reaches 304. Amber dashed guides drop from the 696 end and the 304 end to a bracket below the axis, which spans the distance between them and is labelled 392 clusters that are not entities, every one of them a link the evidence could not support. To the left of that bracket a note says there is no bound on this side and the truth could be anywhere below 696. Two closing panels list what the run entitles you to say, including at most 696 entities and that more data can only lower it, against what it does not entitle you to say, including about 696 entities and any statement of accuracy to within a percentage.">
+        <style>
+          .p4aH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .p4aL { font: 800 9px Inter, sans-serif; fill: #54655F; letter-spacing: .11em; }
+          .p4aV { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .p4aVw { font: 800 13px Inter, sans-serif; fill: #FFFFFF; }
+          .p4aAx { font: 400 9px Inter, sans-serif; fill: #54655F; }
+          .p4aK { font: 800 11px Inter, sans-serif; fill: #9C3D18; }
+          .p4aM { font: 400 10px Inter, sans-serif; fill: #54655F; }
+          .p4aT { font: 800 9.5px Inter, sans-serif; fill: #FFFFFF; letter-spacing: .07em; }
+          .p4aB { font: 400 11px Inter, sans-serif; fill: #13201E; }
+        </style>
+        <text class="p4aH" x="14" y="20">One scale, three numbers, and a gap that only ever points one way</text>
+
+        <text class="p4aL" x="40" y="44">ADDRESSES SEEN IN THE MONTH</text>
+        <rect x="40" y="52" width="786" height="26" rx="4" fill="#C7E0DC" stroke="#8FBDB8"></rect>
+        <text class="p4aV" x="818" y="71" text-anchor="end">982</text>
+
+        <text class="p4aL" x="40" y="98">WHAT THE CLUSTERING REPORTS</text>
+        <rect x="40" y="106" width="557" height="26" rx="4" fill="#8FBDB8" stroke="#1F5F5B"></rect>
+        <text class="p4aV" x="589" y="125" text-anchor="end">696</text>
+
+        <text class="p4aL" x="40" y="152">THE TRUTH, WHICH ONLY THE BENCH KNOWS</text>
+        <rect x="40" y="160" width="243" height="26" rx="4" fill="#1F5F5B"></rect>
+        <text class="p4aVw" x="275" y="179" text-anchor="end">304</text>
+
+        <line x1="40" y1="202" x2="840" y2="202" stroke="#CFDEDA" stroke-width="1.4"></line>
+        <line x1="40" y1="202" x2="40" y2="209" stroke="#CFDEDA" stroke-width="1.4"></line>
+        <line x1="240" y1="202" x2="240" y2="209" stroke="#CFDEDA" stroke-width="1.4"></line>
+        <line x1="440" y1="202" x2="440" y2="209" stroke="#CFDEDA" stroke-width="1.4"></line>
+        <line x1="640" y1="202" x2="640" y2="209" stroke="#CFDEDA" stroke-width="1.4"></line>
+        <line x1="840" y1="202" x2="840" y2="209" stroke="#CFDEDA" stroke-width="1.4"></line>
+        <text class="p4aAx" x="40" y="224" text-anchor="middle">0</text>
+        <text class="p4aAx" x="240" y="224" text-anchor="middle">250</text>
+        <text class="p4aAx" x="440" y="224" text-anchor="middle">500</text>
+        <text class="p4aAx" x="640" y="224" text-anchor="middle">750</text>
+        <text class="p4aAx" x="840" y="224" text-anchor="middle">1,000</text>
+
+        <line x1="283" y1="160" x2="283" y2="240" stroke="#9C3D18" stroke-width="1.2" stroke-dasharray="4 4"></line>
+        <line x1="597" y1="106" x2="597" y2="240" stroke="#9C3D18" stroke-width="1.2" stroke-dasharray="4 4"></line>
+        <line x1="283" y1="248" x2="597" y2="248" stroke="#9C3D18" stroke-width="1.6"></line>
+        <line x1="283" y1="243" x2="283" y2="253" stroke="#9C3D18" stroke-width="1.6"></line>
+        <line x1="597" y1="243" x2="597" y2="253" stroke="#9C3D18" stroke-width="1.6"></line>
+        <text class="p4aK" x="440" y="272" text-anchor="middle">392 clusters that are not entities</text>
+        <text class="p4aM" x="440" y="290" text-anchor="middle">every one of them a link the evidence could not support</text>
+
+        <text class="p4aK" x="44" y="272">No bound on this side.</text>
+        <text class="p4aM" x="44" y="290">The truth sits somewhere below 696.</text>
+
+        <rect x="14" y="312" width="420" height="124" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="312" width="420" height="24" rx="10" fill="#1F5F5B"></rect>
+        <rect x="14" y="324" width="420" height="12" fill="#1F5F5B"></rect>
+        <text class="p4aT" x="28" y="329">WHAT THE RUN ENTITLES YOU TO SAY</text>
+        <text class="p4aB" x="28" y="358">At most 696 entities produced this month's rows.</text>
+        <text class="p4aB" x="28" y="380">The figure sits above the truth and never below it.</text>
+        <text class="p4aB" x="28" y="402">No two parties were fused: wrongly merged is 0.</text>
+        <text class="p4aB" x="28" y="424">More evidence can only lower it, never raise it.</text>
+
+        <rect x="446" y="312" width="420" height="124" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="446" y="312" width="420" height="24" rx="10" fill="#9C3D18"></rect>
+        <rect x="446" y="324" width="420" height="12" fill="#9C3D18"></rect>
+        <text class="p4aT" x="460" y="329">WHAT IT DOES NOT ENTITLE YOU TO SAY</text>
+        <text class="p4aB" x="460" y="358">About 696 entities. Roughly 700 users.</text>
+        <text class="p4aB" x="460" y="380">Accurate to within some percentage.</text>
+        <text class="p4aB" x="460" y="402">The gap is small because the method is standard.</text>
+        <text class="p4aB" x="460" y="424">A second method would confirm the figure.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the bracket has one closed end. The left side of it is open, and no run of this method on any amount of data will ever close it.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The two directions, and why one of them is empty<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Over-merging puts two parties into one cluster and pushes the count below the truth. Under-merging leaves one party spread across several clusters and pushes the count above it. A method that does both has an error that could fall either way, which is why such a method gets reported with an interval and why the interval is honest.</p>
+        <p>Session 3 derived why the first direction is unavailable: producing the co-spend that would fuse two parties requires authorising both inputs, and a party that can authorise both is one party. There is no data the generator could produce, and no data a ledger could carry, in which that case exists. The measured 0 in the wrongly merged column across five seeds is a confirmation of a derivation, not a finding.</p>
+        <p>So the error vector has one component and it is non-negative. That is a much stronger statement than a small error. A small two-sided error still needs a caveat in both directions. A one-sided error of any size at all lets you write the word "most" in front of the number and be right about it forever.</p>
+      </div>
+    </details>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>A ceiling with no floor is still worth publishing<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The obvious complaint about a one-sided bound is that it is half a result. The complaint is correct and it is not a reason to withhold it, because the alternative on the table is not a two-sided bound. It is the raw address count, which is also an upper bound, is also one-sided, and sits about 286 further from the truth on month A.</p>
+        <p>Framing the comparison that way changes the conversation. Both candidate figures are ceilings. One of them is a lower ceiling. Nobody has to argue about accuracy, because neither figure has any, and the choice is between two bounds of the same kind where one dominates.</p>
+        <p>What you lose by not having a floor is the ability to say the count is not much smaller than this. You cannot say it and you should not imply it, and the imply is where teams actually fail: a figure reported with no qualifier will be read as an estimate by everybody downstream, which is why the word is not optional and the direction has to travel with the number into every place it goes.</p>
+      </div>
+    </details>
+
+    <div class="p4code">
+      <span class="p4cap">Everything a production run can compute, and the field that is missing</span>
+      <code>// Month A, the seed convention from session 3: world seed s, tx seed s + 1.
+var spent = {};
+txs.forEach(function (inputs) {
+  inputs.forEach(function (a) { spent[a] = (spent[a] || 0) + 1; });
+});
+var everSpent = Object.keys(spent).length;
+
+var report = {
+  addressesSeen:   world.addresses.length,          // 982
+  everSpentAsInput: everSpent,                      // 787
+  noEvidenceAtAll: world.addresses.length - everSpent,  // 195
+  merges:          cl.links,                        // 286
+  entitiesAtMost:  cl.entities                      // 696
+};
+
+// There is deliberately no entitiesAtLeast field. Nothing in the run
+// produces one, and adding a plausible-looking number here is the
+// single most damaging line anybody could write in this file.</code>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>195 addresses the method never had a word to say about<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The gap between 696 and 304 gets attributed to operators almost every time it comes up, and part of it is. There is a second contributor that is entirely ordinary and easy to miss, because it is invisible unless you go and count it: on month A only 787 of the 982 addresses ever appear as a transaction input at all. The other 195 are seen only as recipients.</p>
+        <p>Those 195 cannot be clustered. Not clustered badly, not clustered with weak evidence: <span class="mono">union</span> is only ever called on inputs, so an address that is never an input is never an argument to it, and it finishes the run exactly where it started, alone. Each one is a cluster of size one, which means at least 195 of the 696 clusters are addresses the method was never given a single fact about.</p>
+        <p>That is worth naming separately whenever the gap is explained, because it is not adversarial, it is not fixable by a better heuristic on the same evidence, and it will be a larger share of the gap in any product where most participants receive more often than they send. Larkfield issues rewards, so its data leans that way by design.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A single bar representing all 982 addresses in month A, split into a wide left segment of 787 addresses that appear as a spend input at least once and a narrow right segment of 195 that never do. An arrow drops from the left segment into a panel headed evidence exists, which notes that 706 of them appear as an input more than once, that this is what gives union something to join, and that all 286 successful merges came from this side. A bent arrow drops from the right segment into a panel headed no evidence at all, which notes that union is only ever called on inputs, so each of the 195 finishes alone, and that 195 of the 696 clusters are single addresses the method was never given a fact about. A closing band says this is a second source of over-count in which nobody is hiding anything, and that it will be a larger share wherever participants receive more often than they send.">
+        <style>
+          .p4bH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .p4bL { font: 800 9px Inter, sans-serif; fill: #54655F; letter-spacing: .11em; }
+          .p4bS { font: 700 10.5px Inter, sans-serif; fill: #13201E; }
+          .p4bT { font: 800 9.5px Inter, sans-serif; fill: #FFFFFF; letter-spacing: .07em; }
+          .p4bB { font: 400 10.5px Inter, sans-serif; fill: #13201E; }
+          .p4bM { font: 400 10px Inter, sans-serif; fill: #54655F; }
+          .p4bK { font: 800 11.5px Inter, sans-serif; fill: #9C3D18; }
+        </style>
+        <defs>
+          <marker id="p4bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1F5F5B"></path></marker>
+          <marker id="p4bArA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9C3D18"></path></marker>
+        </defs>
+
+        <text class="p4bH" x="14" y="20">Before any operator does anything, a fifth of the addresses are outside the method's reach</text>
+
+        <text class="p4bL" x="40" y="44">EVERY ADDRESS IN MONTH A, 982 OF THEM</text>
+        <rect x="40" y="52" width="641" height="34" rx="4" fill="#8FBDB8" stroke="#1F5F5B"></rect>
+        <rect x="681" y="52" width="159" height="34" rx="4" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p4bS" x="54" y="74">787 appear as a spend input at least once</text>
+        <text class="p4bS" x="695" y="74">195 never do</text>
+
+        <line x1="240" y1="86" x2="240" y2="114" stroke="#1F5F5B" stroke-width="1.6" marker-end="url(#p4bAr)"></line>
+        <path d="M 760 86 L 760 100 L 655 100 L 655 114" fill="none" stroke="#9C3D18" stroke-width="1.6" marker-end="url(#p4bArA)"></path>
+
+        <rect x="40" y="118" width="400" height="120" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="40" y="118" width="400" height="24" rx="10" fill="#1F5F5B"></rect>
+        <rect x="40" y="130" width="400" height="12" fill="#1F5F5B"></rect>
+        <text class="p4bT" x="54" y="135">EVIDENCE EXISTS</text>
+        <text class="p4bB" x="54" y="166">706 of them appear as an input more than once,</text>
+        <text class="p4bB" x="54" y="184">which is what gives union something to join.</text>
+        <text class="p4bB" x="54" y="202">All 286 successful merges came from this side,</text>
+        <text class="p4bB" x="54" y="220">and everything the method achieves happens here.</text>
+
+        <rect x="470" y="118" width="370" height="120" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="470" y="118" width="370" height="24" rx="10" fill="#9C3D18"></rect>
+        <rect x="470" y="130" width="370" height="12" fill="#9C3D18"></rect>
+        <text class="p4bT" x="484" y="135">NO EVIDENCE AT ALL</text>
+        <text class="p4bB" x="484" y="166">union is only ever called on inputs, so an</text>
+        <text class="p4bB" x="484" y="184">address that is never one finishes alone.</text>
+        <text class="p4bB" x="484" y="202">195 of the 696 clusters are single addresses</text>
+        <text class="p4bB" x="484" y="220">the method was never given a fact about.</text>
+
+        <rect x="14" y="258" width="852" height="108" rx="10" fill="#FDF3EE" stroke="#9C3D18"></rect>
+        <text class="p4bK" x="30" y="282">A second source of over-count, and nobody is hiding anything.</text>
+        <text class="p4bM" x="30" y="304">Operators are the contributor everybody reaches for. This is the other one: about a fifth of the addresses are only ever seen</text>
+        <text class="p4bM" x="30" y="322">receiving, so the co-spend rule has no evidence about them in either direction and each is counted as a separate holder.</text>
+        <text class="p4bM" x="30" y="340">It is not a defect and it is not adversarial. It is what a positive-only rule does with silence, and it grows wherever</text>
+        <text class="p4bM" x="30" y="358">participants receive more often than they send, which is exactly the shape of a product that issues rewards.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the narrow amber block is not noise. It is 195 clusters that were decided before the algorithm ran a single union.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers validation with no answer sheet</span>
+      <h2>Three checks that survive when the truth column is deleted</h2>
+      <span class="tag concept">12 min live</span>
+    </div>
+    <p class="lede">Take away <span class="mono">trueEntities</span> and <span class="mono">stillSplit</span> and the run still supports real checks. None of them measures accuracy, and saying so plainly is part of running them properly, because a check that gets mistaken for an accuracy measure is worse than no check. What they catch is a broken implementation, a figure that moved for the wrong reason, and two months that are not comparable.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 418" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three panels of checks that need no ground truth. Panel one, stability across seeds, plots five dots on a small axis from 660 to 700 at the values 676, 688, 696 twice and 707, a spread of 31 on a figure near 690, and notes that it proves the method is not fragile to the sample it saw and proves nothing about the distance to 304. Panel two, monotonicity, shows a descending staircase of cluster counts as transactions arrive, states the identity addresses minus merges equals clusters, and notes that every merge removes exactly one cluster and nothing adds one, so the check proves your build is not double counting or losing roots. Panel three, sensitivity to the window, shows a window sliding along a bar of history with arrows both ways, notes there is no threshold to tune so sensitivity means only how much history you fed it, and says to report the window beside the figure every time. A closing band says none of the three is accuracy, that a method can pass all three and still sit 392 above the truth, and lists what they do rule out.">
+        <style>
+          .p4cH { font: 800 13px Inter, sans-serif; fill: #13201E; }
+          .p4cT { font: 800 9px Inter, sans-serif; fill: #FFFFFF; letter-spacing: .08em; }
+          .p4cS { font: 700 10px Inter, sans-serif; fill: #1F5F5B; }
+          .p4cB { font: 400 10px Inter, sans-serif; fill: #13201E; }
+          .p4cM { font: 400 10px Inter, sans-serif; fill: #54655F; }
+          .p4cA { font: 400 9px Inter, sans-serif; fill: #54655F; }
+          .p4cX { font: 700 10px "SF Mono", Menlo, monospace; fill: #1F5F5B; }
+          .p4cK { font: 800 11.5px Inter, sans-serif; fill: #1F5F5B; }
+        </style>
+        <defs>
+          <marker id="p4cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1F5F5B"></path></marker>
+        </defs>
+
+        <text class="p4cH" x="14" y="20">Three checks with no answer sheet, and an honest note on what each one misses</text>
+
+        <rect x="14" y="40" width="276" height="248" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="40" width="276" height="24" rx="10" fill="#1F5F5B"></rect>
+        <rect x="14" y="52" width="276" height="12" fill="#1F5F5B"></rect>
+        <text class="p4cT" x="28" y="57">CHECK 1 · STABILITY</text>
+        <text class="p4cS" x="28" y="86">Same method, five months</text>
+        <line x1="30" y1="126" x2="272" y2="126" stroke="#CFDEDA" stroke-width="1.4"></line>
+        <line x1="30" y1="126" x2="30" y2="133" stroke="#CFDEDA" stroke-width="1.4"></line>
+        <line x1="117" y1="126" x2="117" y2="133" stroke="#CFDEDA" stroke-width="1.4"></line>
+        <line x1="205" y1="126" x2="205" y2="133" stroke="#CFDEDA" stroke-width="1.4"></line>
+        <circle cx="100" cy="104" r="5" fill="#1F5F5B"></circle>
+        <circle cx="152" cy="104" r="5" fill="#1F5F5B"></circle>
+        <circle cx="187" cy="97" r="5" fill="#1F5F5B"></circle>
+        <circle cx="187" cy="111" r="5" fill="#1F5F5B"></circle>
+        <circle cx="235" cy="104" r="5" fill="#1F5F5B"></circle>
+        <text class="p4cA" x="30" y="147" text-anchor="middle">660</text>
+        <text class="p4cA" x="117" y="147" text-anchor="middle">680</text>
+        <text class="p4cA" x="205" y="147" text-anchor="middle">700</text>
+        <text class="p4cB" x="28" y="176">Range 676 to 707, a spread of</text>
+        <text class="p4cB" x="28" y="194">31 on a figure near 690.</text>
+        <text class="p4cM" x="28" y="218">Proves: the method is not</text>
+        <text class="p4cM" x="28" y="236">fragile to the sample it saw.</text>
+        <text class="p4cM" x="28" y="260">Proves nothing about 304.</text>
+
+        <rect x="302" y="40" width="276" height="248" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="302" y="40" width="276" height="24" rx="10" fill="#123D3A"></rect>
+        <rect x="302" y="52" width="276" height="12" fill="#123D3A"></rect>
+        <text class="p4cT" x="316" y="57">CHECK 2 · MONOTONICITY</text>
+        <text class="p4cS" x="316" y="86">More data, fewer clusters, never more</text>
+        <polyline points="320,100 360,100 360,106 400,106 400,112 440,112 440,118 480,118 480,124 520,124 520,130 560,130" fill="none" stroke="#1F5F5B" stroke-width="2"></polyline>
+        <text class="p4cA" x="320" y="150">clusters, as transactions arrive</text>
+        <text class="p4cX" x="316" y="176">addresses - merges = clusters</text>
+        <text class="p4cM" x="316" y="200">Every merge removes exactly one</text>
+        <text class="p4cM" x="316" y="218">cluster, and nothing adds one.</text>
+        <text class="p4cM" x="316" y="242">Proves: your build is not double</text>
+        <text class="p4cM" x="316" y="260">counting or losing roots.</text>
+
+        <rect x="590" y="40" width="276" height="248" rx="10" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="590" y="40" width="276" height="24" rx="10" fill="#1F5F5B"></rect>
+        <rect x="590" y="52" width="276" height="12" fill="#1F5F5B"></rect>
+        <text class="p4cT" x="604" y="57">CHECK 3 · SENSITIVITY</text>
+        <text class="p4cS" x="604" y="86">The only lever is the window</text>
+        <rect x="604" y="98" width="248" height="16" rx="3" fill="#EFF7F5" stroke="#CFDEDA"></rect>
+        <rect x="662" y="98" width="110" height="16" rx="3" fill="#C7E0DC" stroke="#1F5F5B"></rect>
+        <line x1="668" y1="132" x2="632" y2="132" stroke="#1F5F5B" stroke-width="1.5" marker-end="url(#p4cAr)"></line>
+        <line x1="766" y1="132" x2="802" y2="132" stroke="#1F5F5B" stroke-width="1.5" marker-end="url(#p4cAr)"></line>
+        <text class="p4cA" x="604" y="152">widen it and the count only falls</text>
+        <text class="p4cB" x="604" y="180">There is no threshold to tune,</text>
+        <text class="p4cB" x="604" y="198">so sensitivity means one thing:</text>
+        <text class="p4cB" x="604" y="216">how much history you fed it.</text>
+        <text class="p4cM" x="604" y="240">Report the window beside the</text>
+        <text class="p4cM" x="604" y="258">figure, or the two are not comparable.</text>
+
+        <rect x="14" y="304" width="852" height="100" rx="10" fill="#EFF7F5" stroke="#1F5F5B"></rect>
+        <text class="p4cK" x="30" y="328">None of these three is accuracy, and running all three is still the right thing to do.</text>
+        <text class="p4cM" x="30" y="350">A method can pass every one of them and sit 392 above the truth, which is exactly what happens on month A. What they rule out</text>
+        <text class="p4cM" x="30" y="368">is a broken implementation, a figure that moved because of the sample rather than the population, and a month-on-month</text>
+        <text class="p4cM" x="30" y="386">comparison between two runs measured over different windows. Those are the three ways this number actually goes wrong.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - each panel carries its own disclaimer on purpose. A check that gets quoted as an accuracy figure has done more harm than not running it.</figcaption>
+    </figure>
+
+    <div class="wk" id="p4-bound">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">All five months, clustered in this page. The toggle deletes the two columns a real warehouse does not have, which is the view you actually work in.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="p4-truth">Ground truth</label>
+        <select class="sql-code" id="p4-truth">
+          <option value="hide">Hidden, as in production</option>
+          <option value="show">Visible, as on the bench</option>
+        </select>
+        <div id="p4-out"></div>
+        <p class="sql-note" id="p4-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="p4-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Read the production view first, then turn the truth back on<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Start with the truth hidden, because that is the table you will actually have. Five months, five cluster counts between 676 and 707, five merge counts, and an identity that holds on every row. Everything on that screen is computable from rows anybody can read, and nothing on it tells you how far from correct the figure is.</p>
+        <p>Now ask the question a reviewer will ask: is 696 a good number? The production view cannot answer it and neither can you, and the correct response is to say what the figure is rather than how good it is. At most 696 entities, computed over this window, by a method whose only error direction is upward.</p>
+        <p>Then turn the truth on. The two extra columns appear and the gap is 372 to 403 depending on the month. Nothing else on the row changed. That is the whole lesson: the run was identical, the reporting was identical, and the thing you were tempted to promise was never in the run at all.</p>
+      </div>
+    </details>
+
+    <div class="p4code">
+      <span class="p4cap">The three checks, as assertions you can ship</span>
+      <code>// 1. Monotonic identity. Cheapest test in the file, catches most build errors.
+if (score.addresses - cl.links !== cl.entities) throw new Error("union-find is wrong");
+
+// 2. Monotonicity under more data. Feed a prefix, then the whole thing.
+var half = W3.clusterByCoSpend(world, txs.slice(0, txs.length / 2));
+if (cl.entities &gt; half.entities) throw new Error("more evidence raised the count");
+
+// 3. Stability across seeds. A smell test, deliberately loose, and not a proof.
+//    Month A to E land on 676, 688, 696, 696, 707: spread 31 on a figure near 690.
+if (spread(runs) / median(runs) &gt; 0.10) console.warn("seed-fragile, go and look");
+
+// Note what is absent: no test compares any of this to a true entity count,
+// because outside the bench there is not one to compare to.</code>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The check that looks rigorous and is not<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Resampling is the trap, and it is attractive because it produces an interval and intervals look like rigour. Bootstrap the transactions, re-run the clustering, and you get a distribution of cluster counts that is narrow and stable. It is a real measurement of a real thing: how much the figure would move if a slightly different draw of transactions had happened.</p>
+        <p>That is not the error. The error is 392, it is structural, and every bootstrap sample contains the same 195 never-spent addresses and the same ordinary people who never happened to co-spend. Resampling cannot reach any of it, so the interval it produces is tight around the wrong centre and will be read by everyone as a statement about the distance to the truth.</p>
+        <p>The same objection applies to cross-validation, to a holdout of transactions, and to splitting the month in half and comparing. All of them measure sampling behaviour on a dataset whose problem is not sampling. If you want one sentence for a review: an interval that does not contain 304 is not an interval about the entity count.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where serious people disagree<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>One camp says report the bound as the headline figure, with the word "at most" fused to it in every system that carries it, and treat any stripping of that word as an incident. Their case is that a bound is a genuine result, that the direction is derived rather than assumed, and that the alternative is somebody else quoting the raw address count with no qualifier at all. They point out that regulated reporting is full of bounds and that consumers of numbers cope with them fine when the discipline is enforced at the source.</p>
+        <p>The other camp says that in practice the qualifier does not survive contact with a slide, an email or a quarterly comparison, so publishing a bound is publishing a point estimate with extra steps and a defence you will not be present to make. Their proposal is to report the address count, which is at least trivially defined and impossible to misread as people, and to keep the clustered figure internal as an analysis artefact.</p>
+        <p>Both have watched the failure they are worried about. The first camp's risk is that the bound loses its qualifier in transit; the second camp's risk is that the worse number becomes the published one and gets the same treatment anyway. Notice that the disagreement is not about the method at all: both sides accept 696, both accept that it is a ceiling, and what they differ on is whether your organisation can carry a qualifier for four quarters. That is a question about your organisation, and you already know the answer.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Write the report you would actually publish</h2>
+      <span class="tag build">15 min hands on</span>
+    </div>
+    <p class="lede">Six steps, most of them with the live box open and the truth hidden. The aim is to leave with a sentence you would put your name on and a test file that fails if anybody later adds a lower bound to it.</p>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Count the never-spent addresses yourself</h4>
+        <p>Build the set of addresses that appear as an input at least once. On month A you should get 787 against 982 addresses. Subtract. Those 195 are singleton clusters before the algorithm does anything, and confirming that in your own code is the fastest way to believe it.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Hide the truth and write the figure</h4>
+        <p>With the toggle on production, write down the one number you would publish for month A and the exact words attached to it. No hedge sentence underneath. The words have to travel with the number, so they have to be short enough to survive.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Try to write the lower bound</h4>
+        <p>Genuinely attempt it. Whatever you reach for, ask what observation in the rows would move it. The exercise ends when you can say out loud why the field cannot be filled, which takes about two minutes and is the point of the step.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Run the identity at three window lengths</h4>
+        <p>Feed a quarter, a half and all of the transactions. Check addresses minus merges equals clusters at each. Check the count never rose. You now have monotonicity as a measured fact rather than a claim from a slide.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Bootstrap it on purpose and look at what you get</h4>
+        <p>Resample the transactions with replacement twenty times and take the spread of cluster counts. It will be small. Write next to it the distance from 696 to 304, and keep both numbers side by side as a reminder of what an interval here is measuring.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the test that blocks a future floor</h4>
+        <p>One assertion that fails if the report object ever gains a field naming a minimum entity count, and one comment saying why. The person who adds it in eight months will not have been in this room, and the test is the only part of tonight that will still be there.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When somebody asks how accurate a figure is, check first whether accuracy is defined for it. If there is no source that holds the truth, the question has no answer and producing one anyway is the failure mode, not the honesty. Say which direction the error runs, say what could move it, and say what you measured instead. That is a complete answer even though it does not contain a percentage.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">A colleague bootstraps the transactions, re-runs the clustering twenty times, and reports 696 plus or minus 4. What is wrong with that interval?</p>
+      <div class="qopt">A · Twenty resamples is too few; the interval would be honest at two hundred</div>
+      <div class="qopt">B · Nothing, provided the interval is reported as a range rather than a point</div>
+      <div class="qopt">C · It measures how the figure moves under a different draw of transactions, which is not the error. The error is structural, every resample contains the same never-spent addresses and the same people who never co-spent, and 304 is nowhere near the interval</div>
+      <q class="qwhy">Resampling can only see variation it can resample away. The 392 gap on month A is a property of what the evidence contains, not of which transactions were drawn, so a tight interval around 696 is a correct measurement of an irrelevant quantity and will be read as a claim about the truth.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">On month A, 787 of the 982 addresses ever appear as a spend input. What does that tell you about the 696 clusters?</p>
+      <div class="qopt">A · At least 195 of them are single addresses that were never an argument to union at all, so the method had no evidence about them in either direction</div>
+      <div class="qopt">B · 195 addresses were excluded from the run, so the real cluster count is 501</div>
+      <div class="qopt">C · The 195 are probably operator addresses, since operators avoid co-spending</div>
+      <q class="qwhy">Union is only ever called on transaction inputs. An address that is never an input is never unioned and finishes the run alone, so each of the 195 is its own cluster. They are not excluded and they are not adversarial; they are simply outside the reach of a rule that runs on co-spends.</q>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Why is "at most 696 entities" a stronger claim than "about 696 entities", even though it sounds weaker?</p>
+      <div class="qopt">A · Because bounds are conventional in regulated reporting and estimates are not</div>
+      <div class="qopt">B · Because the error is one-sided and derived, so the bound holds on every run of any size, while "about" asserts a two-sided closeness that nothing in the run supports</div>
+      <div class="qopt">C · Because 696 is close enough to the truth that the bound is nearly tight</div>
+      <q class="qwhy">Wrongly merged is 0 for a structural reason, so every error inflates and the figure can never be below the truth. That statement survives any amount of new data. "About" claims the truth is also not far below, which is exactly the direction with no evidence, and on month A it is wrong by 392.</q>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 5</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty minutes, on your own run and on the sentence you wrote in step 2.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Tabulate the five months without the truth</h4>
+        <p>Addresses, ever spent as an input, merges and clusters for the five seeds. Add the never-spent column yourself. Then mark which single row you would have flagged as a problem if you had only seen this table.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Bring a guess about the operators</h4>
+        <p>Four operators run 60 addresses each in this world. Write down, as a single number, how much smaller you think the clustered figure would get if every one of them co-spent carelessly rather than carefully. Session 5 measures it, and the answer surprises most people.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session covers</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The two error directions</span><span class="note">Over-merge and under-merge, and why only the second one is available on this evidence.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Zero wrongly merged, on every month</span><span class="note">Measured at 0 across all five seeds, confirming the derivation rather than discovering it.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Still split, 372 to 403</span><span class="note">The whole of the error, all of it in one direction, on the five months of Bench A.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">A ceiling with no floor</span><span class="note">An upper bound with no lower bound to pair it with, and the report that follows from that.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">787 ever spent, 195 never</span><span class="note">A second source of over-count that has nothing to do with anybody hiding.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Stability, monotonicity, window sensitivity</span><span class="note">Three checks that need no ground truth, each with what it does not prove attached.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Why resampling is the trap</span><span class="note">A tight interval that measures the draw rather than the error, and reads as the opposite.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">How much of the gap operators own</span><span class="note">Named tonight as a share people overestimate. Session 5 varies their discipline and measures it.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Whether to publish the metric at all</span><span class="note">Both positions stated tonight and left standing. Session 5 takes the same argument further with numbers.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Precision, recall and an operating point</span><span class="note">There is no threshold here, so there is no curve. Score-based linkage lives in learn-entity-resolution-with-phoebe.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Hashes, blocks, consensus and chain mechanics</span><span class="note">The prerequisite is learn-blockchain-with-phoebe and it is assumed rather than repeated.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Named networks, and any real network statistic</span><span class="note">Every figure here comes from the generator in the page, and none of it describes anything outside it.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Anything to do with price, markets or holdings</span><span class="note">Out of scope by design, and nothing here is advice of any kind.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The one sentence.</strong> The honest output is a bound with a direction, not a point with a hedge.</div>
+      <div class="cheat-item"><strong>Two directions, one empty.</strong> Wrongly merged is 0 on every month. Still split runs 372 to 403.</div>
+      <div class="cheat-item"><strong>The claim.</strong> At most 696 entities on month A. There is no lower bound and inventing one is the failure.</div>
+      <div class="cheat-item"><strong>The other over-count.</strong> 787 of 982 ever spent, so 195 clusters were decided before the first union.</div>
+      <div class="cheat-item"><strong>Check 1.</strong> Stability: 676 to 707 across five months. Proves the sample, not the answer.</div>
+      <div class="cheat-item"><strong>Check 2.</strong> Monotonicity: addresses minus merges equals clusters, and the count only falls.</div>
+      <div class="cheat-item"><strong>Check 3.</strong> Window sensitivity: the only lever. Report the window beside the figure or the months do not compare.</div>
+      <div class="cheat-item"><strong>The trap.</strong> A bootstrap interval that does not contain 304 is not an interval about the entity count.</div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 4 of 10 · learn-web3-with-phoebe · by Phoebe Fu</p>
+      <nav class="pagenav">
+        <a href="p3-addresses-are-not-people.html">← Practitioner session 3 · Addresses are not people</a>
+        <a href="p5-sybils-and-adversarial-counts.html">Practitioner session 5 · Sybils and adversarial counts →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/w3-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof W3 === "undefined") return;
+  var sel = document.getElementById("p4-truth");
+  var out = document.getElementById("p4-out");
+  var verdict = document.getElementById("p4-verdict");
+  var self = document.getElementById("p4-self");
+
+  var MONTHS = [
+    { name: "Month A", seed: 11 },
+    { name: "Month B", seed: 101 },
+    { name: "Month C", seed: 2024 },
+    { name: "Month D", seed: 7 },
+    { name: "Month E", seed: 55555 }
+  ];
+
+  function comma(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+
+  function runMonth(s) {
+    var world = W3.makeWorld({ people: 300, sybils: 4, sybilAddrs: 60, seed: s });
+    var txs = W3.makeTransactions(world, {
+      transactions: 4000, coSpendRate: 0.25, sybilDiscipline: 0.97, seed: s + 1
+    });
+    var cl = W3.clusterByCoSpend(world, txs);
+    var sc = W3.scoreClustering(world, cl);
+    var seen = {};
+    txs.forEach(function (inputs) {
+      inputs.forEach(function (a) { seen[a] = true; });
+    });
+    var everSpent = Object.keys(seen).length;
+    return {
+      addresses: sc.addresses,
+      everSpent: everSpent,
+      never: sc.addresses - everSpent,
+      merges: cl.links,
+      clustered: sc.clustered,
+      truth: sc.trueEntities,
+      split: sc.stillSplit,
+      mixed: sc.mixedClusters,
+      identity: (sc.addresses - cl.links) === sc.clustered
+    };
+  }
+
+  function render() {
+    var showTruth = sel.value === "show";
+    var rows = MONTHS.map(function (m) { return { m: m, r: runMonth(m.seed) }; });
+
+    var html = '<table class="sql-table"><thead><tr>'
+      + "<th>Month</th><th>Addresses</th><th>Ever spent</th><th>Never spent</th>"
+      + "<th>Merges</th><th>Clusters</th>"
+      + (showTruth ? "<th>Truth</th><th>Still split</th>" : "")
+      + "<th>Wrongly merged</th></tr></thead><tbody>";
+
+    rows.forEach(function (x) {
+      html += "<tr><td>" + x.m.name + "</td>"
+        + "<td>" + comma(x.r.addresses) + "</td>"
+        + "<td>" + comma(x.r.everSpent) + "</td>"
+        + '<td><b class="p4-amb">' + comma(x.r.never) + "</b></td>"
+        + "<td>" + comma(x.r.merges) + "</td>"
+        + '<td><b class="p4-ok">' + comma(x.r.clustered) + "</b></td>"
+        + (showTruth
+            ? "<td>" + comma(x.r.truth) + "</td><td>" + comma(x.r.split) + "</td>"
+            : "")
+        + "<td>" + comma(x.r.mixed) + "</td></tr>";
+    });
+    html += "</tbody></table>";
+    out.innerHTML = html;
+
+    var clusters = rows.map(function (x) { return x.r.clustered; });
+    var lo = Math.min.apply(null, clusters), hi = Math.max.apply(null, clusters);
+    var allIdentity = rows.every(function (x) { return x.r.identity; });
+    var allZero = rows.every(function (x) { return x.r.mixed === 0; });
+
+    if (showTruth) {
+      var splits = rows.map(function (x) { return x.r.split; });
+      verdict.textContent = "With the truth on, the error is " + Math.min.apply(null, splits)
+        + " to " + Math.max.apply(null, splits)
+        + " clusters, all of it in one direction, and wrongly merged is 0 on every month."
+        + " Nothing in the run changed when the columns appeared. They were never an output of it.";
+    } else {
+      verdict.textContent = "This is the whole of what a warehouse can see: clusters from "
+        + lo + " to " + hi + ", a spread of " + (hi - lo)
+        + ", the identity holding on every row, and no way at all to say how far any of them sits from the truth."
+        + " The defensible sentence is at most this many entities, over this window.";
+    }
+
+    var t = W3.selfTest();
+    self.textContent = (t.ok && allIdentity && allZero)
+      ? "Self test passes, addresses minus merges equals clusters on all five months, and wrongly merged is 0 on all five. Nothing here describes a real network."
+      : "A check failed in this browser, so nothing in the table above should be believed.";
+  }
+
+  sel.addEventListener("change", render);
+  render();
+})();
+</script>
+<style>
+  #p4-bound .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 16rem; }
+  #p4-bound table.sql-table { margin: .6rem 0 .2rem; font-size: .82rem; }
+  #p4-bound .p4-amb { color: var(--amber); }
+  #p4-bound .p4-ok { color: var(--indigo); }
+  .p4code {
+    background: var(--indigo-50);
+    border: 1px solid var(--hairline);
+    border-left: 4px solid var(--indigo);
+    border-radius: 12px;
+    padding: 1rem 1.15rem 1.1rem;
+    margin: 1rem 0 1.4rem;
+    overflow-x: auto;
+  }
+  .p4code .p4cap {
+    display: block;
+    font-family: Inter, -apple-system, sans-serif;
+    font-size: .68rem;
+    font-weight: 800;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--indigo);
+    margin-bottom: 1rem;
+  }
+  .p4code code {
+    display: block;
+    white-space: pre;
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: .8rem;
+    line-height: 1.75;
+    color: var(--ink);
+  }
+</style>
+</body>
+</html>
