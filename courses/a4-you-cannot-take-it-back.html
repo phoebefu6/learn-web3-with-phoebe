@@ -497,26 +497,26 @@
 
     <div class="quiz-q" data-answer="1">
       <p class="qtext">Larkfield appends a record that supersedes an earlier wrong one. What has actually changed for a downstream consumer who was already reading those rows?</p>
-      <div class="qopt">A · The wrong value is no longer returned, since the newer record takes precedence automatically</div>
-      <div class="qopt">B · Nothing, unless that consumer's read path applies the superseding relationship, and there is no error or flag if it does not</div>
-      <div class="qopt">C · The consumer receives a warning the next time the affected rows are queried</div>
-      <q class="qwhy">An annotation asserts a relationship. Nothing enforces it. A query written against the raw rows keeps returning the original value, confidently and silently, and when the rows are public you do not control who is running such a query.</q>
+      <button class="qopt" type="button">A · The wrong value is no longer returned, since the newer record takes precedence automatically</button>
+      <button class="qopt" type="button">B · Nothing, unless that consumer's read path applies the superseding relationship, and there is no error or flag if it does not</button>
+      <button class="qopt" type="button">C · The consumer receives a warning the next time the affected rows are queried</button>
+      <p class="qwhy">An annotation asserts a relationship. Nothing enforces it. A query written against the raw rows keeps returning the original value, confidently and silently, and when the rows are public you do not control who is running such a query.</p>
     </div>
 
     <div class="quiz-q" data-answer="2">
       <p class="qtext">Why does the correction logic in the read path never get retired, even years later?</p>
-      <div class="qopt">A · Because teams are reluctant to remove code that somebody else wrote</div>
-      <div class="qopt">B · Because the tooling has no way to express that a rule is no longer needed</div>
-      <div class="qopt">C · Because a rule can only be retired once the wrong row is gone, and the wrong row is never gone</div>
-      <q class="qwhy">The retirement condition simply never arrives. That makes the reporting layer grow with the count of historical errors and never shrink, which is a budget line to plan for rather than a failure of discipline to correct.</q>
+      <button class="qopt" type="button">A · Because teams are reluctant to remove code that somebody else wrote</button>
+      <button class="qopt" type="button">B · Because the tooling has no way to express that a rule is no longer needed</button>
+      <button class="qopt" type="button">C · Because a rule can only be retired once the wrong row is gone, and the wrong row is never gone</button>
+      <p class="qwhy">The retirement condition simply never arrives. That makes the reporting layer grow with the count of historical errors and never shrink, which is a budget line to plan for rather than a failure of discipline to correct.</p>
     </div>
 
     <div class="quiz-q" data-answer="0">
       <p class="qtext">Two people in a design review disagree about whether an opaque reference to a customer may go on the permanent record. What is the honest description of that disagreement?</p>
-      <div class="qopt">A · It is unresolved and turns on how resolvable a reference becomes over the life of a permanent record, which nobody knows; the two positions fail differently rather than one being wrong</div>
-      <div class="qopt">B · It is settled, and the reference is safe because it carries no name</div>
-      <div class="qopt">C · It is settled, and no reference of any kind may ever be written</div>
-      <q class="qwhy">One side says a reference is opaque only against today's linking ability and the record outlives that. The other says a reference with no table behind it is not usable information and destroying the table is a real remedy. Both have shipped systems, and the disagreement is about the future rather than about the present.</q>
+      <button class="qopt" type="button">A · It is unresolved and turns on how resolvable a reference becomes over the life of a permanent record, which nobody knows; the two positions fail differently rather than one being wrong</button>
+      <button class="qopt" type="button">B · It is settled, and the reference is safe because it carries no name</button>
+      <button class="qopt" type="button">C · It is settled, and no reference of any kind may ever be written</button>
+      <p class="qwhy">One side says a reference is opaque only against today's linking ability and the record outlives that. The other says a reference with no table behind it is not usable information and destroying the table is a real remedy. Both have shipped systems, and the disagreement is about the future rather than about the present.</p>
     </div>
 
     <div class="quiz-score"></div>

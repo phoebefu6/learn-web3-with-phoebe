@@ -503,26 +503,26 @@
 
     <div class="quiz-q" data-answer="1">
       <p class="qtext">A team clusters Larkfield's addresses by co-spend before training, reasoning that it will make the population closer to a population of real parties. What does Bench A measure?</p>
-      <div class="qopt">A · The operator share falls from 24.4 percent to roughly 12 percent, halving the distortion</div>
-      <div class="qopt">B · The operator share rises from 24.4 percent to 34.3 percent, because ordinary addresses merge when they co-spend and operator addresses mostly do not</div>
-      <div class="qopt">C · The operator share is unchanged, since clustering does not remove any rows</div>
-      <q class="qwhy">The step is still worth taking, because 696 is closer to 304 than 982 is. It just does the opposite of what is assumed to the composition: it compresses the part of the population that leaves evidence and leaves the part that does not almost intact.</q>
+      <button class="qopt" type="button">A · The operator share falls from 24.4 percent to roughly 12 percent, halving the distortion</button>
+      <button class="qopt" type="button">B · The operator share rises from 24.4 percent to 34.3 percent, because ordinary addresses merge when they co-spend and operator addresses mostly do not</button>
+      <button class="qopt" type="button">C · The operator share is unchanged, since clustering does not remove any rows</button>
+      <p class="qwhy">The step is still worth taking, because 696 is closer to 304 than 982 is. It just does the opposite of what is assumed to the composition: it compresses the part of the population that leaves evidence and leaves the part that does not almost intact.</p>
     </div>
 
     <div class="quiz-q" data-answer="2">
       <p class="qtext">Why is "your labels may be manufactured" a different problem from ordinary class imbalance?</p>
-      <div class="qopt">A · Because manufactured rows are always mislabelled, whereas imbalanced classes are correctly labelled</div>
-      <div class="qopt">B · Because imbalance can be measured and manufactured composition cannot</div>
-      <div class="qopt">C · Because reweighting assumes the population underneath the sample is fixed, and here part of that population was chosen by four parties who could have chosen a different number</div>
-      <q class="qwhy">Imbalance is an artefact of collection over a population that exists independently of you. Reweighting to the observed composition is reasonable there. Here the observed composition is partly an authored quantity, so reweighting to it reweights to somebody else's decision.</q>
+      <button class="qopt" type="button">A · Because manufactured rows are always mislabelled, whereas imbalanced classes are correctly labelled</button>
+      <button class="qopt" type="button">B · Because imbalance can be measured and manufactured composition cannot</button>
+      <button class="qopt" type="button">C · Because reweighting assumes the population underneath the sample is fixed, and here part of that population was chosen by four parties who could have chosen a different number</button>
+      <p class="qwhy">Imbalance is an artefact of collection over a population that exists independently of you. Reweighting to the observed composition is reasonable there. Here the observed composition is partly an authored quantity, so reweighting to it reweights to somebody else's decision.</p>
     </div>
 
     <div class="quiz-q" data-answer="0">
       <p class="qtext">A training set is cut from a naive append-only load with no finality lag. Beyond the 5.75 percent of rows that are wrong, what makes this worse for a model than for a report?</p>
-      <div class="qopt">A · The wrong rows are concentrated in the most recent blocks, which is exactly the region a time-based split puts in the validation fold, and a frozen snapshot is not republished the way a report is</div>
-      <div class="qopt">B · Models are more sensitive to small percentages of bad rows than reports are</div>
-      <div class="qopt">C · There is no difference, since 5.75 percent is 5.75 percent wherever it lands</div>
-      <q class="qwhy">The defect is not spread evenly. It sits at the tail, which is the part a temporal split uses to decide whether the model works, and the snapshot that carries it is frozen and shipped rather than recomputed next week.</q>
+      <button class="qopt" type="button">A · The wrong rows are concentrated in the most recent blocks, which is exactly the region a time-based split puts in the validation fold, and a frozen snapshot is not republished the way a report is</button>
+      <button class="qopt" type="button">B · Models are more sensitive to small percentages of bad rows than reports are</button>
+      <button class="qopt" type="button">C · There is no difference, since 5.75 percent is 5.75 percent wherever it lands</button>
+      <p class="qwhy">The defect is not spread evenly. It sits at the tail, which is the part a temporal split uses to decide whether the model works, and the snapshot that carries it is frozen and shipped rather than recomputed next week.</p>
     </div>
 
     <div class="quiz-score"></div>

@@ -555,26 +555,26 @@
 
     <div class="quiz-q" data-answer="1">
       <p class="qtext">An engineer builds one table at the transaction-input grain and reports a monthly transaction count from it. What happens?</p>
-      <div class="qopt">A · The count is correct, because every input belongs to exactly one transaction</div>
-      <div class="qopt">B · The count is high, because a transaction with two inputs contributes two rows, and nothing errors or looks unusual</div>
-      <div class="qopt">C · The count is low, because the exploded grain drops single-input transactions</div>
-      <q class="qwhy">The exploded grain has one row per input, so any transaction that spends from more than one address is counted more than once. There is no error, no null and no failed test. This is the ordinary grain mistake, and it is worth rehearsing precisely because the source looks too simple for it to happen.</q>
+      <button class="qopt" type="button">A · The count is correct, because every input belongs to exactly one transaction</button>
+      <button class="qopt" type="button">B · The count is high, because a transaction with two inputs contributes two rows, and nothing errors or looks unusual</button>
+      <button class="qopt" type="button">C · The count is low, because the exploded grain drops single-input transactions</button>
+      <p class="qwhy">The exploded grain has one row per input, so any transaction that spends from more than one address is counted more than once. There is no error, no null and no failed test. This is the ordinary grain mistake, and it is worth rehearsing precisely because the source looks too simple for it to happen.</p>
     </div>
 
     <div class="quiz-q" data-answer="2">
       <p class="qtext">A team runs a full profiling suite over the address column. Uniqueness passes, nulls are zero, cardinality is high and stable. What has the suite established?</p>
-      <div class="qopt">A · That the address column is safe to use as a person identifier</div>
-      <div class="qopt">B · That the address column is a foreign key into some party table that has not been located yet</div>
-      <div class="qopt">C · That the column is well formed, which says nothing about how many parties are behind it, and no automated check available to the team can say anything about that</div>
-      <q class="qwhy">Every mechanical property of a key holds. The property that fails is the one no profiler measures: values per real party. On Larkfield's month that is about 1,000 addresses against 304 parties, a 3.2 times error living inside a column that passes every test you own.</q>
+      <button class="qopt" type="button">A · That the address column is safe to use as a person identifier</button>
+      <button class="qopt" type="button">B · That the address column is a foreign key into some party table that has not been located yet</button>
+      <button class="qopt" type="button">C · That the column is well formed, which says nothing about how many parties are behind it, and no automated check available to the team can say anything about that</button>
+      <p class="qwhy">Every mechanical property of a key holds. The property that fails is the one no profiler measures: values per real party. On Larkfield's month that is about 1,000 addresses against 304 parties, a 3.2 times error living inside a column that passes every test you own.</p>
     </div>
 
     <div class="quiz-q" data-answer="0">
       <p class="qtext">Which of the four missing pieces of a normal ingestion is best described as a gain rather than a loss?</p>
-      <div class="qopt">A · The backfill request, since the entire history is readable at any time without anyone's agreement, so re-deriving a metric is compute rather than negotiation</div>
-      <div class="qopt">B · The SLA, since removing a promise removes the risk of breaching it</div>
-      <div class="qopt">C · The schema contract, since an unowned schema cannot drift</div>
-      <q class="qwhy">No SLA and no contract are straightforward losses. The absent gatekeeper and the absent backfill queue are gains, and they come from exactly the same missing upstream owner as the losses do. An unowned schema drifts more easily than an owned one, not less, because nothing is obliged to announce the change.</q>
+      <button class="qopt" type="button">A · The backfill request, since the entire history is readable at any time without anyone's agreement, so re-deriving a metric is compute rather than negotiation</button>
+      <button class="qopt" type="button">B · The SLA, since removing a promise removes the risk of breaching it</button>
+      <button class="qopt" type="button">C · The schema contract, since an unowned schema cannot drift</button>
+      <p class="qwhy">No SLA and no contract are straightforward losses. The absent gatekeeper and the absent backfill queue are gains, and they come from exactly the same missing upstream owner as the losses do. An unowned schema drifts more easily than an owned one, not less, because nothing is obliged to announce the change.</p>
     </div>
 
     <div class="quiz-score"></div>

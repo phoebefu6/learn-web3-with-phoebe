@@ -486,26 +486,26 @@ if (spread(runs) / median(runs) &gt; 0.10) console.warn("seed-fragile, go and lo
 
     <div class="quiz-q" data-answer="2">
       <p class="qtext">A colleague bootstraps the transactions, re-runs the clustering twenty times, and reports 696 plus or minus 4. What is wrong with that interval?</p>
-      <div class="qopt">A · Twenty resamples is too few; the interval would be honest at two hundred</div>
-      <div class="qopt">B · Nothing, provided the interval is reported as a range rather than a point</div>
-      <div class="qopt">C · It measures how the figure moves under a different draw of transactions, which is not the error. The error is structural, every resample contains the same never-spent addresses and the same people who never co-spent, and 304 is nowhere near the interval</div>
-      <q class="qwhy">Resampling can only see variation it can resample away. The 392 gap on month A is a property of what the evidence contains, not of which transactions were drawn, so a tight interval around 696 is a correct measurement of an irrelevant quantity and will be read as a claim about the truth.</q>
+      <button class="qopt" type="button">A · Twenty resamples is too few; the interval would be honest at two hundred</button>
+      <button class="qopt" type="button">B · Nothing, provided the interval is reported as a range rather than a point</button>
+      <button class="qopt" type="button">C · It measures how the figure moves under a different draw of transactions, which is not the error. The error is structural, every resample contains the same never-spent addresses and the same people who never co-spent, and 304 is nowhere near the interval</button>
+      <p class="qwhy">Resampling can only see variation it can resample away. The 392 gap on month A is a property of what the evidence contains, not of which transactions were drawn, so a tight interval around 696 is a correct measurement of an irrelevant quantity and will be read as a claim about the truth.</p>
     </div>
 
     <div class="quiz-q" data-answer="0">
       <p class="qtext">On month A, 787 of the 982 addresses ever appear as a spend input. What does that tell you about the 696 clusters?</p>
-      <div class="qopt">A · At least 195 of them are single addresses that were never an argument to union at all, so the method had no evidence about them in either direction</div>
-      <div class="qopt">B · 195 addresses were excluded from the run, so the real cluster count is 501</div>
-      <div class="qopt">C · The 195 are probably operator addresses, since operators avoid co-spending</div>
-      <q class="qwhy">Union is only ever called on transaction inputs. An address that is never an input is never unioned and finishes the run alone, so each of the 195 is its own cluster. They are not excluded and they are not adversarial; they are simply outside the reach of a rule that runs on co-spends.</q>
+      <button class="qopt" type="button">A · At least 195 of them are single addresses that were never an argument to union at all, so the method had no evidence about them in either direction</button>
+      <button class="qopt" type="button">B · 195 addresses were excluded from the run, so the real cluster count is 501</button>
+      <button class="qopt" type="button">C · The 195 are probably operator addresses, since operators avoid co-spending</button>
+      <p class="qwhy">Union is only ever called on transaction inputs. An address that is never an input is never unioned and finishes the run alone, so each of the 195 is its own cluster. They are not excluded and they are not adversarial; they are simply outside the reach of a rule that runs on co-spends.</p>
     </div>
 
     <div class="quiz-q" data-answer="1">
       <p class="qtext">Why is "at most 696 entities" a stronger claim than "about 696 entities", even though it sounds weaker?</p>
-      <div class="qopt">A · Because bounds are conventional in regulated reporting and estimates are not</div>
-      <div class="qopt">B · Because the error is one-sided and derived, so the bound holds on every run of any size, while "about" asserts a two-sided closeness that nothing in the run supports</div>
-      <div class="qopt">C · Because 696 is close enough to the truth that the bound is nearly tight</div>
-      <q class="qwhy">Wrongly merged is 0 for a structural reason, so every error inflates and the figure can never be below the truth. That statement survives any amount of new data. "About" claims the truth is also not far below, which is exactly the direction with no evidence, and on month A it is wrong by 392.</q>
+      <button class="qopt" type="button">A · Because bounds are conventional in regulated reporting and estimates are not</button>
+      <button class="qopt" type="button">B · Because the error is one-sided and derived, so the bound holds on every run of any size, while "about" asserts a two-sided closeness that nothing in the run supports</button>
+      <button class="qopt" type="button">C · Because 696 is close enough to the truth that the bound is nearly tight</button>
+      <p class="qwhy">Wrongly merged is 0 for a structural reason, so every error inflates and the figure can never be below the truth. That statement survives any amount of new data. "About" claims the truth is also not far below, which is exactly the direction with no evidence, and on month A it is wrong by 392.</p>
     </div>
 
     <div class="quiz-score"></div>

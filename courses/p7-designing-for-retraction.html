@@ -574,26 +574,26 @@
 
     <div class="quiz-q" data-answer="1">
       <p class="qtext">A team sets a finality lag of 1 block against a reorganisation depth of 3, reasoning that some protection is better than none. What does Bench B say happens?</p>
-      <div class="qopt">A · Roughly a third of the wrong rows remain, which is an acceptable partial defence</div>
-      <div class="qopt">B · 346 rows are still wrong, 3.99 percent of the warehouse, and the lag has mostly bought the feeling of having addressed it</div>
-      <div class="qopt">C · The lag has no effect at all, since it is shallower than the depth</div>
-      <q class="qwhy">Partial is the trap. Lag 1 does remove some damage, going from 511 to 346, and that is exactly why it is dangerous: the warehouse is still wrong, and the team has already spent the concern that would have made them look again.</q>
+      <button class="qopt" type="button">A · Roughly a third of the wrong rows remain, which is an acceptable partial defence</button>
+      <button class="qopt" type="button">B · 346 rows are still wrong, 3.99 percent of the warehouse, and the lag has mostly bought the feeling of having addressed it</button>
+      <button class="qopt" type="button">C · The lag has no effect at all, since it is shallower than the depth</button>
+      <p class="qwhy">Partial is the trap. Lag 1 does remove some damage, going from 511 to 346, and that is exactly why it is dangerous: the warehouse is still wrong, and the team has already spent the concern that would have made them look again.</p>
     </div>
 
     <div class="quiz-q" data-answer="2">
       <p class="qtext">Why is a retracting loader described as expensive when the code change in the loader itself is small?</p>
-      <div class="qopt">A · Because deleting rows is slower than inserting them at warehouse scale</div>
-      <div class="qopt">B · Because it has to know the reorganisation depth in order to decide what to remove</div>
-      <div class="qopt">C · Because the cost lands downstream: every table, extract and cached report has to tolerate rows disappearing, and most warehouses are built on the assumption that they do not</div>
-      <q class="qwhy">The delete is trivial. The bill is that a total can now go down. Option B is also the opposite of true, which is retraction's main advantage: it responds to the replacement that actually happened rather than to an assumed depth.</q>
+      <button class="qopt" type="button">A · Because deleting rows is slower than inserting them at warehouse scale</button>
+      <button class="qopt" type="button">B · Because it has to know the reorganisation depth in order to decide what to remove</button>
+      <button class="qopt" type="button">C · Because the cost lands downstream: every table, extract and cached report has to tolerate rows disappearing, and most warehouses are built on the assumption that they do not</button>
+      <p class="qwhy">The delete is trivial. The bill is that a total can now go down. Option B is also the opposite of true, which is retraction's main advantage: it responds to the replacement that actually happened rather than to an assumed depth.</p>
     </div>
 
     <div class="quiz-q" data-answer="0">
       <p class="qtext">Your upstream restates data regularly and your team already handles late-arriving records well. Why does that not carry over?</p>
-      <div class="qopt">A · Late data is additive and withdrawn data is subtractive, so the existing patterns cover the case where a total goes up and not the case where it goes down</div>
-      <div class="qopt">B · Late-arriving patterns only work on dimension tables, not on fact tables</div>
-      <div class="qopt">C · It does carry over, since both are just restatements of a previous period</div>
-      <q class="qwhy">A merge key handles a row that turns up late. It has nothing to say about a row that was loaded, counted, cached and sent, and is now gone. The first leaves every previously correct figure correct. The second does not.</q>
+      <button class="qopt" type="button">A · Late data is additive and withdrawn data is subtractive, so the existing patterns cover the case where a total goes up and not the case where it goes down</button>
+      <button class="qopt" type="button">B · Late-arriving patterns only work on dimension tables, not on fact tables</button>
+      <button class="qopt" type="button">C · It does carry over, since both are just restatements of a previous period</button>
+      <p class="qwhy">A merge key handles a row that turns up late. It has nothing to say about a row that was loaded, counted, cached and sent, and is now gone. The first leaves every previously correct figure correct. The second does not.</p>
     </div>
 
     <div class="quiz-score"></div>

@@ -514,26 +514,26 @@ var gap   = careless.trueEntities                     // 304 entities in this wo
 
     <div class="quiz-q" data-answer="1">
       <p class="qtext">A colleague sweeps operator discipline and reports a swing of 140 clusters. You look at the harness and find the world seed incremented on each pass. What has been measured?</p>
-      <div class="qopt">A · The swing plus some noise, so 140 is roughly right and should be quoted with a caveat</div>
-      <div class="qopt">B · A comparison between different worlds with different address counts, where the discipline effect and the draw effect are added together and cannot be separated afterwards</div>
-      <div class="qopt">C · Nothing, since union find is deterministic and the result would be identical either way</div>
-      <q class="qwhy">The world generator decides how many addresses each person holds, so moving its seed changes the population as well as the behaviour. The run completes, the table looks normal, and the number attributes a difference of two causes entirely to one of them.</q>
+      <button class="qopt" type="button">A · The swing plus some noise, so 140 is roughly right and should be quoted with a caveat</button>
+      <button class="qopt" type="button">B · A comparison between different worlds with different address counts, where the discipline effect and the draw effect are added together and cannot be separated afterwards</button>
+      <button class="qopt" type="button">C · Nothing, since union find is deterministic and the result would be identical either way</button>
+      <p class="qwhy">The world generator decides how many addresses each person holds, so moving its seed changes the population as well as the behaviour. The run completes, the table looks normal, and the number attributes a difference of two causes entirely to one of them.</p>
     </div>
 
     <div class="quiz-q" data-answer="2">
       <p class="qtext">Operator discipline goes from 100 percent to 50 percent and the wrongly merged column stays at 0. Why is that the expected result rather than a surprise?</p>
-      <div class="qopt">A · Because at 50 percent the operators still avoid co-spending most of the time</div>
-      <div class="qopt">B · Because the score function only counts wrongly merged clusters among ordinary people</div>
-      <div class="qopt">C · Because carelessness only creates links, and a co-spend link is evidence that one party authorised both inputs, so a new link can never fuse two different parties</div>
-      <q class="qwhy">Lowering discipline hands the method more true links, never a false one. The sweep therefore has no error trade-off in it at all: there is no operating point to choose and no curve to plot, which is a genuine structural difference from score-based linkage.</q>
+      <button class="qopt" type="button">A · Because at 50 percent the operators still avoid co-spending most of the time</button>
+      <button class="qopt" type="button">B · Because the score function only counts wrongly merged clusters among ordinary people</button>
+      <button class="qopt" type="button">C · Because carelessness only creates links, and a co-spend link is evidence that one party authorised both inputs, so a new link can never fuse two different parties</button>
+      <p class="qwhy">Lowering discipline hands the method more true links, never a false one. The sweep therefore has no error trade-off in it at all: there is no operating point to choose and no curve to plot, which is a genuine structural difference from score-based linkage.</p>
     </div>
 
     <div class="quiz-q" data-answer="0">
       <p class="qtext">A detection project promises to identify operator addresses and thereby fix the active-address figure. What does the sweep say about the second half of that promise?</p>
-      <div class="qopt">A · The best any such project can achieve on the headline figure is the careless end of the sweep, which on month A is 666 against a reported 696 and a truth of 304, so the figure stays more than twice the truth</div>
-      <div class="qopt">B · Nothing, because the sweep varies a generator field rather than a real detection method</div>
-      <div class="qopt">C · The promise is achievable, since identifying all 240 operator addresses collapses them to 4 entities</div>
-      <q class="qwhy">A heuristic on the same rows can at best recover the links the operators withheld, which is exactly what the careless end of the sweep already contains. Option C describes an outcome no rule reading co-spends can produce, because 240 addresses only collapse when the evidence to join them exists.</q>
+      <button class="qopt" type="button">A · The best any such project can achieve on the headline figure is the careless end of the sweep, which on month A is 666 against a reported 696 and a truth of 304, so the figure stays more than twice the truth</button>
+      <button class="qopt" type="button">B · Nothing, because the sweep varies a generator field rather than a real detection method</button>
+      <button class="qopt" type="button">C · The promise is achievable, since identifying all 240 operator addresses collapses them to 4 entities</button>
+      <p class="qwhy">A heuristic on the same rows can at best recover the links the operators withheld, which is exactly what the careless end of the sweep already contains. Option C describes an outcome no rule reading co-spends can produce, because 240 addresses only collapse when the evidence to join them exists.</p>
     </div>
 
     <div class="quiz-score"></div>

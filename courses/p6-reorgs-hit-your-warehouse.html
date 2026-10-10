@@ -532,26 +532,26 @@ function onBlock(block) {
 
     <div class="quiz-q" data-answer="2">
       <p class="qtext">After a replacement, which of the four checks in Part 1 moves, and in which direction?</p>
-      <div class="qopt">A · Uniqueness fails, because the replacement blocks reuse heights already present</div>
-      <div class="qopt">B · Schema validation fails, because the superseded rows are now inconsistent with the source</div>
-      <div class="qopt">C · Row count and freshness both improve: more rows are present than before and the newest block is newer, so the one signal that changed moved in the reassuring direction</div>
-      <q class="qwhy">Every check inspects rows that arrive, and the rows that arrived are fine. The replacement writes new well formed rows with their own keys, so nothing trips, and the two observables that move both move upward. That is why the situation reads as healthy at the moment it got worse.</q>
+      <button class="qopt" type="button">A · Uniqueness fails, because the replacement blocks reuse heights already present</button>
+      <button class="qopt" type="button">B · Schema validation fails, because the superseded rows are now inconsistent with the source</button>
+      <button class="qopt" type="button">C · Row count and freshness both improve: more rows are present than before and the newest block is newer, so the one signal that changed moved in the reassuring direction</button>
+      <p class="qwhy">Every check inspects rows that arrive, and the rows that arrived are fine. The replacement writes new well formed rows with their own keys, so nothing trips, and the two observables that move both move upward. That is why the situation reads as healthy at the moment it got worse.</p>
     </div>
 
     <div class="quiz-q" data-answer="0">
       <p class="qtext">A team sets a finality lag of 1 against a depth of 3 and records it in the design document as a precaution. Why is that position worse than having set no lag at all?</p>
-      <div class="qopt">A · Because the warehouse still holds 346 wrong rows at 3.99 percent, and the team has now spent the concern that would have made somebody look at it again</div>
-      <div class="qopt">B · Because a lag of 1 leaves more wrong rows than a lag of 0 does</div>
-      <div class="qopt">C · Because holding any rows back invalidates the freshness service level</div>
-      <q class="qwhy">A lag of 1 genuinely removes damage, dropping 511 to 346, which is precisely what makes it dangerous. The residual is invisible from inside the warehouse and the documented precaution ensures nobody goes looking for it.</q>
+      <button class="qopt" type="button">A · Because the warehouse still holds 346 wrong rows at 3.99 percent, and the team has now spent the concern that would have made somebody look at it again</button>
+      <button class="qopt" type="button">B · Because a lag of 1 leaves more wrong rows than a lag of 0 does</button>
+      <button class="qopt" type="button">C · Because holding any rows back invalidates the freshness service level</button>
+      <p class="qwhy">A lag of 1 genuinely removes damage, dropping 511 to 346, which is precisely what makes it dangerous. The residual is invisible from inside the warehouse and the documented precaution ensures nobody goes looking for it.</p>
     </div>
 
     <div class="quiz-q" data-answer="1">
       <p class="qtext">Your team already handles late-arriving records well, with idempotent loads and merge keys. Why does none of that help here?</p>
-      <div class="qopt">A · Because merge keys only work on dimension tables and this is a fact table</div>
-      <div class="qopt">B · Because those patterns handle data that arrives late, which is additive, and this is data that is withdrawn, which is subtractive, so every pattern in the toolkit produces a row where what is needed is the removal of one</div>
-      <div class="qopt">C · It does help, since a replacement is a restatement of an earlier period</div>
-      <q class="qwhy">A merge key resolves a row that turns up after its period. It has nothing to say about a row that was written, counted and reported, and is now unsupported by the source. The first leaves every previously correct figure correct. The second does not.</q>
+      <button class="qopt" type="button">A · Because merge keys only work on dimension tables and this is a fact table</button>
+      <button class="qopt" type="button">B · Because those patterns handle data that arrives late, which is additive, and this is data that is withdrawn, which is subtractive, so every pattern in the toolkit produces a row where what is needed is the removal of one</button>
+      <button class="qopt" type="button">C · It does help, since a replacement is a restatement of an earlier period</button>
+      <p class="qwhy">A merge key resolves a row that turns up after its period. It has nothing to say about a row that was written, counted and reported, and is now unsupported by the source. The first leaves every previously correct figure correct. The second does not.</p>
     </div>
 
     <div class="quiz-score"></div>

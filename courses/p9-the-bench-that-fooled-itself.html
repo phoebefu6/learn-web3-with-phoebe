@@ -499,26 +499,26 @@
 
     <div class="quiz-q" data-answer="2">
       <p class="qtext">The faulty bench reported 0 wrong rows at a finality lag of 1 against a depth 3 reorganisation. Which single observation identifies this as a harness fault rather than a finding?</p>
-      <div class="qopt">A · The number changed when the seed changed, which a real measurement would not do</div>
-      <div class="qopt">B · Zero is never a plausible value for a count of wrong rows</div>
-      <div class="qopt">C · A lag of 1 writes two of the three replaced blocks before the replacement lands, so those rows are in the warehouse, and a gate has no way to remove them</div>
-      <q class="qwhy">The argument is from the mechanism and needs no access to the code. Option A is the reverse of what happened: the faulty answer was stable across four seeds, which is what made it look trustworthy. Zero is a perfectly plausible value at lag 3, which is why the shape of the sweep rather than the presence of a zero is the tell.</q>
+      <button class="qopt" type="button">A · The number changed when the seed changed, which a real measurement would not do</button>
+      <button class="qopt" type="button">B · Zero is never a plausible value for a count of wrong rows</button>
+      <button class="qopt" type="button">C · A lag of 1 writes two of the three replaced blocks before the replacement lands, so those rows are in the warehouse, and a gate has no way to remove them</button>
+      <p class="qwhy">The argument is from the mechanism and needs no access to the code. Option A is the reverse of what happened: the faulty answer was stable across four seeds, which is what made it look trustworthy. Zero is a perfectly plausible value at lag 3, which is why the shape of the sweep rather than the presence of a zero is the tell.</p>
     </div>
 
     <div class="quiz-q" data-answer="1">
       <p class="qtext">All three of the engine's self test properties pass under the faulty code. What does that say about the three properties?</p>
-      <div class="qopt">A · They were wrong and should be replaced</div>
-      <div class="qopt">B · They were correct but all sat where the answer is obvious, at no defence and at a defence deeper than needed, so none of them could distinguish a gate from a remover</div>
-      <div class="qopt">C · They pass because the bug only affects the reporting layer, not the engine</div>
-      <q class="qwhy">The three properties are still in the engine and still worth having. The gap was their placement: a lag of 0 has no defence to get wrong and a lag of 6 is over-deep, so both endpoints look identical whichever mechanism is doing the work. Only the partial region tells them apart.</q>
+      <button class="qopt" type="button">A · They were wrong and should be replaced</button>
+      <button class="qopt" type="button">B · They were correct but all sat where the answer is obvious, at no defence and at a defence deeper than needed, so none of them could distinguish a gate from a remover</button>
+      <button class="qopt" type="button">C · They pass because the bug only affects the reporting layer, not the engine</button>
+      <p class="qwhy">The three properties are still in the engine and still worth having. The gap was their placement: a lag of 0 has no defence to get wrong and a lag of 6 is over-deep, so both endpoints look identical whichever mechanism is doing the work. Only the partial region tells them apart.</p>
     </div>
 
     <div class="quiz-q" data-answer="0">
       <p class="qtext">Under the faulty wiring, the reported wrong-row count is zero at every lag above zero for depth 2, depth 3 and depth 4 alike. Why is that the most useful diagnostic of the three discussed tonight?</p>
-      <div class="qopt">A · Because it is visible from the output alone: a reading that does not respond to the quantity it claims to measure is not a reading, and you can apply that to a bench you did not write</div>
-      <div class="qopt">B · Because varying the depth is cheaper than writing a test</div>
-      <div class="qopt">C · Because depth 4 is the realistic case and depth 3 is not</div>
-      <q class="qwhy">It needs no access to the wiring and no theory of what went wrong. Vary the thing the control defends against; if the reported protection is unchanged, the harness is not connected to the world the way its labels claim. The course takes no position on what any depth is in reality, and none of these figures describes a real network.</q>
+      <button class="qopt" type="button">A · Because it is visible from the output alone: a reading that does not respond to the quantity it claims to measure is not a reading, and you can apply that to a bench you did not write</button>
+      <button class="qopt" type="button">B · Because varying the depth is cheaper than writing a test</button>
+      <button class="qopt" type="button">C · Because depth 4 is the realistic case and depth 3 is not</button>
+      <p class="qwhy">It needs no access to the wiring and no theory of what went wrong. Vary the thing the control defends against; if the reported protection is unchanged, the harness is not connected to the world the way its labels claim. The course takes no position on what any depth is in reality, and none of these figures describes a real network.</p>
     </div>
 
     <div class="quiz-score"></div>

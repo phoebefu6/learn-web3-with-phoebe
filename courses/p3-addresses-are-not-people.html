@@ -600,26 +600,26 @@ var score = W3.scoreClustering(world, cl);
 
     <div class="quiz-q" data-answer="1">
       <p class="qtext">Inside find, the line <span class="mono">parent[x] = parent[parent[x]]</span> runs on every step of the walk. What does it change?</p>
-      <div class="qopt">A · It can change which root is returned, which is why it must run before the comparison</div>
-      <div class="qopt">B · Nothing about the partition; it only shortens future walks, because a node's grandparent is in the same tree as its parent</div>
-      <div class="qopt">C · It merges the node with its grandparent, which is why the cluster count falls during a find</div>
-      <q class="qwhy">Path halving is purely a performance optimisation. Reassigning a node to its grandparent keeps it in the same tree, so the root at the end of the walk is unchanged and the cluster count is untouched. Only a successful union changes the partition.</q>
+      <button class="qopt" type="button">A · It can change which root is returned, which is why it must run before the comparison</button>
+      <button class="qopt" type="button">B · Nothing about the partition; it only shortens future walks, because a node's grandparent is in the same tree as its parent</button>
+      <button class="qopt" type="button">C · It merges the node with its grandparent, which is why the cluster count falls during a find</button>
+      <p class="qwhy">Path halving is purely a performance optimisation. Reassigning a node to its grandparent keeps it in the same tree, so the root at the end of the walk is unchanged and the cluster count is untouched. Only a successful union changes the partition.</p>
     </div>
 
     <div class="quiz-q" data-answer="2">
       <p class="qtext">A run on month A reports 982 addresses, 286 successful merges and 700 clusters. What do you know?</p>
-      <div class="qopt">A · Nothing is wrong; the cluster count varies with the order transactions are processed in</div>
-      <div class="qopt">B · The clustering found extra evidence, so the count is closer to the truth than the canon figure</div>
-      <div class="qopt">C · There is a bug, because every successful merge removes exactly one cluster, so 982 minus 286 must be 696</div>
-      <q class="qwhy">Union returns true only when two distinct groups are joined, and joining two groups reduces the count by one. The identity addresses minus merges equals clusters holds on every run of any size, which makes it the cheapest possible test on an implementation.</q>
+      <button class="qopt" type="button">A · Nothing is wrong; the cluster count varies with the order transactions are processed in</button>
+      <button class="qopt" type="button">B · The clustering found extra evidence, so the count is closer to the truth than the canon figure</button>
+      <button class="qopt" type="button">C · There is a bug, because every successful merge removes exactly one cluster, so 982 minus 286 must be 696</button>
+      <p class="qwhy">Union returns true only when two distinct groups are joined, and joining two groups reduces the count by one. The identity addresses minus merges equals clusters holds on every run of any size, which makes it the cheapest possible test on an implementation.</p>
     </div>
 
     <div class="quiz-q" data-answer="0">
       <p class="qtext">Why is the wrongly merged column 0 across every seed, rather than merely small?</p>
-      <div class="qopt">A · A wrong merge would need one transaction naming input addresses held by two different parties, and building that requires authorising both, which means one party controls both</div>
-      <div class="qopt">B · Because the generator was configured so that operators avoid co-spending 97 percent of the time</div>
-      <div class="qopt">C · Because union by rank rejects merges between trees whose ranks differ by more than one</div>
-      <q class="qwhy">The zero is structural, not empirical and not a configuration artefact. The case that would produce it cannot be constructed, so every error is a link the method failed to make, every one of those inflates the count, and the output is therefore a ceiling. Operator discipline changes how many links are missed, never whether a wrong one is made.</q>
+      <button class="qopt" type="button">A · A wrong merge would need one transaction naming input addresses held by two different parties, and building that requires authorising both, which means one party controls both</button>
+      <button class="qopt" type="button">B · Because the generator was configured so that operators avoid co-spending 97 percent of the time</button>
+      <button class="qopt" type="button">C · Because union by rank rejects merges between trees whose ranks differ by more than one</button>
+      <p class="qwhy">The zero is structural, not empirical and not a configuration artefact. The case that would produce it cannot be constructed, so every error is a link the method failed to make, every one of those inflates the count, and the output is therefore a ceiling. Operator discipline changes how many links are missed, never whether a wrong one is made.</p>
     </div>
 
     <div class="quiz-score"></div>

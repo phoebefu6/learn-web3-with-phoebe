@@ -457,26 +457,26 @@
 
     <div class="quiz-q" data-answer="1">
       <p class="qtext">Adding 10 addresses to each of the 4 operators adds 40 addresses to the world and 40 to the clustered entity count. What does a slope of exactly 1 tell you about the co-spend heuristic?</p>
-      <div class="qopt">A · It is working correctly, since each new address is a new thing to count</div>
-      <div class="qopt">B · It has no evidence about those addresses at all, because the only signal it reads is a co-spend and these addresses never produce one, so they pass through the cleaning step untouched</div>
-      <div class="qopt">C · It is over-merging, and the slope should be above 1</div>
-      <q class="qwhy">A slope of 1 means the step removed nothing. Option A describes what the answer would look like if the addresses were 40 real parties, which is precisely the mistake the count invites. The heuristic is not failing at its job here, it is being run against a population that emits none of the evidence it consumes.</q>
+      <button class="qopt" type="button">A · It is working correctly, since each new address is a new thing to count</button>
+      <button class="qopt" type="button">B · It has no evidence about those addresses at all, because the only signal it reads is a co-spend and these addresses never produce one, so they pass through the cleaning step untouched</button>
+      <button class="qopt" type="button">C · It is over-merging, and the slope should be above 1</button>
+      <p class="qwhy">A slope of 1 means the step removed nothing. Option A describes what the answer would look like if the addresses were 40 real parties, which is precisely the mistake the count invites. The heuristic is not failing at its job here, it is being run against a population that emits none of the evidence it consumes.</p>
     </div>
 
     <div class="quiz-q" data-answer="2">
       <p class="qtext">Your loader waits 3 blocks and has been clean for a year. Reorganisations at the source deepen to 6 blocks. What happens in your warehouse?</p>
-      <div class="qopt">A · The loader falls behind and the lag alerts fire</div>
-      <div class="qopt">B · Nothing, because a 3 block lag is a general precaution</div>
-      <div class="qopt">C · About 508 rows, 5.80 percent of the warehouse, now describe history the chain no longer has, and nothing in your pipeline errors or alerts, because the shortfall is now 3 blocks where it used to be 0</div>
-      <q class="qwhy">The measured grid gives 508 orphaned rows at depth 6 with a lag of 3. The dangerous feature is that nothing about your side changed, so there is no signal on your side to detect it. The depth has to be monitored where it happens, which is not in your warehouse.</q>
+      <button class="qopt" type="button">A · The loader falls behind and the lag alerts fire</button>
+      <button class="qopt" type="button">B · Nothing, because a 3 block lag is a general precaution</button>
+      <button class="qopt" type="button">C · About 508 rows, 5.80 percent of the warehouse, now describe history the chain no longer has, and nothing in your pipeline errors or alerts, because the shortfall is now 3 blocks where it used to be 0</button>
+      <p class="qwhy">The measured grid gives 508 orphaned rows at depth 6 with a lag of 3. The dangerous feature is that nothing about your side changed, so there is no signal on your side to detect it. The depth has to be monitored where it happens, which is not in your warehouse.</p>
     </div>
 
     <div class="quiz-q" data-answer="0">
       <p class="qtext">Clustering raises the operator share of the population from 24.4 percent of addresses to 34.3 percent of entities, against a truth of 1.3 percent. Why does a cleaning step make the contamination worse as a proportion?</p>
-      <div class="qopt">A · Because it shrinks the honest population, whose addresses merge, while leaving the manufactured one intact, since those addresses never co-spend and so never merge</div>
-      <div class="qopt">B · Because the heuristic wrongly merges honest holders into operator clusters</div>
-      <div class="qopt">C · Because operators create more addresses once they detect clustering</div>
-      <q class="qwhy">It is arithmetic on two populations shrinking at different rates, not a defect in the heuristic. Option B is ruled out by measurement: the wrongly merged count is 0 on every seed and every setting. Option C describes an adaptation the bench does not model and does not claim.</q>
+      <button class="qopt" type="button">A · Because it shrinks the honest population, whose addresses merge, while leaving the manufactured one intact, since those addresses never co-spend and so never merge</button>
+      <button class="qopt" type="button">B · Because the heuristic wrongly merges honest holders into operator clusters</button>
+      <button class="qopt" type="button">C · Because operators create more addresses once they detect clustering</button>
+      <p class="qwhy">It is arithmetic on two populations shrinking at different rates, not a defect in the heuristic. Option B is ruled out by measurement: the wrongly merged count is 0 on every seed and every setting. Option C describes an adaptation the bench does not model and does not claim.</p>
     </div>
 
     <div class="quiz-score"></div>

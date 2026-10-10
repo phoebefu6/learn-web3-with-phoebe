@@ -510,26 +510,26 @@
 
     <div class="quiz-q" data-answer="2">
       <p class="qtext">Larkfield's competitor can read every row Larkfield reads. What is the second consequence of that, the one teams usually leave out?</p>
-      <div class="qopt">A · The rows will be read less carefully, because responsibility for them is now shared</div>
-      <div class="qopt">B · Larkfield's figures become less accurate, because it no longer controls the source</div>
-      <div class="qopt">C · Larkfield loses the ability to rest on an unverifiable claim, because anyone who doubts a reported figure can recompute it from the same rows</div>
-      <q class="qwhy">Losing exclusivity removes an advantage and it also removes a defence. A figure that cannot be checked by an outsider is easy to defend and hard to trust. Once the inputs are public, care in the derivation becomes visible, and so does its absence.</q>
+      <button class="qopt" type="button">A · The rows will be read less carefully, because responsibility for them is now shared</button>
+      <button class="qopt" type="button">B · Larkfield's figures become less accurate, because it no longer controls the source</button>
+      <button class="qopt" type="button">C · Larkfield loses the ability to rest on an unverifiable claim, because anyone who doubts a reported figure can recompute it from the same rows</button>
+      <p class="qwhy">Losing exclusivity removes an advantage and it also removes a defence. A figure that cannot be checked by an outsider is easy to defend and hard to trust. Once the inputs are public, care in the derivation becomes visible, and so does its absence.</p>
     </div>
 
     <div class="quiz-q" data-answer="1">
       <p class="qtext">A new analyst joins Larkfield and joins the reward table to the address column, treating it as a customer id. Why is that a problem even though every query runs and every schema check passes?</p>
-      <div class="qopt">A · Because addresses change too often for a join key</div>
-      <div class="qopt">B · Because an address is persistent and looks like an identifier, but one party can hold many of them and nothing in the data or reachable from it says which ones belong together</div>
-      <div class="qopt">C · Because joining on an address is slower than joining on a numeric key</div>
-      <q class="qwhy">The failure is silent, which is what makes it expensive. The column behaves like a key in every mechanical sense. It simply is not one entity per value, and there is no external table to correct that, because the key that would do it does not exist anywhere.</q>
+      <button class="qopt" type="button">A · Because addresses change too often for a join key</button>
+      <button class="qopt" type="button">B · Because an address is persistent and looks like an identifier, but one party can hold many of them and nothing in the data or reachable from it says which ones belong together</button>
+      <button class="qopt" type="button">C · Because joining on an address is slower than joining on a numeric key</button>
+      <p class="qwhy">The failure is silent, which is what makes it expensive. The column behaves like a key in every mechanical sense. It simply is not one entity per value, and there is no external table to correct that, because the key that would do it does not exist anywhere.</p>
     </div>
 
     <div class="quiz-q" data-answer="0">
       <p class="qtext">Larkfield's pipeline is rebuilt, tested and instrumented to a very high standard. Which of the four couplings does that work not help with at all?</p>
-      <div class="qopt">A · The fourth: a metric that somebody is paid to move stays wrong no matter how clean the pipeline carrying it is</div>
-      <div class="qopt">B · The second: correction, since a better pipeline cannot append rows</div>
-      <div class="qopt">C · None of them, since pipeline quality is the root cause in every case</div>
-      <q class="qwhy">Engineering fixes the transport. It does not touch the incentive that created the rows. A cleaner pipeline reporting an inflated count reports it faster, more reliably and with better monitoring, and the number is exactly as wrong as it was.</q>
+      <button class="qopt" type="button">A · The fourth: a metric that somebody is paid to move stays wrong no matter how clean the pipeline carrying it is</button>
+      <button class="qopt" type="button">B · The second: correction, since a better pipeline cannot append rows</button>
+      <button class="qopt" type="button">C · None of them, since pipeline quality is the root cause in every case</button>
+      <p class="qwhy">Engineering fixes the transport. It does not touch the incentive that created the rows. A cleaner pipeline reporting an inflated count reports it faster, more reliably and with better monitoring, and the number is exactly as wrong as it was.</p>
     </div>
 
     <div class="quiz-score"></div>

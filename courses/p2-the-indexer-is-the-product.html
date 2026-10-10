@@ -527,26 +527,26 @@
 
     <div class="quiz-q" data-answer="2">
       <p class="qtext">Two teams index the same rows for the same month and publish active user figures that differ by several hundred. Both pipelines pass their tests. What is the most likely cause?</p>
-      <div class="qopt">A · One of them has a bug in an aggregation that its tests do not cover</div>
-      <div class="qopt">B · One of them is reading a stale copy of the rows</div>
-      <div class="qopt">C · The two decoded and defined the metric differently, so they are answering two different questions with the same words</div>
-      <q class="qwhy">Shared inputs remove the argument about what the data says and leave the argument about what the question means. Four defensible definitions on Larkfield's month give four different counts with no bug anywhere. Reconciliation starts with the two definitions side by side, not with the two totals.</q>
+      <button class="qopt" type="button">A · One of them has a bug in an aggregation that its tests do not cover</button>
+      <button class="qopt" type="button">B · One of them is reading a stale copy of the rows</button>
+      <button class="qopt" type="button">C · The two decoded and defined the metric differently, so they are answering two different questions with the same words</button>
+      <p class="qwhy">Shared inputs remove the argument about what the data says and leave the argument about what the question means. Four defensible definitions on Larkfield's month give four different counts with no bug anywhere. Reconciliation starts with the two definitions side by side, not with the two totals.</p>
     </div>
 
     <div class="quiz-q" data-answer="0">
       <p class="qtext">Which of the three abnormal properties is the one an ordinary pipeline's habits do not cover at all?</p>
-      <div class="qopt">A · Retraction, because idempotent loads and restatable tables assume somebody tells you the past changed, and here nobody does</div>
-      <div class="qopt">B · Schema ownership, because no pipeline has ever had to handle a schema change</div>
-      <div class="qopt">C · Many expressions of one event, because conformed dimensions are an unsolved problem</div>
-      <q class="qwhy">Schema changes and multi-shape sources are both familiar problems with existing craft, harder here but recognisable. Retraction is the one with no analogue: rows already loaded silently start describing history the chain no longer has, with no correction record, no failed load and no alert. Session 6 measures it.</q>
+      <button class="qopt" type="button">A · Retraction, because idempotent loads and restatable tables assume somebody tells you the past changed, and here nobody does</button>
+      <button class="qopt" type="button">B · Schema ownership, because no pipeline has ever had to handle a schema change</button>
+      <button class="qopt" type="button">C · Many expressions of one event, because conformed dimensions are an unsolved problem</button>
+      <p class="qwhy">Schema changes and multi-shape sources are both familiar problems with existing craft, harder here but recognisable. Retraction is the one with no analogue: rows already loaded silently start describing history the chain no longer has, with no correction record, no failed load and no alert. Session 6 measures it.</p>
     </div>
 
     <div class="quiz-q" data-answer="1">
       <p class="qtext">An indexer adds a column mapping each address to a marketing campaign, taken from Larkfield's own systems, and publishes it in the same wide table as the decoded chain fields. What has that cost?</p>
-      <div class="qopt">A · Nothing, since the column is accurate and the join is tested</div>
-      <div class="qopt">B · Every metric derived from that column is no longer recomputable by an outsider, and nothing in the table tells a reader which columns those are</div>
-      <div class="qopt">C · The table can no longer be restated, because enrichment is not idempotent</div>
-      <q class="qwhy">Enrichment is ordinary work with one specific cost here. The claimed advantage of public rows is that a stranger can recompute your figure. A private column silently removes that for everything downstream of it, and a wide table that mixes the two is read as more verifiable than it is. The fix is naming, not architecture.</q>
+      <button class="qopt" type="button">A · Nothing, since the column is accurate and the join is tested</button>
+      <button class="qopt" type="button">B · Every metric derived from that column is no longer recomputable by an outsider, and nothing in the table tells a reader which columns those are</button>
+      <button class="qopt" type="button">C · The table can no longer be restated, because enrichment is not idempotent</button>
+      <p class="qwhy">Enrichment is ordinary work with one specific cost here. The claimed advantage of public rows is that a stranger can recompute your figure. A private column silently removes that for everything downstream of it, and a wide table that mixes the two is read as more verifiable than it is. The fix is naming, not architecture.</p>
     </div>
 
     <div class="quiz-score"></div>
