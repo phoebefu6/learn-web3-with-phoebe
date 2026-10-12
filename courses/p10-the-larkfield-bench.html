@@ -246,7 +246,7 @@
     <p class="lede">Two dials that are usually discussed as one. How deep the chain reorganises, which is a property of the world and not a choice, and how long the loader waits, which is the only choice you have. Set them independently and a very simple exchange rate appears.</p>
 
     <figure class="zoomable">
-      <svg viewBox="0 0 880 452" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn schematic of a loader running behind a chain tip. A row of blocks runs left to right. The last three are crossed through and redrawn above as replacements, marking a three block reorganisation. A loader head sits two blocks behind the tip, labelled finality lag of two. The band between the loader head and the start of the replaced region is labelled the shortfall, depth minus lag, and the rows written inside it are marked as orphaned because they were loaded from blocks that no longer exist and nothing errors. The band between the loader head and the tip is labelled rows held back. Underneath, a measured band states that across four seeds, five depths and every lag, each block of shortfall costs between 166 and 173 orphaned rows, about 1.9 percent of the warehouse, while each block of lag holds back between 40 and 44 rows regardless of the depth. So a block of waiting removes about 169 wrong rows and costs about 42 held rows until the lag reaches the depth, after which the 42 is still paid and the 169 is zero.">
+      <svg viewBox="0 0 880 466" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn schematic of a loader running behind a chain tip. A row of blocks runs left to right. The last three are crossed through and redrawn above as replacements, marking a three block reorganisation. A loader head sits two blocks behind the tip, labelled finality lag of two. The band between the loader head and the start of the replaced region is labelled the shortfall, depth minus lag, and the rows written inside it are marked as orphaned because they were loaded from blocks that no longer exist and nothing errors. The band between the loader head and the tip is labelled rows held back. Underneath, a measured band states that across four seeds, five depths and every lag, each block of shortfall costs between 166 and 173 orphaned rows, about 1.9 percent of the warehouse, while each block of lag holds back between 40 and 44 rows regardless of the depth. So a block of waiting removes about 169 wrong rows and costs about 42 held rows until the lag reaches the depth, after which the 42 is still paid and the 169 is zero.">
         <style>
           .p10bH { font: 800 13.5px Inter, sans-serif; fill: #13201E; }
           .p10bL { font: 800 9px Inter, sans-serif; fill: #54655F; letter-spacing: .1em; }
@@ -261,7 +261,7 @@
 
         <text class="p10bH" x="14" y="20">The only quantity that matters is the gap between the depth and the lag.</text>
 
-        <rect x="14" y="32" width="852" height="252" rx="12" fill="#FFFFFF" stroke="#DCE9E6"></rect>
+        <rect x="14" y="32" width="852" height="266" rx="12" fill="#FFFFFF" stroke="#DCE9E6"></rect>
 
         <!-- replacement blocks drawn above -->
         <text class="p10bL" x="546" y="58">THE REPLACEMENT, WHICH ARRIVES LATER</text>
@@ -288,9 +288,9 @@
         <rect x="642" y="130" width="86" height="40" rx="7" fill="#FFFFFF" stroke="#9C3D18" stroke-width="1.8"></rect>
         <rect x="738" y="130" width="86" height="40" rx="7" fill="#FFFFFF" stroke="#9C3D18" stroke-width="1.8"></rect>
 
-        <path d="M552 168 L 626 132" fill="none" stroke="#9C3D18" stroke-width="1.6" stroke-linecap="round"></path>
-        <path d="M648 168 L 722 132" fill="none" stroke="#9C3D18" stroke-width="1.6" stroke-linecap="round"></path>
-        <path d="M744 168 L 818 132" fill="none" stroke="#9C3D18" stroke-width="1.6" stroke-linecap="round"></path>
+        <path data-strike="1" d="M552 168 L 626 132" fill="none" stroke="#9C3D18" stroke-width="1.6" stroke-linecap="round"></path>
+        <path data-strike="1" d="M648 168 L 722 132" fill="none" stroke="#9C3D18" stroke-width="1.6" stroke-linecap="round"></path>
+        <path data-strike="1" d="M744 168 L 818 132" fill="none" stroke="#9C3D18" stroke-width="1.6" stroke-linecap="round"></path>
 
         <text class="p10bR" x="589" y="154" text-anchor="middle">block 8</text>
         <text class="p10bR" x="685" y="154" text-anchor="middle">block 9</text>
@@ -316,13 +316,13 @@
         <text class="p10bN" x="733" y="288" text-anchor="middle">Held back, waiting to be loaded</text>
 
         <!-- MEASURED BAND -->
-        <rect x="14" y="296" width="852" height="142" rx="12" fill="#EFF7F5" stroke="#C7E0DC"></rect>
-        <text class="p10bL" x="30" y="320">MEASURED OVER 4 SEEDS, 5 DEPTHS AND EVERY LAG, 60 COMBINATIONS IN ALL</text>
-        <text class="p10bB" x="30" y="344">Each block of shortfall costs 166 to 173 orphaned rows, about 1.9 percent of the warehouse each.</text>
-        <text class="p10bB" x="30" y="364">Each block of lag holds back 40 to 44 rows, and that figure does not depend on the depth at all.</text>
-        <text class="p10bN" x="30" y="390">So one block of waiting removes about 169 wrong rows and costs about 42 held ones. Four to one, in your favour.</text>
-        <text class="p10bK" x="30" y="412">The moment the lag reaches the depth, the 169 becomes 0 and the 42 keeps being paid on every further block.</text>
-        <text class="p10bM" x="30" y="430">Which means the whole decision is one number you probably do not have written down anywhere: the depth you are designing for.</text>
+        <rect x="14" y="310" width="852" height="142" rx="12" fill="#EFF7F5" stroke="#C7E0DC"></rect>
+        <text class="p10bL" x="30" y="334">MEASURED OVER 4 SEEDS, 5 DEPTHS AND EVERY LAG, 60 COMBINATIONS IN ALL</text>
+        <text class="p10bB" x="30" y="358">Each block of shortfall costs 166 to 173 orphaned rows, about 1.9 percent of the warehouse each.</text>
+        <text class="p10bB" x="30" y="378">Each block of lag holds back 40 to 44 rows, and that figure does not depend on the depth at all.</text>
+        <text class="p10bN" x="30" y="404">So one block of waiting removes about 169 wrong rows and costs about 42 held ones. Four to one, in your favour.</text>
+        <text class="p10bK" x="30" y="426">The moment the lag reaches the depth, the 169 becomes 0 and the 42 keeps being paid on every further block.</text>
+        <text class="p10bM" x="30" y="444">Which means the whole decision is one number you probably do not have written down anywhere: the depth you are designing for.</text>
       </svg>
       <figcaption>🔍 Click to zoom - depth and lag are not two knobs with a complicated interaction. They subtract, and the difference is the only thing that costs anything.</figcaption>
     </figure>
